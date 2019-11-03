@@ -1,0 +1,22 @@
+.icon-btn {
+    cursor: pointer;
+    color: var(--primary-base);
+    transition: color .35s linear;
+    &:hover {
+        color: var(--text-color-secondary);
+    }
+    &:active {
+        color:  var(--primary-base);
+    }
+    &[disabled] {
+        color: var(--disabled-color);
+        pointer-events: none;
+    }
+}
+
+.text-link {
+    &:hover {
+        cursor: pointer;
+        color: var(--primary-base);
+    }
+}
