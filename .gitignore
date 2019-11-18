@@ -3,6 +3,7 @@ node_modules
 .history
 /dist
 mock/nas/*
+docker/dist
 
 # local env files
 .env.local
