@@ -13,12 +13,12 @@ export interface DeptQueryRes {
 
 export interface DeptAddReq {
   name: string
-  parentId?: number
+  parentId: number
 }
 
-export interface DeptPatchReq {
+export interface DeptUpdateReq {
   name: string
-  parentId?: number
+  parentId: number
 }
 
 export interface DeptRes {
@@ -35,8 +35,8 @@ export function addDept (req: DeptAddReq) {
   return http().post<number>(`/depts`, req)
 }
 
-export function patchDept (id: number, req: DeptPatchReq) {
-  return http().patch<void>(`/depts/${id}`, req)
+export function updateDept (id: number, req: DeptUpdateReq) {
+  return http().put<void>(`/depts/${id}`, req)
 }
 
 export function getDept (id: number) {

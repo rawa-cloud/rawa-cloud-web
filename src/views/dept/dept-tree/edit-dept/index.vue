@@ -3,7 +3,7 @@
       <v-modal :visible.sync="actualVisible" width="30vw" :title="title">
         <v-form ref="form">
           <v-form-item label="父级部门" prop="parentId">
-            <v-select clearable searchable v-model="form.parentId">
+            <v-select clearable searchable v-model="form.parentId" :disabled="!isEdit">
               <v-option :label="dept.name" :value="dept.id" v-for="dept in depts" :key="dept.id"></v-option>
             </v-select>
           </v-form-item>
@@ -24,7 +24,7 @@
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator'
-import { addDept, patchDept, queryDepts } from '@/api/dept'
+import { addDept, updateDept, queryDepts } from '@/api/dept'
 
 @Component
 export default class EditDept extends Vue {
@@ -100,7 +100,7 @@ export default class EditDept extends Vue {
 
   request (): Promise<number | void> {
     let req: any = this.generateReq()
-    if (this.isEdit) return patchDept(this.dept.id, req)
+    if (this.isEdit) return updateDept(this.dept.id, req)
     return addDept(req)
   }
 
@@ -111,7 +111,6 @@ export default class EditDept extends Vue {
     Object.assign(req, { name, parentId })
     if (this.isEdit) {
       req.id = this.dept && this.dept.id
-      if (!req.parrentId) req.parrentId = -1
     }
     return req
   }

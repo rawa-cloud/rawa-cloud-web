@@ -11,26 +11,29 @@ export interface UserQueryRes {
   id: number
   username: string
   cname: string
-  deptId?: number
+  deptId: number
   ip?: string
   status: boolean
-  deptName?: string
+  deptName: string
+  roles: number[]
+  files: number[]
 }
 
 export interface UserAddReq {
   username: string
   cname: string
   ip?: string
-  deptId?: number
-  files?: number[]
+  deptId: number
+  roles: number[]
+  files: number[]
 }
 
-export interface UserPatchReq {
-  username?: string
-  cname?: string
+export interface UserUpdateReq {
+  cname: string
   ip?: string
-  deptId?: number
-  status?: boolean
+  deptId: number
+  status: boolean
+  roles?: number[]
   files?: number[]
 }
 
@@ -38,10 +41,12 @@ export interface UserRes {
   id: number
   username: string
   cname: string
-  deptId?: number
+  deptId: number
   ip?: string
   status: boolean
-  deptName?: string
+  deptName: string
+  roles: number[]
+  files: number[]
 }
 
 export function queryUsers (req: UserQueryReq) {
@@ -52,8 +57,8 @@ export function addUser (req: UserAddReq) {
   return http().post<number>(`/users`, req)
 }
 
-export function patchUser (id: number, req: UserPatchReq) {
-  return http().patch<void>(`/users/${id}`, req)
+export function patchUser (id: number, req: UserUpdateReq) {
+  return http().put<void>(`/users/${id}`, req)
 }
 
 export function getUser (id: number) {

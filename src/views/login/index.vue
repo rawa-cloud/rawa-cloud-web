@@ -1,22 +1,22 @@
 <template>
     <div :class="[$style.container]">
-        <div :class="[$style.box]" class="elevation-4 border rounded p-4" @keyup.enter="onLogin">
-            <div :class="[$style.logo]"></div>
-            <div :class="[$style.title]" class="display-4 text-center mb-3">
-                Vua Pro
+        <div :class="[$style.box]" class="rounded p-4" @keyup.enter="onLogin">
+            <div :class="[$style.logo]">
+                <img src="@/assets/logo.png" alt="&times;" class="w-3">
             </div>
+            <div :class="[$style.title]">瑞柚云盘</div>
 
             <form @submit.prevent>
                 <div class="mb-3">
-                    <v-input name="username" v-model.trim="form.username" placeholder="输入账号" size="lg" block prefix="user" maxlength="32"></v-input>
+                    <v-input name="username" v-model.trim="form.username" placeholder="请输入账号" size="lg" block prefix="user" maxlength="32"></v-input>
                 </div>
                 <div class="mb-3">
-                    <v-input name="password" v-model.trim="form.password" placeholder="输入账号" size="lg" block prefix="lock" type="passworrd" maxlength="32"></v-input>
+                    <v-input name="password" v-model.trim="form.password" placeholder="请输入密码" size="lg" block prefix="lock" type="password" maxlength="32"></v-input>
                 </div>
 
-                <div class="mb-3 text-right">
+                <!-- <div class="mb-3 text-right">
                     <a> <v-icon type="key" class="mr-2"></v-icon> 忘记密码</a>
-                </div>
+                </div> -->
 
                 <v-button type="primary" size="lg" block @click="onLogin" :loading="loading">登 录</v-button>
             </form>
@@ -54,12 +54,23 @@ export default class Login extends Vue {
 }
 
 .box {
-    width: 420px;
-    height: 360px;
-    background: #fff;
+    position: relative;
+    width: 360px;
+    height: 280px;
+    background: rgba(255, 255, 255, .4);
 }
 
 .logo {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%) translateY(-200%);
+}
 
+.title {
+    text-align: center;
+    font-size: 24px;
+    color: rgba(0, 0, 0, .6);
+    margin: 0 0 12px 0;
+    font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
 }
 </style>

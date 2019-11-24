@@ -1,6 +1,6 @@
 <template>
 <div :class="[$style.container]">
-    <span class="text-primary ft-24 ml-4">Vua Pro</span>
+    <span class="text-primary ft-24 ml-4">瑞柚云盘</span>
 
     <span :class="[$style.opt]">
         <global-search></global-search>

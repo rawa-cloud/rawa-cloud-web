@@ -58,6 +58,9 @@ const root = [
       },
       {
         pid: 'user'
+      },
+      {
+        pid: 'log'
       }
     ]
   }

@@ -16,7 +16,7 @@
           </div>
         </div>
         <div v-else>
-          <span>暂无数据</span>
+          <no-data></no-data>
         </div>
     </div>
 </template>

@@ -10,8 +10,8 @@
                 <span class="mr-4">{{node.data.label}}</span>
                 <div @click.stop="" class="_flag_actions">
                     <span class="icon-btn" @click="onAdd(node.data)"><v-icon type="plus"></v-icon></span>
-                    <span class="ml-2 icon-btn" @click="onEdit(node)"><v-icon type="edit"></v-icon></span>
-                    <span class="ml-2 icon-btn" @click="onDelete(node.data)"><v-icon type="delete"></v-icon></span>
+                    <span class="ml-2 icon-btn" @click="onEdit(node)" v-if="node.data.parentId"><v-icon type="edit"></v-icon></span>
+                    <span class="ml-2 icon-btn" @click="onDelete(node.data)" v-if="node.data.parentId"><v-icon type="delete"></v-icon></span>
                 </div>
             </div>
         </v-tree>

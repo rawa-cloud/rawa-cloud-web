@@ -115,9 +115,14 @@ export default class User extends Vue {
     }
 
     onDelete (id: any) {
-      deleteUser(id).then(() => {
-        this.$message.success('删除用户成功')
-        this.query()
+      this.$modal.confirm({
+        title: '删除确认',
+        content: '将删除该用户所有文件记录，不可恢复， 确定删除?'
+      }).then(() => {
+        deleteUser(id).then(() => {
+          this.$message.success('删除用户成功')
+          this.query()
+        })
       })
     }
 

@@ -46,6 +46,12 @@ export const menus: Array<MenuOption> = [
     link: '/user'
   },
   {
+    name: '操作日志',
+    icon: 'user',
+    pid: `${HOME}.log`,
+    link: '/log'
+  },
+  {
     name: '系统管理',
     icon: 'setting',
     pid: `${HOME}.system`,
