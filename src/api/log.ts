@@ -13,7 +13,6 @@ export interface LogQueryRes {
   operateTime: string
 }
 
-
 export function queryLogs (req?: LogQueryReq) {
   return http().get<LogQueryRes[]>(`/logs`, { params: req })
 }

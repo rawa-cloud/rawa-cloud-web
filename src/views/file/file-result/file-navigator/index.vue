@@ -43,33 +43,28 @@ export default class FileNavigator extends Vue {
         return
       }
       let ret: any[] = []
-      if (this.id < 0) {
-        ret.push(generateHome())
-        this.dataSource = ret
-        return
-      }
       getFile(this.id).then(data => {
         let parent = data
         while (parent) {
           ret.splice(0, 0, parent)
-          if (!parent.parent) ret.splice(0, 0, generateHome(parent))
+          // if (!parent.parent) ret.splice(0, 0, generateHome(parent))
           parent = parent.parent as any
         }
         this.dataSource = ret
       })
 
-      function generateHome (file?: any) {
-        const all = {
-          id: -2,
-          name: '全部文件'
-        }
-        const personal = {
-          id: -3,
-          name: '个人文件'
-        }
-        let isPersonal = file ? file.personal : vm.id === -3
-        return isPersonal ? personal : all
-      }
+      // function generateHome (file?: any) {
+      //   const all = {
+      //     id: -2,
+      //     name: '全部文件'
+      //   }
+      //   const personal = {
+      //     id: -3,
+      //     name: '个人文件'
+      //   }
+      //   let isPersonal = file ? file.personal : vm.id === -3
+      //   return isPersonal ? personal : all
+      // }
     }
 
     @Watch('id', { immediate: true }) idChange (id: number) {

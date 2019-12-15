@@ -1,5 +1,7 @@
 <template>
-<div>Footer</div>
+<div class="text-center text-secondary">
+  Copyright©️  2019 瑞柚云盘出品
+</div>
 </template>
 
 <script lang="ts">

@@ -1,15 +1,9 @@
 import { http } from '.'
 
 export interface FileQueryReq {
-  parentId?: number
+  parentId: number
 
   dir?: boolean
-
-  creationBy?: string
-
-  status?: boolean
-
-  personal?: boolean
 }
 
 export interface FileQueryRes {
@@ -41,14 +35,12 @@ export interface FileQueryRes {
 
   limitSuffix?: string
 
-  personal?: boolean
-
-  records: any[]
+  userId?: number
 }
 
 export interface FileAddReq {
 
-  parentId?: number
+  parentId: number
 
   dir: boolean
 
@@ -59,8 +51,6 @@ export interface FileAddReq {
   limitSize?: number
 
   limitSuffix?: string
-
-  personal: boolean
 }
 
 export interface FilePatchReq {
@@ -105,9 +95,7 @@ export interface FileRes {
 
   limitSuffix?: string
 
-  personal?: boolean
-
-  records: any[]
+  userId?: number
 
   parent?: FileRes
 }
@@ -128,8 +116,20 @@ export function getFile (id: number) {
   return http().get<FileRes>(`/files/${id}`)
 }
 
-export function deleteFile (id: number) {
-  return http().delete<void>(`/files/${id}`)
+export function rename (id: number, name: string) {
+  return http().put<any>(`/files/${id}/rename`, { name })
+}
+
+export function getFileRecords (id: number) {
+  return http().get<any[]>(`/files/${id}/records`)
+}
+
+export function deleteFiles (ids: number[]) {
+  return http().delete<void>(`/files/batch/${ids.join(',')}`)
+}
+
+export function updateFileContent (id: number, req: {uuid: string, remark?: string}) {
+  return http().put<number>(`/files/${id}/update`, req)
 }
 
 export function downloadFile (id: number) {
@@ -137,5 +137,13 @@ export function downloadFile (id: number) {
 }
 
 export function previewFile (id: number) {
-  return http().get<Blob>(`/files/preview/${id}`, { responseType: 'blob' })
+  return http().get<Blob>(`/files/${id}/preview`, { responseType: 'blob' })
+}
+
+export function getRootFile () {
+  return http().get<FileRes>(`/files/file/root`)
+}
+
+export function getUserRootFile () {
+  return http().get<FileRes>(`/files/file/user-root`)
 }

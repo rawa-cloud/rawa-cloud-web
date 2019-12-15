@@ -24,7 +24,7 @@
 
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import EditAuthority from './edit-authority/index.vue'
-import { queryAuthorities, deleteAuthority } from '@/api/authority'
+import { getDeptAuthorities } from '@/api/dept'
 
 @Component({
   components: { EditAuthority }
@@ -54,10 +54,10 @@ export default class Authority extends Vue {
     }
 
     onDelete (id: number) {
-      deleteAuthority(id, this.isUser).then(() => {
-        this.$message.success('删除成功')
-        this.loadData()
-      })
+      // deleteAuthority(id, this.isUser).then(() => {
+      //   this.$message.success('删除成功')
+      //   this.loadData()
+      // })
     }
 
     loadData () {
@@ -65,12 +65,11 @@ export default class Authority extends Vue {
         this.dataSource = []
         return
       }
-      queryAuthorities({
-        isUser: this.isUser,
-        principleId: this.principleId
-      }).then(data => {
-        this.dataSource = data || []
-      })
+      if (!this.isUser) {
+        getDeptAuthorities(this.principleId).then(data => {
+          this.dataSource = data || []
+        })
+      }
     }
 
     @Watch('principleId', { immediate: true }) principleIdChange () {

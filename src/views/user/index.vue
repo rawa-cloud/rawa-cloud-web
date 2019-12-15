@@ -32,7 +32,7 @@
           <div class="mb-2 text-right">
             <v-button type="text" size="sm" color="primary" @click="onAdd">新增用户</v-button>
           </div>
-          <v-table pageable :data-source="dataSource" height="calc(100vh - 330px)">
+            <v-table pageable :data-source="dataSource" height="calc(100vh - 330px)">
                 <v-table-column prop="username" label="用户名"></v-table-column>
                 <v-table-column prop="cname" label="姓名"></v-table-column>
                 <v-table-column prop="deptName" label="所属部门"></v-table-column>

@@ -127,8 +127,6 @@ export default class EditDir extends Vue {
       req.parentId = this.file.parentId
     } else {
       let parentId: any = this.parentId
-      if (parentId < 0) req.personal = parentId === -3
-      parentId = parentId < 0 ? null : parentId
       req.parentId = parentId
     }
     return req

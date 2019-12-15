@@ -17,70 +17,78 @@
 
 import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
 import { TreeNodeLoadFn } from 'vua'
-import { queryFiles } from '@/api/file'
+import { queryFiles, getUserRootFile, getRootFile } from '@/api/file'
 
 @Component
 export default class FileTree extends Vue {
-    @Prop(Number) id!: number
+  @Prop(Number) id!: number
 
-    @Emit('update:id') updateId (id: number) {}
+  @Emit('update:id') updateId (id: number) {}
 
-    props = {
-      key: 'id',
-      label: 'name'
-    }
+  props = {
+    key: 'id',
+    label: 'name'
+  }
 
-    dataSource: any = [
-      {
-        id: -2,
-        name: '全部文件',
-        dir: true,
-        personal: false
-      },
-      {
-        id: -3,
-        name: '个人文件',
-        dir: true,
-        personal: true
-      }
-    ]
+  dataSource: any = [
+    // {
+    //   id: -2,
+    //   name: '全部文件',
+    //   dir: true,
+    //   personal: false
+    // },
+    // {
+    //   id: -3,
+    //   name: '个人文件',
+    //   dir: true,
+    //   personal: true
+    // }
+  ]
 
-    iconProps (node: any) {
-      let dir = node.data.dir
-      let personal = node.data.personal
-      let root = !(node.parent && node.parent.parent)
-      let contentType = node.data.contentType
-      return { dir, personal, root, contentType }
-    }
+  iconProps (node: any) {
+    let dir = node.data.dir
+    let personal = !!node.data.user
+    let root = !(node.parent && node.parent.parent)
+    let contentType = node.data.contentType
+    return { dir, personal, root, contentType }
+  }
 
-    loadFn: TreeNodeLoadFn = ({ node }, resovle) => {
-      let parentId = node.data.id
-      parentId = parentId < 0 ? -1 : parentId
-      let personal = node.data.personal
-      let status = true
-      let dir = true
-      queryFiles({ parentId, personal, status, dir }).then((data) => {
-        resovle(data)
-      })
-    }
+  loadFn: TreeNodeLoadFn = ({ node }, resovle) => {
+    let parentId = node.data.id
+    let dir = true
+    queryFiles({ parentId, dir }).then((data) => {
+      resovle(data)
+    })
+  }
 
-    onRefresh () {
-    //   this.loadDepts()
-    }
+  loadData () {
+    const all = [getRootFile(), getUserRootFile()]
+    Promise.all(all).then((data: any[]) => {
+      this.dataSource = data || []
+    })
+  }
 
-    onExpand () {
-      const $e = this.$refs.tree as any
-      $e.expandAll(true)
-    }
+  onRefresh () {
+  //   this.loadDepts()
+  }
 
-    onCollapse () {
-      const $e = this.$refs.tree as any
-      $e.expandAll(false)
-    }
+  onExpand () {
+    const $e = this.$refs.tree as any
+    $e.expandAll(true)
+  }
 
-    onSelect (node: any) {
-      this.updateId(node.data.id)
-    }
+  onCollapse () {
+    const $e = this.$refs.tree as any
+    $e.expandAll(false)
+  }
+
+  onSelect (node: any) {
+    this.updateId(node.data.id)
+  }
+
+  mounted () {
+    this.loadData()
+  }
 }
 </script>
 

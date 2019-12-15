@@ -14,9 +14,6 @@ export interface AuthorityQueryRes {
   isDir: boolean
   umask: number
   validDays?: number
-  // principleId: number
-  // isUser: boolean
-  // fileName: string
 }
 
 export interface AuthorityAddReq {

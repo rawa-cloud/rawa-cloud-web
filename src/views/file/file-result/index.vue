@@ -6,6 +6,8 @@
                 <v-button color="primary" class="mr-2" @click="onNew">新建文件夹</v-button>
 
                 <v-button-group class="mr-2">
+                    <v-button color="primary" @click="onRenew()">更新</v-button>
+                    <v-button color="primary" @click="onFileRecord()">查看文件轨迹</v-button>
                     <v-button color="primary" @click="onShare()">分享</v-button>
                     <v-button color="primary" @click="onDownload()">下载</v-button>
                     <v-button color="primary" @click="onDelete()">删除</v-button>
@@ -41,14 +43,14 @@
         <file-link ref="fileLink"></file-link>
         <file-rename ref="fileRename"></file-rename>
         <file-preview ref="filePreview"></file-preview>
+        <file-record ref="fileRecord"></file-record>
     </div>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component, Prop, Watch, Provide } from 'vue-property-decorator'
-import { queryFiles, downloadFile } from '@/api/file'
-import { addRecycles, queryRecycles } from '@/api/recycle'
+import { queryFiles, downloadFile, deleteFiles } from '@/api/file'
 import { download } from '@/helpers/download'
 import FileList from './file-list/index.vue'
 import FileThumbnail from './file-thumbnail/index.vue'
@@ -57,9 +59,10 @@ import EditDir from './edit-dir/index.vue'
 import FileUpload from './file-upload/index.vue'
 import FileLink from './file-link/index.vue'
 import FileRename from './file-rename/index.vue'
+import FileRecord from './file-record/index.vue'
 
 @Component({
-  components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename }
+  components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename, FileRecord }
 })
 export default class FileResult extends Vue {
     @Prop(Number) parentId!: number
@@ -137,7 +140,7 @@ export default class FileResult extends Vue {
       if (!this.validate(file)) return
       this.$modal.confirm({ title: '确认', content: '确认删除文件？' }).then(() => {
         let ids: number[] = file ? [file.id] : this.checkedRows.map((v: any) => v.id)
-        addRecycles({ files: ids }).then((data) => {
+        deleteFiles(ids).then((data) => {
           this.refresh()
         })
       })
@@ -154,6 +157,33 @@ export default class FileResult extends Vue {
       $e.rename(row).then(() => {
         this.$message.success('重命名成功')
         this.refresh()
+      })
+    }
+
+    @Provide() onRenew (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('不能选择多条记录')
+        return
+      }
+      let f = file || this.checkedRows[0]
+      const $e = this.$refs.fileUpload as FileUpload
+      $e.update(f.id).then(() => {
+        this.$message.success('更新成功')
+        this.refresh()
+      })
+    }
+
+    @Provide() onFileRecord (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('不能选择多条记录')
+        return
+      }
+      let f = file || this.checkedRows[0]
+      const $e = this.$refs.fileRecord as FileRecord
+      $e.view(f.id).then(() => {
+        // do nothing
       })
     }
 
@@ -180,13 +210,7 @@ export default class FileResult extends Vue {
         return
       }
       let parentId = this.parentId
-      let personal = false
-      let status = true
-      if (parentId < 0) {
-        if (parentId === -3) personal = true
-        parentId = -1
-      }
-      let req = { parentId, personal, status }
+      let req = { parentId }
       this.loading = true
       queryFiles(req).then(data => {
         this.dataSource = data || []

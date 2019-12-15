@@ -19,7 +19,8 @@
 
         <v-table pageable row-key="id" :data-source="dataSource" @selection-change="onSelectionChange" height="calc(100vh - 300px)">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
-            <v-table-column prop="path" label="文件名"></v-table-column>
+            <v-table-column prop="name" label="文件名"></v-table-column>
+            <v-table-column prop="path" label="路径"></v-table-column>
             <v-table-column prop="size" label="大小"></v-table-column>
             <v-table-column prop="creationTime" label="删除时间"></v-table-column>
             <v-table-column prop="creationBy" label="删除人"></v-table-column>

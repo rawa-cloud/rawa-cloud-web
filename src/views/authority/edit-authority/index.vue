@@ -40,7 +40,7 @@
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator'
-import { addAuthority, patchAuthority } from '@/api/authority'
+import { addDeptAuthority } from '@/api/dept'
 import { UMASK, toUmask, toArray, allUmask } from '@/common/umask'
 // import FileSelector from './file-selector/index.vue'
 
@@ -154,30 +154,19 @@ export default class EditAuthority extends Vue {
 
   request (): Promise<number | void> {
     const vm = this
-    let req: any = this.generateReq()
+    const id = this.principleId
+    const { fileId, umask, validDays } = this.form
     if (!validate()) return Promise.reject(new Error('validate fail'))
-    if (this.isEdit) return patchAuthority(this.row.id, this.isUser, req)
-    return addAuthority(req)
+    // if (this.isEdit) return patchAuthority(this.row.id, this.isUser, req)
+    return !this.isUser ? addDeptAuthority(id, fileId, umask, validDays) : Promise.resolve()
 
     function validate (): boolean {
-      if (!req.fileId && !vm.isEdit) {
+      if (fileId && !vm.isEdit) {
         vm.$message.warning('请选择文件/文件夹')
         return false
       }
       return true
     }
-  }
-
-  generateReq () {
-    let req: any = {}
-    let { isUser, principleId } = this
-    Object.assign(req, this.form)
-    if (this.isEdit) {
-      req.id = this.row && this.row.id
-    } else {
-      Object.assign(req, { isUser, principleId })
-    }
-    return req
   }
 }
 </script>

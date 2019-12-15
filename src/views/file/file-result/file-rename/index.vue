@@ -18,7 +18,7 @@
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator'
-import { patchFile } from '@/api/file'
+import { rename } from '@/api/file'
 
 @Component
 export default class FileRename extends Vue {
@@ -86,14 +86,7 @@ export default class FileRename extends Vue {
   }
 
   request (): Promise<number | void> {
-    let req: any = this.generateReq()
-    return patchFile(this.file.id, req)
-  }
-
-  generateReq () {
-    let req: any = { dir: true }
-    Object.assign(req, this.form)
-    return req
+    return rename(this.file.id, this.form.name)
   }
 }
 </script>

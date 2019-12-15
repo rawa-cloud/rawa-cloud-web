@@ -13,22 +13,21 @@
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator'
-import { queryLogs  } from '@/api/log'
+import { queryLogs } from '@/api/log'
 
 @Component
 export default class Log extends Vue {
-   
    dataSource: any[] = []
 
    loadData () {
-       this.dataSource = []
-       queryLogs().then(data => {
-           this.dataSource = data || []
-       })
+     this.dataSource = []
+     queryLogs().then(data => {
+       this.dataSource = data || []
+     })
    }
 
    mounted () {
-       this.loadData()
+     this.loadData()
    }
 }
 </script>

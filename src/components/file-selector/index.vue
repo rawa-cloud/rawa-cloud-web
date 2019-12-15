@@ -16,7 +16,7 @@
 <script lang="ts">
 
 import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator'
-import { queryFiles, getFile } from '@/api/file'
+import { queryFiles, getFile, getRootFile } from '@/api/file'
 import { toCascade } from '@/helpers/data'
 import { unique } from '@/helpers/lang'
 import { Node } from 'vua'
@@ -117,11 +117,11 @@ export default class FileSelector extends Vue {
   }
 
   loadData () {
-    return queryFiles({ parentId: -1, personal: false }).then(data => {
-      this.dataSource = (data || []).map(v => {
+    return getRootFile().then(data => {
+      this.dataSource = (data ? [data] : []).map(v => {
         return Object.assign(v, { key: v.id, label: v.name })
       })
-      this.putInTreeFileMap(data)
+      if (data) this.putInTreeFileMap([data])
     })
   }
 
