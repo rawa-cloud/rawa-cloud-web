@@ -2,6 +2,9 @@
     <div :class="[$style.container]">
         <file-tree :id.sync="id" :class="[$style.tree]"></file-tree>
         <file-result :parent-id="id" :class="[$style.result]" v-if="id"></file-result>
+        <div class="mt-5 text-center" style="width: 100%;" v-else>
+          <no-data></no-data>
+        </div>
     </div>
 </template>
 

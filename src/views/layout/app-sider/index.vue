@@ -1,7 +1,7 @@
 <template>
 <div :class="[$style.container]">
     <div class="text-center my-3">
-        <img src="@/assets/logo.png" alt="&times;" class="w-3">
+        <img src="@/assets/logo.png" alt="&times;" class="w-3 circle">
     </div>
     <nav-menu style="width: 12rem;"></nav-menu>
 

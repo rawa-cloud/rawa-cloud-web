@@ -27,7 +27,8 @@ export default class FileTree extends Vue {
 
   props = {
     key: 'id',
-    label: 'name'
+    label: 'name',
+    isLeaf: 'leaf'
   }
 
   dataSource: any = [
@@ -63,8 +64,17 @@ export default class FileTree extends Vue {
 
   loadData () {
     const all = [getRootFile(), getUserRootFile()]
-    Promise.all(all).then((data: any[]) => {
-      this.dataSource = data || []
+    Promise.all(all).then(([root, userRoot]) => {
+      let ret = []
+      if (root) {
+        root.name = '全部文件'
+        ret.push(root)
+      }
+      if (userRoot) {
+        userRoot.name = '个人目录'
+        ret.push(userRoot)
+      }
+      this.dataSource = ret
     })
   }
 

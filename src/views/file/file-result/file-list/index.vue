@@ -9,7 +9,12 @@
                     <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
                 </template>
             </v-table-column>
-            <v-table-column prop="size" label="大小"></v-table-column>
+            <v-table-column prop="size" label="大小">
+              <template slot-scope="{row}">
+                <template v-if="row.dir"></template>
+                <template v-else>{{row.size | size}}</template>
+              </template>
+            </v-table-column>
             <v-table-column prop="lastChangeTime" label="修改日期"></v-table-column>
             <v-table-column prop="umask" label="权限"></v-table-column>
             <v-table-column column-key="opt" label="操作" fixed="right" width="120px">

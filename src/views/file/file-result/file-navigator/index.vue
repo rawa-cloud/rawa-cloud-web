@@ -11,7 +11,7 @@
 <script lang="ts">
 
 import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator'
-import { getFile } from '@/api/file'
+import { getParents } from '@/api/file'
 
 @Component
 export default class FileNavigator extends Vue {
@@ -42,15 +42,11 @@ export default class FileNavigator extends Vue {
         this.dataSource = []
         return
       }
-      let ret: any[] = []
-      getFile(this.id).then(data => {
-        let parent = data
-        while (parent) {
-          ret.splice(0, 0, parent)
-          // if (!parent.parent) ret.splice(0, 0, generateHome(parent))
-          parent = parent.parent as any
-        }
-        this.dataSource = ret
+      getParents(this.id).then(data => {
+        this.dataSource = (data || []).filter((v: any, i: number) => {
+          if (i === 0) v.name = v.name === '/' ? '全部文件' : '个人文件'
+          return true
+        })
       })
 
       // function generateHome (file?: any) {

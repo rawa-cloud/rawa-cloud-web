@@ -116,6 +116,10 @@ export function getFile (id: number) {
   return http().get<FileRes>(`/files/${id}`)
 }
 
+export function getParents (id: number) {
+  return http().get<FileRes[]>(`/files/${id}/parents`)
+}
+
 export function rename (id: number, name: string) {
   return http().put<any>(`/files/${id}/rename`, { name })
 }

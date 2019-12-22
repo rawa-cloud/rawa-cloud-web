@@ -2,7 +2,10 @@
     <div>
         <ul :class="[$style.list]">
             <li :class="[$style.item, activeCls(row)]" v-for="(row, i) in dataSource" :key="i" @click="onPreview(row)">
-                <div class="text-center"><file-icon v-bind="iconProps(row)" class="ft-64"></file-icon></div>
+                <div class="text-center">
+                    <img :src="imageUrl(row)" :class="[$style.thumbnail]" v-if="imageUrl(row)">
+                    <file-icon v-bind="iconProps(row)" class="ft-64" v-else></file-icon>
+                </div>
                 <div class="text-truncate text-center px-3">{{row.name}}</div>
                 <div :class="[$style.checkbox]" @click.stop="onCheck(row)"><v-icon type="check-circle"></v-icon></div>
             </li>
@@ -13,6 +16,9 @@
 <script lang="ts">
 
 import { Vue, Component, Prop, Emit, Inject } from 'vue-property-decorator'
+import { getType } from '@/common/content-type'
+
+const baseUrl = process.env.VUE_APP_API_BASE_URL
 
 @Component
 export default class FileThumbnail extends Vue {
@@ -34,6 +40,11 @@ export default class FileThumbnail extends Vue {
 
     activeCls (row: any) {
       return this.checkedRows.includes(row) ? (this as any).$style.active : ''
+    }
+
+    imageUrl (row: any) {
+      if (getType(row.contentType) !== 'image') return ''
+      return `${baseUrl}/files/${row.id}/preview`
     }
 
     onCheck (row: any) {
@@ -93,5 +104,12 @@ export default class FileThumbnail extends Vue {
         color: var(--primary-lighten-3);
         cursor: pointer;
     }
+}
+
+.thumbnail {
+    max-width: 100%;
+    max-height: 94px;
+    padding: 4px;
+    border-radius: 4px;
 }
 </style>
