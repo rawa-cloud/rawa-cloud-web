@@ -5,8 +5,17 @@
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
             <v-table-column prop="name" label="文件名" width="480px">
                 <template slot-scope="{row}">
-                    <file-icon v-bind="iconProps(row)"></file-icon>
-                    <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
+                  <v-dropdown trigger="contextMenu">
+                    <div>
+                      <file-icon v-bind="iconProps(row)"></file-icon>
+                      <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
+                    </div>
+                    <v-dropdown-menu slot="dropdown">
+                      <v-dropdown-item>1st menu item</v-dropdown-item>
+                      <v-dropdown-item>2st menu item</v-dropdown-item>
+                      <v-dropdown-item>3rd menu item</v-dropdown-item>
+                    </v-dropdown-menu>
+                  </v-dropdown>
                 </template>
             </v-table-column>
             <v-table-column prop="size" label="大小">
@@ -16,7 +25,9 @@
               </template>
             </v-table-column>
             <v-table-column prop="lastChangeTime" label="修改日期"></v-table-column>
-            <v-table-column prop="umask" label="权限"></v-table-column>
+            <v-table-column prop="umask" label="权限">
+              <template slot-scope="{row}">{{row.umask | umask}}</template>
+            </v-table-column>
             <v-table-column column-key="opt" label="操作" fixed="right" width="120px">
                 <template slot-scope="{row}">
                     <span class="mr-2 icon-btn"><v-icon type="share-alt"></v-icon></span>

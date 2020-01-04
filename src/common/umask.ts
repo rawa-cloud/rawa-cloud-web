@@ -22,7 +22,7 @@ export function hasAllAuthority (umask: number, ...bits: number[]) {
   })
 }
 
-export function allUmask (umask: number) {
+export function allUmask (umask: number): boolean {
   if (umask === -1) return true
   let bits = Object.values(UMASK).map((v: any) => v.value) as number[]
   return hasAllAuthority(umask, ...bits)

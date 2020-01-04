@@ -3,7 +3,7 @@
     <div class="text-center my-3">
         <img src="@/assets/logo.png" alt="&times;" class="w-3 circle">
     </div>
-    <nav-menu style="width: 12rem;"></nav-menu>
+    <nav-menu style="width: 9rem;"></nav-menu>
 
     <div :class="[$style.hoverTrigger]" @click="onTrigger">
         <v-icon :type="iconType"></v-icon>

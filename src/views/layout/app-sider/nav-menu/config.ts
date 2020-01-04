@@ -9,12 +9,13 @@ export interface MenuOption {
 }
 
 export const menus: Array<MenuOption> = [
-  {
-    name: 'Dashboard',
-    icon: 'rocket',
-    pid: `${HOME}.dashboard`,
-    link: '/dashboard'
-  },
+  // 暂时不需要
+  // {
+  //   name: 'Dashboard',
+  //   icon: 'rocket',
+  //   pid: `${HOME}.dashboard`,
+  //   link: '/dashboard'
+  // },
   {
     name: '全部文件',
     icon: 'folder-open',
@@ -47,7 +48,7 @@ export const menus: Array<MenuOption> = [
   },
   {
     name: '操作日志',
-    icon: 'user',
+    icon: 'solution',
     pid: `${HOME}.log`,
     link: '/log'
   },
