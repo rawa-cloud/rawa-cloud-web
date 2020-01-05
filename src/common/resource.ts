@@ -12,6 +12,9 @@ const user = [
       },
       {
         pid: `recycle`
+      },
+      {
+        pid: 'search'
       }
     ]
   }
@@ -32,6 +35,9 @@ const admin = [
       },
       {
         pid: `recycle`
+      },
+      {
+        pid: 'search'
       }
     ]
   }
@@ -61,6 +67,9 @@ const root = [
       },
       {
         pid: 'log'
+      },
+      {
+        pid: 'search'
       }
     ]
   }

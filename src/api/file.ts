@@ -66,6 +66,13 @@ export interface FilePatchReq {
   remark?: string
 }
 
+export interface FileMoveReq {
+
+  sources: number[]
+
+  target: number
+}
+
 export interface FileRes {
   id: number
 
@@ -98,6 +105,31 @@ export interface FileRes {
   userId?: number
 
   parent?: FileRes
+}
+
+export interface FileBatchAddReq {
+
+  parentId: number
+
+  dir: boolean
+
+  name: string
+
+  uuid?: string
+
+  children?: FileBatchAddReq
+}
+
+export interface FileSearchReq {
+  name?: string
+
+  creationBy?: string
+
+  creationTimeStart?: string
+
+  creationTimeEnd?: string
+
+  [key: string]: any
 }
 
 export function queryFiles (req: FileQueryReq) {
@@ -150,4 +182,20 @@ export function getRootFile () {
 
 export function getUserRootFile () {
   return http().get<FileRes>(`/files/file/user-root`)
+}
+
+export function moveFiles (req: FileMoveReq) {
+  return http().post<number>(`/files/move`, req)
+}
+
+export function copyFiles (req: FileMoveReq) {
+  return http().post<number>(`/files/copy`, req)
+}
+
+export function batchAddFile (req: FileBatchAddReq[]) {
+  return http().post<number[]>(`/files/batch`, req)
+}
+
+export function searchFiles (req: FileSearchReq) {
+  return http().get<FileRes[]>(`/files/search`, { params: req })
 }

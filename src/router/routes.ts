@@ -52,6 +52,12 @@ const routes: Array<RouteConfig> = [
         component: () => import('@/views/log/index.vue'),
         meta: { pid: `${HOME}.log`, cname: '操作日志' }
       },
+      {
+        path: 'search',
+        name: 'search',
+        component: () => import('@/views/search/index.vue'),
+        meta: { pid: `${HOME}.search`, cname: '文件搜索' }
+      },
       // 系统管理
       {
         path: 'system/user',

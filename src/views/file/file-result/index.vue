@@ -2,7 +2,13 @@
     <div>
         <div :class="[$style.toolbar]" class="m-2">
             <span class="d-flex">
-                <v-button color="primary" class="mr-2" icon="upload" @click="onUpload">上传</v-button>
+                <v-dropdown class="d-inline-block" trigger="hover">
+                  <v-button color="primary" class="mr-2" icon="upload" @click="onUpload(true, false)">上传</v-button>
+                  <v-dropdown-menu slot="dropdown">
+                    <v-dropdown-item @click.native="onUpload(true, false)">上传文件</v-dropdown-item>
+                    <v-dropdown-item @click.native="onUpload(true, true)">上传文件夹</v-dropdown-item>
+                  </v-dropdown-menu>
+                </v-dropdown>
                 <v-button color="primary" class="mr-2" @click="onNew">新建文件夹</v-button>
 
                 <v-button-group class="mr-2">
@@ -12,8 +18,8 @@
                     <v-button color="primary" @click="onDownload()">下载</v-button>
                     <v-button color="primary" @click="onDelete()">删除</v-button>
                     <v-button color="primary" @click="onRename()">重命名</v-button>
-                    <v-button color="primary" disabled>复制到</v-button>
-                    <v-button color="primary" disabled>移动到</v-button>
+                    <v-button color="primary" @click="onCopyTo()">复制到</v-button>
+                    <v-button color="primary" @click="onMoveTo()">移动到</v-button>
                 </v-button-group>
             </span>
 
@@ -44,13 +50,14 @@
         <file-rename ref="fileRename"></file-rename>
         <file-preview ref="filePreview"></file-preview>
         <file-record ref="fileRecord"></file-record>
+        <file-chooser ref="fileChooser"></file-chooser>
     </div>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component, Prop, Watch, Provide } from 'vue-property-decorator'
-import { queryFiles, downloadFile, deleteFiles } from '@/api/file'
+import { queryFiles, downloadFile, deleteFiles, moveFiles, copyFiles } from '@/api/file'
 import { download } from '@/helpers/download'
 import FileList from './file-list/index.vue'
 import FileThumbnail from './file-thumbnail/index.vue'
@@ -92,9 +99,9 @@ export default class FileResult extends Vue {
       }
     }
 
-    onUpload () {
+    onUpload (multiple: boolean, directory: boolean) {
       const $e = this.$refs.fileUpload as FileUpload
-      $e.upload(this.parentId).then(() => {
+      $e.upload(this.parentId, multiple, directory).then(() => {
         this.$message.success('上传成功')
         this.refresh()
       })
@@ -187,12 +194,30 @@ export default class FileResult extends Vue {
       })
     }
 
-    onCopyTo (file?: any) {
-
+    @Provide() onCopyTo (file?: any) {
+      if (!this.validate(file)) return
+      let files = file ? [file] : this.checkedRows
+      let sources = files.map((v: any) => v.id)
+      const $e = (this.$refs as any).fileChooser as any
+      $e.choose(true, '复制到').then((target: any) => {
+        copyFiles({ sources, target }).then((data) => {
+          this.$message.success(`成功复制${data}个文件`)
+          this.refresh()
+        })
+      })
     }
 
-    onMoveTo (file?: any) {
-
+    @Provide() onMoveTo (file?: any) {
+      if (!this.validate(file)) return
+      let files = file ? [file] : this.checkedRows
+      let sources = files.map((v: any) => v.id)
+      const $e = (this.$refs as any).fileChooser as any
+      $e.choose(true, '移动到').then((target: any) => {
+        moveFiles({ sources, target }).then((data) => {
+          this.$message.success(`成功移动${data}个文件`)
+          this.refresh()
+        })
+      })
     }
 
     disabled (type: 'share' | 'download' | 'delete' | 'rename', file?: any) {

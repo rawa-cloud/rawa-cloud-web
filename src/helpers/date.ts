@@ -29,3 +29,9 @@ export function formatDate (date: Date, format: string = 'yyyy/MM/dd HH:mm:ss') 
     return ('0' + text).substr(-num)
   }
 }
+
+export function normalizeDate (date: string) {
+  if (!date) return undefined
+  if (date.length <= 10) return date + ' 00:00:00'
+  return date
+}

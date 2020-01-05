@@ -1,21 +1,12 @@
 <template>
     <div>
-        <v-table :data-source="dataSource"  :class="[$style.table]"
+        <v-table :data-source="dataSource"  :class="[$style.table]" highlight-current-row
             @selection-change="onSelectionChange" height="calc(100vh - 260px)" ref="table">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
             <v-table-column prop="name" label="文件名" width="480px">
                 <template slot-scope="{row}">
-                  <v-dropdown trigger="contextMenu">
-                    <div>
-                      <file-icon v-bind="iconProps(row)"></file-icon>
-                      <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
-                    </div>
-                    <v-dropdown-menu slot="dropdown">
-                      <v-dropdown-item>1st menu item</v-dropdown-item>
-                      <v-dropdown-item>2st menu item</v-dropdown-item>
-                      <v-dropdown-item>3rd menu item</v-dropdown-item>
-                    </v-dropdown-menu>
-                  </v-dropdown>
+                   <file-icon v-bind="iconProps(row)"></file-icon>
+                   <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
                 </template>
             </v-table-column>
             <v-table-column prop="size" label="大小">
@@ -30,8 +21,6 @@
             </v-table-column>
             <v-table-column column-key="opt" label="操作" fixed="right" width="120px">
                 <template slot-scope="{row}">
-                    <span class="mr-2 icon-btn"><v-icon type="share-alt"></v-icon></span>
-                    <span class="mr-2 icon-btn" @click="onDownload(row)"><v-icon type="cloud-download-o"></v-icon></span>
                     <v-dropdown trigger="click" class="d-inline">
                         <span class="icon-btn"><v-icon type="ellipsis"></v-icon></span>
                         <v-dropdown-menu slot="dropdown" class="w-6">
@@ -43,6 +32,20 @@
                     </v-dropdown>
                 </template>
             </v-table-column>
+            <template slot="menu" slot-scope="{row}">
+                <v-dropdown-item @click.native="onDownload(row)">
+                  <span><v-icon type="cloud-download-o"></v-icon> 下载 </span>
+                </v-dropdown-item>
+                 <v-dropdown-item>
+                  <span><v-icon type="share-alt"></v-icon> 分享</span>
+                </v-dropdown-item>
+                <v-dropdown-item @click.native="onRename(row)">
+                  <span><v-icon type="share-alt"></v-icon> 重命名</span>
+                </v-dropdown-item>
+                <v-dropdown-item @click.native="onDelete(row)">
+                  <span><v-icon type="share-alt"></v-icon> 删除</span>
+                </v-dropdown-item>
+            </template>
         </v-table>
     </div>
 </template>

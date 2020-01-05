@@ -53,6 +53,12 @@ export const menus: Array<MenuOption> = [
     link: '/log'
   },
   {
+    name: '文件搜索',
+    icon: 'search',
+    pid: `${HOME}.search`,
+    link: '/search'
+  },
+  {
     name: '系统管理',
     icon: 'setting',
     pid: `${HOME}.system`,
