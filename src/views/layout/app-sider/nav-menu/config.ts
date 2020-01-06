@@ -59,6 +59,12 @@ export const menus: Array<MenuOption> = [
     link: '/search'
   },
   {
+    name: '我的收藏',
+    icon: 'heart-o',
+    pid: `${HOME}.favorite`,
+    link: '/favorite'
+  },
+  {
     name: '系统管理',
     icon: 'setting',
     pid: `${HOME}.system`,

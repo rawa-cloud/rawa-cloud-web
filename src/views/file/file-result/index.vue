@@ -20,6 +20,7 @@
                     <v-button color="primary" @click="onRename()">重命名</v-button>
                     <v-button color="primary" @click="onCopyTo()">复制到</v-button>
                     <v-button color="primary" @click="onMoveTo()">移动到</v-button>
+                    <v-button color="primary" @click="onCollect()">收藏</v-button>
                 </v-button-group>
             </span>
 
@@ -51,6 +52,7 @@
         <file-preview ref="filePreview"></file-preview>
         <file-record ref="fileRecord"></file-record>
         <file-chooser ref="fileChooser"></file-chooser>
+        <file-collect ref="fileCollect"></file-collect>
     </div>
 </template>
 
@@ -67,9 +69,10 @@ import FileUpload from './file-upload/index.vue'
 import FileLink from './file-link/index.vue'
 import FileRename from './file-rename/index.vue'
 import FileRecord from './file-record/index.vue'
+import FileCollect from './file-collect/index.vue'
 
 @Component({
-  components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename, FileRecord }
+  components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename, FileRecord, FileCollect }
 })
 export default class FileResult extends Vue {
     @Prop(Number) parentId!: number
@@ -81,6 +84,10 @@ export default class FileResult extends Vue {
     dataSource: any[] = []
 
     loading: boolean = false
+
+    get filter () {
+      return this.$route.query.filter || null
+    }
 
     onSelectView (view: 'list' | 'thumbnail') {
       this.view = view
@@ -220,6 +227,19 @@ export default class FileResult extends Vue {
       })
     }
 
+    @Provide() onCollect (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('只能选择一条')
+      }
+      let f = file || this.checkedRows[0]
+      const $e = this.$refs.fileCollect as FileCollect
+      $e.collect(f.id, f.name).then(() => {
+        this.$message.success('收藏成功')
+        this.refresh()
+      })
+    }
+
     disabled (type: 'share' | 'download' | 'delete' | 'rename', file?: any) {
       // TODO
     }
@@ -238,7 +258,11 @@ export default class FileResult extends Vue {
       let req = { parentId }
       this.loading = true
       queryFiles(req).then(data => {
-        this.dataSource = data || []
+        this.dataSource = (data || []).filter(v => {
+          if (!this.filter) return true
+          const list = (this.filter as any).split(',').map((v: any) => +v)
+          return list.includes(v.id)
+        })
       }).finally(() => {
         this.loading = false
       })

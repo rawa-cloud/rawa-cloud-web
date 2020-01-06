@@ -15,6 +15,9 @@ const user = [
       },
       {
         pid: 'search'
+      },
+      {
+        pid: 'favorite'
       }
     ]
   }
@@ -38,6 +41,9 @@ const admin = [
       },
       {
         pid: 'search'
+      },
+      {
+        pid: 'favorite'
       }
     ]
   }
@@ -70,6 +76,9 @@ const root = [
       },
       {
         pid: 'search'
+      },
+      {
+        pid: 'favorite'
       }
     ]
   }

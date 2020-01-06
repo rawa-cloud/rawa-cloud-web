@@ -58,6 +58,12 @@ const routes: Array<RouteConfig> = [
         component: () => import('@/views/search/index.vue'),
         meta: { pid: `${HOME}.search`, cname: '文件搜索' }
       },
+      {
+        path: 'favorite',
+        name: 'favorite',
+        component: () => import('@/views/favorite/index.vue'),
+        meta: { pid: `${HOME}.favorite`, cname: '我的收藏' }
+      },
       // 系统管理
       {
         path: 'system/user',
