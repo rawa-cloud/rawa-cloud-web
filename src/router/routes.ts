@@ -7,7 +7,7 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: `${HOME}`,
     component: () => import('@/views/layout/index.vue'),
-    redirect: { path: '/file', query: { id: '-2' } },
+    redirect: '/portal',
     meta: { pid: `${HOME}`, cname: '首页' },
     children: [
       {
@@ -78,6 +78,11 @@ const routes: Array<RouteConfig> = [
         component: () => import('@/views/user-setting/index.vue')
       }
     ]
+  },
+  {
+    path: '/portal',
+    name: 'portal',
+    component: () => import('@/views/portal/index.vue')
   },
   {
     path: '/share/:id',
