@@ -6,5 +6,7 @@ export default class BasePreview extends Vue {
 
   @Prop() rows!: any[]
 
+  @Prop() type!: string
+
   @Emit() close () {}
 }

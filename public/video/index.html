@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+
+  <link href="https://unpkg.com/video.js/dist/video-js.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/video.js/dist/video.min.js"></script>
+</head>
+
+<body>
+  <style>
+    .body {
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }  
+    .video-js {
+      min-width: 600px;
+      min-height: 400px;
+    }
+  </style>
+  <div class="container">
+    <video id="my-player" class="video-js" controls preload="auto" data-setup='{}'>
+      <source src="" type="video/mp4" id="source">
+      </source>
+      <!-- <source src="//vjs.zencdn.net/v/oceans.mp4" type="video/mp4">
+      </source>
+      <source src="//vjs.zencdn.net/v/oceans.webm" type="video/webm">
+      </source>
+      <source src="//vjs.zencdn.net/v/oceans.ogv" type="video/ogg">
+      </source> -->
+    </video>
+  </div>
+  <script>
+    const source = document.getElementById('source')
+    const player = document.getElementById('my-player')
+    let params = query()
+    let src = params.src
+    let type = params.type
+    if(type === 'audio') {
+      player.poster = "http://img.mp.itc.cn/q_mini,c_zoom,w_640/upload/20170708/2188edbf9c8b4271a8227da4898ddbd3_th.jpg"
+    }
+    source.src = src
+
+    function query () {
+      let p = window.location.search.slice(1)
+      let ret = {}
+      p.split('&').forEach(v => {
+        let value = v.split('=')
+        ret[value[0]] = value[1]
+      })
+      return ret
+    }
+  </script>
+</body>
+
+</html>

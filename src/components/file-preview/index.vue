@@ -3,9 +3,10 @@ import { Component, Prop, Vue, Emit, Watch } from 'vue-property-decorator'
 import { getType } from '@/common/content-type'
 import ImagePreview from './image-preview/index.vue'
 import OfficePreview from './office-preview/index.vue'
+import VideoPreview from './video-preview/index.vue'
 
 @Component({
-  components: { ImagePreview, OfficePreview }
+  components: { ImagePreview, OfficePreview, VideoPreview }
 })
 export default class FilePreview extends Vue {
   visible: boolean = false
@@ -27,11 +28,12 @@ export default class FilePreview extends Vue {
 
   render (h: any) {
     if (!this.visible || !this.type) return h('div')
-    let props = { row: this.row, rows: this.rows }
+    let props = { row: this.row, rows: this.rows, type: this.type }
     let on = {
       close: () => { this.visible = false }
     }
-    return h(`${this.type}-preview`, { props, on })
+    let type = this.type === 'audio' ? 'video' : this.type
+    return h(`${type}-preview`, { props, on })
   }
 
   @Watch('visible') visibleChange () {

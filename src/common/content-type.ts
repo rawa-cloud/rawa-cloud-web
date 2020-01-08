@@ -17,10 +17,13 @@ const map: any = {
     'pptx': 'ppt'
   },
   audio: {
-
+    'mp3': 'audio',
+    'ogg': 'audio'
   },
   video: {
-
+    'mp4': 'video',
+    'webm': 'video',
+    'ogv': 'video'
   }
 }
 
