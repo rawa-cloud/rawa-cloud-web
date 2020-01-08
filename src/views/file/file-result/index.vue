@@ -141,10 +141,10 @@ export default class FileResult extends Vue {
         return
       }
       let row = file || this.checkedRows[0]
-      if (row.dir) {
-        this.$message.info('暂不支持下载文件夹')
-        return
-      }
+      // if (row.dir) {
+      //   this.$message.info('暂不支持下载文件夹')
+      //   return
+      // }
       downloadFile(row.id).then(data => {
         download(data, row.name)
       })
