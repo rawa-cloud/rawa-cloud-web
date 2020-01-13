@@ -2,8 +2,18 @@
     <div>
         <div :class="[$style.toolbar]" class="m-2">
             <span class="d-flex">
-                <v-dropdown class="d-inline-block" trigger="hover">
+                <!-- <v-dropdown class="d-inline-block" trigger="hover">
                   <v-button color="primary" class="mr-2" icon="upload" @click="onUpload(true, false)">上传</v-button>
+                  <v-dropdown-menu slot="dropdown">
+                    <v-dropdown-item @click.native="onUpload(true, false)">上传文件</v-dropdown-item>
+                    <v-dropdown-item @click.native="onUpload(true, true)">上传文件夹</v-dropdown-item>
+                  </v-dropdown-menu>
+                </v-dropdown> -->
+                <v-dropdown trigger="click" class="d-inline-block mr-2">
+                  <v-button-group>
+                      <v-button color="primary"  @click="onUpload(true, false)"> 上 传 </v-button>
+                      <v-button color="primary"  x-reference slim><i class="anticon anticon-down"></i></v-button>
+                  </v-button-group>
                   <v-dropdown-menu slot="dropdown">
                     <v-dropdown-item @click.native="onUpload(true, false)">上传文件</v-dropdown-item>
                     <v-dropdown-item @click.native="onUpload(true, true)">上传文件夹</v-dropdown-item>
