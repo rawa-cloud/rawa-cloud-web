@@ -12,15 +12,16 @@
                 <v-button color="primary" class="mr-2" @click="onNew">新建文件夹</v-button>
 
                 <v-button-group class="mr-2">
-                    <v-button color="primary" @click="onRenew()">更新</v-button>
-                    <v-button color="primary" @click="onFileRecord()">查看文件轨迹</v-button>
+                    <v-button color="primary" @click="row.action()" v-for="(row, i) in renderedActions" :key="i">{{row.title}}</v-button>
+                    <!-- <v-button color="primary" @click="onRenew()">更新</v-button>
+                    <v-button color="primary" @click="onFileRecord()">版本</v-button>
                     <v-button color="primary" @click="onShare()">分享</v-button>
                     <v-button color="primary" @click="onDownload()">下载</v-button>
                     <v-button color="primary" @click="onDelete()">删除</v-button>
                     <v-button color="primary" @click="onRename()">重命名</v-button>
                     <v-button color="primary" @click="onCopyTo()">复制到</v-button>
                     <v-button color="primary" @click="onMoveTo()">移动到</v-button>
-                    <v-button color="primary" @click="onCollect()">收藏</v-button>
+                    <v-button color="primary" @click="onCollect()">收藏</v-button> -->
                 </v-button-group>
             </span>
 
@@ -58,7 +59,7 @@
 
 <script lang="ts">
 
-import { Vue, Component, Prop, Watch, Provide } from 'vue-property-decorator'
+import { Vue, Component, Prop, Watch, Provide, Inject } from 'vue-property-decorator'
 import { queryFiles, downloadFile, deleteFiles, moveFiles, copyFiles } from '@/api/file'
 import { download } from '@/helpers/download'
 import FileList from './file-list/index.vue'
@@ -70,6 +71,7 @@ import FileLink from './file-link/index.vue'
 import FileRename from './file-rename/index.vue'
 import FileRecord from './file-record/index.vue'
 import FileCollect from './file-collect/index.vue'
+import { UMASK, hasAllAuthority } from '@/common/umask'
 
 @Component({
   components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename, FileRecord, FileCollect }
@@ -85,8 +87,41 @@ export default class FileResult extends Vue {
 
     loading: boolean = false
 
+    actions = [
+      { title: '打开', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
+      { title: '更新', batch: false, umask: UMASK.UPDATE_FILE.value, action: this.onRenew },
+      { title: '详情', batch: false, umask: UMASK.ACCESS.value, action: this.onRenew },
+      { title: '版本', batch: false, umask: UMASK.ACCESS.value, action: this.onFileRecord },
+      { title: '分享', batch: true, umask: UMASK.LINK.value, action: this.onShare },
+      { title: '下载', batch: false, umask: UMASK.DOWNLOAD.value, action: this.onDownload },
+      { title: '删除', batch: true, umask: UMASK.RECYCLE.value, action: this.onDelete },
+      { title: '重命名', batch: false, umask: UMASK.RENAME.value, action: this.onRename },
+      { title: '复制到', batch: true, umask: UMASK.DOWNLOAD.value, action: this.onCopyTo },
+      { title: '移动到', batch: true, umask: UMASK.RECYCLE.value | UMASK.DOWNLOAD.value, action: this.onMoveTo },
+      { title: '收藏', batch: false, umask: UMASK.ACCESS.value, action: this.onCollect }
+    ]
+
+    @Inject() reload!: (id?: number) => void
+
     get filter () {
       return this.$route.query.filter || null
+    }
+
+    get renderedActions () {
+      return this.filterActions()
+    }
+
+    @Provide() filterActions (row?: any) {
+      const rows = row ? [row] : this.checkedRows
+      if (rows.length < 1) return []
+      return this.actions.filter((v: any) => {
+        if (!v.batch && rows.length > 1) return false
+        return true
+      }).filter((v: any) => {
+        return rows.every((w: any) => {
+          return hasAllAuthority(w.umask, v.umask)
+        })
+      })
     }
 
     onSelectView (view: 'list' | 'thumbnail') {
@@ -97,7 +132,13 @@ export default class FileResult extends Vue {
       this.checkedRows = []
     }
 
-    @Provide() onPreview (row: any) {
+    @Provide() onPreview (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('只能选择一条记录')
+        return
+      }
+      let row = file || this.checkedRows[0]
       if (row.dir) {
         this.$router.push({ path: '/file', query: { id: row.id } })
       } else {
@@ -118,6 +159,7 @@ export default class FileResult extends Vue {
       const $e = this.$refs.editDir as EditDir
       $e.add(this.parentId).then(() => {
         this.$message.success('新建文件夹成功')
+        this.reload()
         this.refresh()
       })
     }
@@ -155,6 +197,8 @@ export default class FileResult extends Vue {
       this.$modal.confirm({ title: '确认', content: '确认删除文件？' }).then(() => {
         let ids: number[] = file ? [file.id] : this.checkedRows.map((v: any) => v.id)
         deleteFiles(ids).then((data) => {
+          this.$message.success('文件删除成功')
+          this.reload()
           this.refresh()
         })
       })
@@ -170,6 +214,9 @@ export default class FileResult extends Vue {
       let $e = this.$refs.fileRename as any
       $e.rename(row).then(() => {
         this.$message.success('重命名成功')
+        if (row.dir) {
+          this.reload()
+        }
         this.refresh()
       })
     }
@@ -209,6 +256,8 @@ export default class FileResult extends Vue {
       $e.choose(true, '复制到').then((target: any) => {
         copyFiles({ sources, target }).then((data) => {
           this.$message.success(`成功复制${data}个文件`)
+          this.reload()
+          this.reload(target)
           this.refresh()
         })
       })
@@ -222,6 +271,8 @@ export default class FileResult extends Vue {
       $e.choose(true, '移动到').then((target: any) => {
         moveFiles({ sources, target }).then((data) => {
           this.$message.success(`成功移动${data}个文件`)
+          this.reload()
+          this.reload(target)
           this.refresh()
         })
       })

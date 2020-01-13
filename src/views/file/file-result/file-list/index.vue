@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-table :data-source="dataSource"  :class="[$style.table]" highlight-current-row
-            @selection-change="onSelectionChange" height="calc(100vh - 260px)" ref="table">
+            @selection-change="onSelectionChange" height="calc(100vh - 260px)" @row-menu="onRowMenu" ref="table">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
             <v-table-column prop="name" label="文件名" width="480px">
                 <template slot-scope="{row}">
@@ -19,7 +19,7 @@
             <v-table-column prop="umask" label="权限">
               <template slot-scope="{row}">{{row.umask | umask}}</template>
             </v-table-column>
-            <v-table-column column-key="opt" label="操作" fixed="right" width="120px">
+            <!-- <v-table-column column-key="opt" label="操作" fixed="right" width="120px">
                 <template slot-scope="{row}">
                     <v-dropdown trigger="click" class="d-inline">
                         <span class="icon-btn"><v-icon type="ellipsis"></v-icon></span>
@@ -31,9 +31,12 @@
                         </v-dropdown-menu>
                     </v-dropdown>
                 </template>
-            </v-table-column>
-            <template slot="menu" slot-scope="{row}">
-                <v-dropdown-item @click.native="onDownload(row)">
+            </v-table-column> -->
+            <template slot="menu" slot-scope="{}">
+                <v-dropdown-item @click.native="row.action()" v-for="(row, i) in menus" :key="i" :class="[$style.menu]">
+                  <span> {{row.title}} </span>
+                </v-dropdown-item>
+                <!-- <v-dropdown-item @click.native="onDownload(row)">
                   <span><v-icon type="cloud-download-o"></v-icon> 下载 </span>
                 </v-dropdown-item>
                  <v-dropdown-item>
@@ -44,7 +47,7 @@
                 </v-dropdown-item>
                 <v-dropdown-item @click.native="onDelete(row)">
                   <span><v-icon type="share-alt"></v-icon> 删除</span>
-                </v-dropdown-item>
+                </v-dropdown-item> -->
             </template>
         </v-table>
     </div>
@@ -70,6 +73,12 @@ export default class FileList extends Vue {
 
     @Inject() onRename!: (row: any) => void
 
+    @Inject() filterActions!: (row?: any) => any[]
+
+    get menus () {
+      return this.filterActions()
+    }
+
     onSelectionChange (rows: any[]) {
       if (isSameArray(rows, this.checkedRows)) return
       this.updateCheckedRows(rows)
@@ -79,6 +88,13 @@ export default class FileList extends Vue {
         let s2 = new Set(b)
         return a.every(v => s2.has(v))
       }
+    }
+
+    onRowMenu (row: any) {
+      const $e = (this.$refs as any).table
+      if ($e.hasSelection(row)) return
+      $e.resetSelection()
+      $e.selectRow(row, true)
     }
 
     iconProps (row: any) {
@@ -111,5 +127,10 @@ export default class FileList extends Vue {
 <style lang="scss" module>
 .table {
     // font-size: 12px;
+}
+
+.menu {
+  width: 120px;
+  padding-left: 32px;
 }
 </style>

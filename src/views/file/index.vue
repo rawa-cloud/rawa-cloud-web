@@ -1,6 +1,6 @@
 <template>
     <div :class="[$style.container]">
-        <file-tree :id.sync="id" :class="[$style.tree]"></file-tree>
+        <file-tree :id.sync="id" :class="[$style.tree]" ref="fileTree"></file-tree>
         <file-result :parent-id="id" :class="[$style.result]" v-if="id"></file-result>
         <div class="mt-5 text-center" style="width: 100%;" v-else>
           <no-data></no-data>
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 
-import { Vue, Component } from 'vue-property-decorator'
+import { Vue, Component, Provide } from 'vue-property-decorator'
 import FileTree from './file-tree/index.vue'
 import FileResult from './file-result/index.vue'
 
@@ -24,6 +24,12 @@ export default class Dept extends Vue {
 
   set id (id: number) {
     this.$router.push({ path: '/file', query: { id: String(id) } })
+  }
+
+  @Provide() reload (id?: number) {
+    const $e = this.$refs.fileTree as any
+    let actualId = id || this.id
+    if ($e) $e.reload(actualId)
   }
 }
 </script>

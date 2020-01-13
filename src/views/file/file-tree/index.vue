@@ -16,7 +16,7 @@
 <script lang="ts">
 
 import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
-import { TreeNodeLoadFn } from 'vua'
+import { TreeNodeLoadFn, VTree } from 'vua'
 import { queryFiles, getUserRootFile, getRootFile } from '@/api/file'
 
 @Component
@@ -78,6 +78,8 @@ export default class FileTree extends Vue {
       this.$nextTick(() => {
         if (!this.id) {
           this.$router.push(`/file?id=${root.id}`)
+        }
+        if (this.id === root.id) {
           const $e = (this.$refs as any).tree
           if ($e) {
             $e.currentNodeKey = root.id
@@ -86,6 +88,44 @@ export default class FileTree extends Vue {
         }
       })
     })
+  }
+
+  reload (id: number) {
+    const $e = this.$refs.tree as VTree
+    const node = $e.nodeMap.get(id)
+    if (!node) {
+      throw new Error(`can not reload tree node [${id}], not found in nodeMap`)
+    }
+    let parentId = id
+    let dir = true
+    node.loading = true
+    queryFiles({ parentId, dir }).then((data) => {
+      let oldData = (node.children || []).map((v: any) => v.data)
+      let newData = data || []
+      let mergedData = merge(newData, oldData)
+      // node.data = mergedData
+      node.children = node.normalizeNode(mergedData)
+      node.expandNode(false)
+      this.$nextTick(() => {
+        node.expandNode(true)
+      })
+    }).finally(() => {
+      node.loading = false
+    })
+
+    function merge (newData: any[], oldData: any[]): any[] {
+      let map = new Map()
+      oldData.forEach((v: any) => {
+        map.set(v.id, v)
+      })
+      return newData.map(v => {
+        if (map.has(v.id)) {
+          let item = map.get(v.id)
+          return Object.assign(item, { name: v.name })
+        }
+        return v
+      })
+    }
   }
 
   onRefresh () {
@@ -126,6 +166,7 @@ export default class FileTree extends Vue {
 
 .tree {
     width: 100%;
+    height: calc(100% - 48px);
     overflow: auto;
 
     :global{
