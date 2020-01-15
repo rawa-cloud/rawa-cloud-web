@@ -262,6 +262,7 @@ export default class FileUpload extends Vue {
 <style lang="scss" module>
 .body {
   height: 380px;
+  overflow: auto;
 }
 
 .upload {

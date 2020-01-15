@@ -37,7 +37,8 @@ export default function install (): void {
       data: 'data',
       successCode: '000000',
       expiredCode: '100000'
-    }
+    },
+    timeout: 24 * 60 * 60 * 1000
   })
 
   Vue.use(SvgPlugin, {})

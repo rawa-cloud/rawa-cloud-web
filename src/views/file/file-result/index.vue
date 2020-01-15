@@ -64,6 +64,7 @@
         <file-record ref="fileRecord"></file-record>
         <file-chooser ref="fileChooser"></file-chooser>
         <file-collect ref="fileCollect"></file-collect>
+        <file-detail ref="fileDetail"></file-detail>
     </div>
 </template>
 
@@ -81,10 +82,11 @@ import FileLink from './file-link/index.vue'
 import FileRename from './file-rename/index.vue'
 import FileRecord from './file-record/index.vue'
 import FileCollect from './file-collect/index.vue'
+import FileDetail from './file-detail/index.vue'
 import { UMASK, hasAllAuthority } from '@/common/umask'
 
 @Component({
-  components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename, FileRecord, FileCollect }
+  components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename, FileRecord, FileCollect, FileDetail }
 })
 export default class FileResult extends Vue {
     @Prop(Number) parentId!: number
@@ -99,9 +101,9 @@ export default class FileResult extends Vue {
 
     actions = [
       { title: '打开', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
-      { title: '更新', batch: false, umask: UMASK.UPDATE_FILE.value, action: this.onRenew },
-      { title: '详情', batch: false, umask: UMASK.ACCESS.value, action: this.onRenew },
-      { title: '版本', batch: false, umask: UMASK.ACCESS.value, action: this.onFileRecord },
+      { title: '更新', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, action: this.onRenew },
+      { title: '详情', batch: false, umask: UMASK.ACCESS.value, action: this.onDetail },
+      { title: '版本', batch: false, onlyFile: true, umask: UMASK.ACCESS.value, action: this.onFileRecord },
       { title: '分享', batch: true, umask: UMASK.LINK.value, action: this.onShare },
       { title: '下载', batch: false, umask: UMASK.DOWNLOAD.value, action: this.onDownload },
       { title: '删除', batch: true, umask: UMASK.RECYCLE.value, action: this.onDelete },
@@ -126,6 +128,7 @@ export default class FileResult extends Vue {
       if (rows.length < 1) return []
       return this.actions.filter((v: any) => {
         if (!v.batch && rows.length > 1) return false
+        if (v.onlyFile && rows.some((w: any) => w.dir)) return false
         return true
       }).filter((v: any) => {
         return rows.every((w: any) => {
@@ -299,6 +302,16 @@ export default class FileResult extends Vue {
         this.$message.success('收藏成功')
         this.refresh()
       })
+    }
+
+    @Provide() onDetail (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('只能选择一条')
+      }
+      let f = file || this.checkedRows[0]
+      const $e = this.$refs.fileDetail as FileDetail
+      $e.view(f).then(() => {})
     }
 
     disabled (type: 'share' | 'download' | 'delete' | 'rename', file?: any) {
