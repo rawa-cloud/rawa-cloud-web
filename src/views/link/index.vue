@@ -8,7 +8,10 @@
                 </template>
             </v-alert>
             <div class="ml-3">
-                <v-button color="primary" icon="rollback" :disabled="checkedRows.length < 1" @click="onCancel()">取消分享</v-button>
+                <v-button color="primary" :disabled="checkedRows.length < 1" @click="onCancel()">
+                  <svg-icon icon="unshare"></svg-icon>
+                  取消分享
+                </v-button>
             </div>
         </div>
 
@@ -34,7 +37,7 @@
             <v-table-column prop="expiryTime" label="失效时间"></v-table-column>
             <v-table-column prop="opt" label="操作" fixed="right" width="80px">
                 <template slot-scope="{row}">
-                    <span class="icon-btn" @click="onCancel(row.id)"><v-icon type="rollback"></v-icon></span>
+                    <span class="icon-btn" @click="onCancel(row.id)"><svg-icon icon="unshare"></svg-icon></span>
                 </template>
             </v-table-column>
         </v-table>

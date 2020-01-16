@@ -20,7 +20,7 @@
               <v-input readonly append="链接7天后失效" :value="linkUrl" style="flex: 1 1 auto;"></v-input>
               <v-button type="primary" @click="onCopy" class="ml-2">复制链接</v-button>
             </div>
-            <div class="mt-2">
+            <div class="mt-2" v-if="link.password">
               <v-input readonly append="提取码" :value="link.password" class="w-10"></v-input>
             </div>
           </div>
@@ -140,7 +140,7 @@ export default class FileLink extends Vue {
       req.password = randomString()
     }
     if (this.form.validDays) {
-      req.expiredTime = formatDate(addDays(this.form.validDays as any))
+      req.expiryTime = formatDate(addDays(this.form.validDays as any))
     }
     Object.assign(req, this.form)
     return req

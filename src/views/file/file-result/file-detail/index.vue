@@ -68,6 +68,7 @@ export default class EditDir extends Vue {
   }
 
   resolveText (row: any) {
+    if (!this.file) return ''
     if (row.formatter) return row.formatter(this.file)
     return this.file[row.key]
   }

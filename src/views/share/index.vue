@@ -15,14 +15,14 @@
             <span class="ml-2 text-link">{{link && link.fileName}}</span>
           </span>
           <span>
-            <v-button type="outline" color="primary" icon="close-circle-o">取消分享</v-button>
-            <v-button type="outline" color="primary" icon="cloud-download-o" class="ml-2">下载</v-button>
+            <v-button type="primary" icon="close-circle-o" @click="onCancelShare">取消分享</v-button>
+            <v-button type="primary" icon="cloud-download-o" class="ml-2" disabled>下载</v-button>
           </span>
         </div>
 
-        <div class="caption">
-          <span><span><v-icon type="clock-circle-o"></v-icon></span> <span class="ml-2">2019/09/07 12:34:45</span></span>
-          <span class="ml-3">失效时间：6小时</span>
+        <div class="caption" v-if="link">
+          <span><span><v-icon type="clock-circle-o"></v-icon></span> <span class="ml-2">{{link.creationTime}}</span></span>
+          <span class="ml-3">失效时间：{{expiryTimeText}}</span>
         </div>
       </div>
 
@@ -39,6 +39,7 @@
 
         <file-list :data-source="dataSource" :checked-rows.sync="checkedRows"></file-list>
       </div>
+      <file-preview ref="filePreview"></file-preview>
     </div>
   </div>
 </template>
@@ -47,6 +48,7 @@
 
 import { Vue, Component, Provide, Watch } from 'vue-property-decorator'
 import { getLink, queryFiles, download as downloadFile } from '@/api/share'
+import { deleteLink } from '@/api/link'
 import { download } from '@/helpers/download'
 import FileList from './file-list/index.vue'
 import FileNavigator from './file-navigator/index.vue'
@@ -91,24 +93,37 @@ export default class Share extends Vue {
     return { dir, personal, root, contentType }
   }
 
+  get expiryTimeText () {
+    if (!this.link) return ''
+    let time = this.link.expiryTime || ''
+    return time ? time.slice(0, 10) : '永久'
+  }
+
   onClearSelection () {
     this.checkedRows = []
+  }
+
+  onCancelShare () {
+    if (!this.link) return
+    deleteLink([this.link.id]).then(() => {
+      this.$message.success('已取消分享')
+      this.$router.go(-1)
+    })
   }
 
   @Provide() onPreview (row: any) {
     let path = this.$route.path
     if (row.dir) {
       this.$router.push({ path: path, query: { fileId: row.id } })
+    } else {
+      const $e = this.$refs.filePreview as any
+      $e.preview(row, this.dataSource)
     }
   }
 
   @Provide() onDownload (file?: any) {
     if (!file) {
       this.$message.info('暂不支持批量下载')
-      return
-    }
-    if (file.dir) {
-      this.$message.info('暂不支持下载文件夹')
       return
     }
     downloadFile(this.link.id, this.password, file.id).then(data => {
