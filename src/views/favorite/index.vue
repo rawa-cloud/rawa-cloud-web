@@ -87,6 +87,9 @@ export default class Favorite extends Vue {
   loadCatalogs () {
     queryCatalogs().then(data => {
       this.catalogs = data || []
+      if (!this.current && this.catalogs[0]) {
+        this.current = this.catalogs[0].id
+      }
     })
   }
 

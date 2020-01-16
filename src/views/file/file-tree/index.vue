@@ -79,12 +79,10 @@ export default class FileTree extends Vue {
         if (!this.id) {
           this.$router.push(`/file?id=${root.id}`)
         }
-        if (this.id === root.id) {
-          const $e = (this.$refs as any).tree
-          if ($e) {
-            $e.currentNodeKey = root.id
-            $e.$children[0].onExpand()
-          }
+        const $e = (this.$refs as any).tree
+        if ($e) {
+          $e.currentNodeKey = root.id
+          $e.$children[0].onExpand()
         }
       })
     })

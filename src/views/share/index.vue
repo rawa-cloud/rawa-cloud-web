@@ -127,7 +127,7 @@ export default class Share extends Vue {
       return
     }
     downloadFile(this.link.id, this.password, file.id).then(data => {
-      download(data, file.name)
+      download(data, file.dir ? `${file.name}.zip` : file.name)
     })
   }
 

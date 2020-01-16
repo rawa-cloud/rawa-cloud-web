@@ -1,6 +1,6 @@
 <template>
  <v-modal :visible.sync="visible" :title="title">
-    <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :class="[$style.tree]" v-if="visible">
+    <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" :class="[$style.tree]" ref="tree" v-if="visible">
       <div slot="content"  slot-scope="{node}" @click="onChoose(node)">
         <span><file-icon v-bind="iconProps(node.data)" class="mr-2"></file-icon>{{node.data.label}}</span>
       </div>
@@ -36,6 +36,12 @@ export default class FileChooser extends Vue {
 
   reject: any = null
 
+  props = {
+    key: 'id',
+    label: 'name',
+    isLeaf: 'leaf'
+  }
+
   iconProps (row: any) {
     let dir = row.dir
     let personal = row.personal
@@ -44,9 +50,10 @@ export default class FileChooser extends Vue {
     return { dir, personal, root, contentType }
   }
 
-  loadFn = ({ node }: any, resovle: any) => {
+  loadFn ({ node }: any, resovle: any) {
     let parentId = node.data.id
-    queryFiles({ parentId, dir: this.onlyDir ? true : undefined }).then(data => {
+    let dir = this.onlyDir ? true : undefined
+    queryFiles({ parentId, dir }).then(data => {
       resovle((data || []).map(v => Object.assign(v, { key: v.id, label: v.name })))
     })
   }
@@ -55,6 +62,13 @@ export default class FileChooser extends Vue {
     return getRootFile().then(data => {
       this.dataSource = (data ? [data] : []).map(v => {
         return Object.assign(v, { key: v.id, label: v.name })
+      })
+      this.$nextTick(() => {
+        const $e = (this.$refs as any).tree
+        if ($e && this.dataSource[0]) {
+          $e.currentNodeKey = this.dataSource[0].id
+          $e.$children[0].onExpand()
+        }
       })
     })
   }

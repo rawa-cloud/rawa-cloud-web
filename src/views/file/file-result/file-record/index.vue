@@ -2,7 +2,7 @@
     <div>
       <v-modal :visible.sync="actualVisible" width="70vw" title="文件轨迹">
         <div>
-          <v-table pageable :data-source="dataSource" height="420px">
+          <v-table pageable :data-source="dataSource" height="420px" size="sm">
                 <v-table-column prop="name" label="文件名"></v-table-column>
                 <v-table-column prop="lastChangeBy" label="修改人"></v-table-column>
                 <v-table-column prop="lastChangeTime" label="修改时间"></v-table-column>
@@ -10,8 +10,7 @@
                 <v-table-column prop="remark" label="备注"></v-table-column>
                 <v-table-column prop="opt" label="操作" fixed="right" width="160px">
                     <template slot-scope="{row}">
-                        <span class="icon-btn" @click="onPreview(row.id)" title="预览"><v-icon type="edit"></v-icon></span>
-                        <span class="ml-3 icon-btn" @click="onDownload(row.id)" title="下载"><v-icon type="cloud-download-o"></v-icon></span>
+                        <span class="ml-3 icon-btn" @click="onDownload(row)" title="下载"><v-icon type="cloud-download-o"></v-icon></span>
                     </template>
                 </v-table-column>
             </v-table>
@@ -28,6 +27,8 @@
 
 import { Vue, Component } from 'vue-property-decorator'
 import { getFileRecords } from '@/api/file'
+import { download as downloadFile } from '@/api/nas'
+import { download } from '@/helpers/download'
 
 @Component
 export default class FileRecord extends Vue {
@@ -83,8 +84,10 @@ export default class FileRecord extends Vue {
     })
   }
 
-  onDownload () {
-
+  onDownload (row: any) {
+    downloadFile(row.uuid).then(data => {
+      download(data, row.name)
+    })
   }
 
   onPreview () {

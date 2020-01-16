@@ -201,7 +201,7 @@ export default class FileResult extends Vue {
       //   return
       // }
       downloadFile(row.id).then(data => {
-        download(data, row.name)
+        download(data, row.dir ? `${row.name}.zip` : row.name)
       })
     }
 

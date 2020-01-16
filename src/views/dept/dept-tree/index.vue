@@ -96,13 +96,17 @@ export default class DeptTree extends Vue {
     }
 
     loadDepts () {
-      queryDepts({}).then(data => {
+      return queryDepts({}).then(data => {
         this.dataSource = toCascade((data || []).map(mapper))
       })
     }
 
     mounted () {
-      this.loadDepts()
+      this.loadDepts().then(() => {
+        this.$nextTick(() => {
+          this.onExpand()
+        })
+      })
     }
 }
 </script>

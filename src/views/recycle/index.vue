@@ -13,21 +13,31 @@
             </v-alert>
             <div class="ml-3">
                 <v-button color="primary" icon="delete" :disabled="checkedRows.length < 1" @click="onDelete()">删除</v-button>
-                <v-button color="primary" icon="reload" :disabled="checkedRows.length < 1" class="ml-2" @click="onRecover()">恢复</v-button>
+                <v-button color="primary" :disabled="checkedRows.length < 1" class="ml-2" @click="onRecover()">
+                  <svg-icon icon="recover"></svg-icon>
+                  恢复
+                  </v-button>
             </div>
         </div>
 
         <v-table pageable row-key="id" :data-source="dataSource" @selection-change="onSelectionChange" height="calc(100vh - 300px)">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
-            <v-table-column prop="name" label="文件名"></v-table-column>
+            <v-table-column prop="name" label="文件名">
+              <template slot-scope="{row}">
+                  <file-icon v-bind="iconProps(row)"></file-icon>
+                  <span class="ml-2">{{row.name}}</span>
+              </template>
+            </v-table-column>
             <v-table-column prop="path" label="路径"></v-table-column>
-            <v-table-column prop="size" label="大小"></v-table-column>
+            <v-table-column prop="size" label="大小">
+              <template slot-scope="{row}"><span v-if="!row.dir">{{row.size | size}}</span></template>
+            </v-table-column>
             <v-table-column prop="creationTime" label="删除时间"></v-table-column>
             <v-table-column prop="creationBy" label="删除人"></v-table-column>
             <v-table-column prop="opt" label="操作" fixed="right" width="80px">
                 <template slot-scope="{row}">
                     <span class="icon-btn" @click="onDelete(row.id)"><v-icon type="delete"></v-icon></span>
-                    <span class="ml-3 icon-btn" @click="onRecover(row.id)"><v-icon type="reload"></v-icon></span>
+                    <span class="ml-3 icon-btn" @click="onRecover(row.id)"><svg-icon icon="recover"></svg-icon></span>
                 </template>
             </v-table-column>
         </v-table>
@@ -44,6 +54,14 @@ export default class Recycle extends Vue {
     dataSource: any[] = []
 
     checkedRows: any = []
+
+    iconProps (row: any) {
+      let dir = row.dir
+      let personal = false
+      let root = false
+      let contentType = row.contentType
+      return { dir, personal, root, contentType }
+    }
 
     onDelete (id?: number) {
       if (!this.validate(id)) return
