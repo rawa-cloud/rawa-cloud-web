@@ -47,6 +47,12 @@ const routes: Array<RouteConfig> = [
         meta: { pid: `${HOME}.user`, cname: '用户管理' }
       },
       {
+        path: 'authority',
+        name: 'authority',
+        component: () => import('@/views/authority1/index.vue'),
+        meta: { pid: `${HOME}.authority`, cname: '权限管理' }
+      },
+      {
         path: 'log',
         name: 'log',
         component: () => import('@/views/log/index.vue'),

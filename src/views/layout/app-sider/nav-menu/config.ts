@@ -47,6 +47,12 @@ export const menus: Array<MenuOption> = [
     link: '/user'
   },
   {
+    name: '权限管理',
+    icon: 'safety',
+    pid: `${HOME}.authority`,
+    link: '/authority'
+  },
+  {
     name: '操作日志',
     icon: 'solution',
     pid: `${HOME}.log`,

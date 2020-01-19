@@ -34,6 +34,9 @@ const admin = [
         pid: `file`
       },
       {
+        pid: `authority`
+      },
+      {
         pid: `link`
       },
       {
@@ -58,6 +61,9 @@ const root = [
       },
       {
         pid: `file`
+      },
+      {
+        pid: `authority`
       },
       {
         pid: `link`

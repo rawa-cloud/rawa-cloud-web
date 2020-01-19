@@ -4,6 +4,7 @@ export interface AuthorityQueryReq {
   isUser?: boolean
   principleId?: number
   fileId?: number
+  implicit?: boolean
 }
 
 export interface AuthorityQueryRes {
