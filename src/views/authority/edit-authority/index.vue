@@ -1,91 +1,92 @@
 <template>
-    <div>
-      <v-modal :visible.sync="actualVisible" width="60vw" :title="title">
+<div :class="[$style.container]">
+  <div class="my-2" v-if="visible">
+      <div>
+        <v-checkbox v-model="allChecked" :disabled="!editable">全部</v-checkbox>
+        <v-checkbox v-model="noneChecked" :disabled="!editable">禁用</v-checkbox>
 
-        <div :class="[$style.body]" v-if="visible">
-          <div :class="[$style.bodyLeft]">
-            <v-checkbox v-model="allChecked">全部</v-checkbox>
-            <v-checkbox v-model="noneChecked">禁用</v-checkbox>
-            <v-checkbox-group v-model="form.bits">
-              <v-row :gutter="16">
-                <v-col :span="8" v-for="(item, key) in umasks" :key="key">
-                  <v-checkbox :label="item.value">{{item.desc}}</v-checkbox>
-                </v-col>
-              </v-row>
-            </v-checkbox-group>
+        <span v-if="authority && authority.implicit" class="caption">
+          (继承于 <span>部门/用户</span> <span class="text-info"> {{authority.principleName}} </span>, <span>文件(夹) </span> <span class="text-info"> {{authority.fileName}} </span> <a @click="onUp(authority)"> &gt;&gt; 前往</a>)
+        </span>
+      </div>
+      <v-checkbox-group v-model="form.bits" v-if="editable">
+        <v-row :gutter="16">
+          <v-col :span="4" v-for="(item, key) in umasks" :key="key">
+            <v-checkbox :label="item.value">{{item.desc}}</v-checkbox>
+          </v-col>
+        </v-row>
+      </v-checkbox-group>
+      <v-checkbox-group :value="originForm.bits" v-else>
+        <v-row :gutter="16">
+          <v-col :span="4" v-for="(item, key) in umasks" :key="key">
+            <v-checkbox :label="item.value" disabled>{{item.desc}}</v-checkbox>
+          </v-col>
+        </v-row>
+      </v-checkbox-group>
 
-            <div class="mt-4 d-flex align-items-center">
-              <span class="mr-2">有效天数: </span>
-              <v-select v-model="form.validDays" class="w-8">
-                <v-option label="永久有效" :value="-1"></v-option>
-                <v-option label="1天" :value="1"></v-option>
-                <v-option label="3天" :value="3"></v-option>
-                <v-option label="7天" :value="7"></v-option>
-              </v-select>
-            </div>
-          </div>
-          <div :class="[$style.bodyRight]" class="border-left pl-3">
-            <file-selector :ids.sync="form.ids" :disabled="isEdit" ></file-selector>
-          </div>
+      <div class="mt-2 d-flex align-items-center justify-content-between">
+        <div class="d-flex align-items-center">
+          <span class="mr-2">有效天数: </span>
+          <v-input-number size="sm" v-model="form.validDays" maxlength="4" :max="9999" :min="1" :precision="0" class="w-8" v-if="editable"></v-input-number>
+          <span class="caption" v-else>{{originForm.validDays || '永久有效'}}</span>
         </div>
-
-        <div slot="footer" class="text-right">
-          <v-button @click="onCancel">取消</v-button>
-          <v-button type="primary" class="ml-3" @click="onConfirm">确定</v-button>
-        </div>
-      </v-modal>
+      </div>
+  </div>
+  <div v-else> <no-data></no-data> </div>
+  <div :class="[$style.action]">
+    <div v-if="!editable">
+      <span v-if="authority && !authority.implicit">
+        <v-button type="primary" @click="onEdit" >更改权限</v-button>
+        <v-button type="error" @click="onDelete" class="ml-2">删除权限</v-button>
+      </span>
+      <v-button type="primary" @click="onEdit" v-else>新增权限</v-button>
     </div>
+    <span v-else>
+      <v-button @click="onCancel">取 消</v-button>
+      <v-button type="primary" class="ml-2" @click="onSave">保 存</v-button>
+    </span>
+  </div>
+</div>
 </template>
 
 <script lang="ts">
 
-import { Vue, Component } from 'vue-property-decorator'
-import { addDeptAuthority } from '@/api/dept'
+import { Vue, Component, Emit, Prop, Watch } from 'vue-property-decorator'
 import { UMASK, toUmask, toArray, allUmask } from '@/common/umask'
-// import FileSelector from './file-selector/index.vue'
+import { queryAuthorities, addAuthority, deleteAuthorities } from '@/api/authority'
 
-@Component({
-  components: { }
-})
+@Component
 export default class EditAuthority extends Vue {
-  row: any = null
+  @Prop() dept!: any
 
-  get principleId () {
-    return this.row && this.row.principleId
-  }
+  @Prop() user!: any
 
-  get isUser () {
-    return this.row && this.row.isUser
-  }
+  @Prop() file!: any
 
   umasks = UMASK
 
+  editable: boolean = false
+
+  authority: any = null
+
   form: any = {
-    fileId: null,
-    validDays: -1,
+    validDays: null,
     umask: 0,
     set bits (value: number[]) {
       this.umask = toUmask(value)
     },
     get bits () {
       return toArray(this.umask)
-    },
-    set ids (ids) {
-      this.fileId = ids[0] || null
-    },
-    get ids () {
-      return this.fileId ? [this.fileId] : []
     }
   }
 
-  resolve: Function | null = null
-
-  reject: Function | null = null
-
-  visible: boolean = false
+  get isUser () {
+    return !!this.user
+  }
 
   get allChecked () {
-    return allUmask(this.form.umask)
+    let umask = this.editable ? this.form.umask : this.originForm.umask
+    return allUmask(umask)
   }
 
   set allChecked (value: boolean) {
@@ -93,98 +94,104 @@ export default class EditAuthority extends Vue {
   }
 
   get noneChecked () {
-    return this.form.umask === 0
+    let umask = this.editable ? this.form.umask : this.originForm.umask
+    return umask === 0
   }
 
   set noneChecked (value: boolean) {
     if (value) this.form.umask = 0
   }
 
-  get isEdit (): boolean {
-    return !!(this.row && this.row.id)
-  }
-
-  get actualVisible () {
-    return this.visible
-  }
-
-  set actualVisible (visible: boolean) {
-    this.onCancel()
-  }
-
-  get title () {
-    return this.isEdit ? '编辑文件权限' : '新增文件权限'
-  }
-
-  add (row: any): Promise<any> {
-    this.row = row || null
-    return this.init()
-  }
-
-  edit (row: any) {
-    this.row = row || null
-    return this.init()
-  }
-
-  init (): Promise<any> {
-    let origin = {
-      validDays: (this.row && this.row.validDays) || -1,
-      fileId: (this.row && this.row.fileId) || null,
-      umask: (this.row && this.row.umask) || 0
+  get originForm () {
+    let umask = (this.authority && this.authority.umask) || 0
+    return {
+      validDays: (this.authority && this.authority.validDays) || null,
+      umask,
+      get bits () {
+        return toArray(umask)
+      }
     }
-    Object.assign(this.form, origin)
-    this.visible = true
-    return new Promise((resolve, reject) => {
-      this.resolve = resolve
-      this.reject = reject
+  }
+
+  get visible () {
+    return this.editable || !!this.authority
+  }
+
+  get props () {
+    return {
+      user: this.user,
+      dept: this.dept,
+      file: this.file
+    }
+  }
+
+  onEdit () {
+    this.editable = true
+    this.form.validDays = null
+    this.form.umask = (this.authority && this.authority.umask) || 0
+  }
+
+  onDelete () {
+    let id = this.authority && this.authority.id
+    if (!id) return
+    deleteAuthorities([id], this.isUser).then(() => {
+      this.$message.success('删除成功')
+      this.loadData()
     })
   }
 
   onCancel () {
-    this.visible = false
-    if (this.reject) this.reject()
+    this.editable = false
   }
 
-  onConfirm () {
-    this.request().then(data => {
-      this.visible = false
-      if (this.resolve) this.resolve(data)
+  onSave () {
+    this.editable = false
+    let req = {
+      isUser: this.isUser,
+      principleId: this.isUser ? this.user.id : this.dept.id,
+      fileId: this.file.id,
+      umask: this.form.umask,
+      validDays: this.form.validDays
+    }
+    addAuthority(req).then(() => {
+      this.$message.success('修改权限成功')
+      this.loadData()
     })
   }
 
-  request (): Promise<number | void> {
-    const vm = this
-    const id = this.principleId
-    const { fileId, umask, validDays } = this.form
-    if (!validate()) return Promise.reject(new Error('validate fail'))
-    // if (this.isEdit) return patchAuthority(this.row.id, this.isUser, req)
-    return !this.isUser ? addDeptAuthority(id, fileId, umask, validDays) : Promise.resolve()
+  onUp (row: any) {
+    let { principleId, isUser, fileId } = row
+    this.$router.push(`/authority?principleId=${principleId}&isUser=${isUser ? 1 : 0}&fileId=${fileId}&t=${Date.now()}`)
+  }
 
-    function validate (): boolean {
-      if (fileId && !vm.isEdit) {
-        vm.$message.warning('请选择文件/文件夹')
-        return false
-      }
-      return true
+  loadData () {
+    let isUser = !!this.user
+    let principleId = !isUser ? (this.dept && this.dept.id) : (this.user && this.user.id)
+    if (!principleId) {
+      this.authority = null
+      return
     }
+    let fileId = this.file && this.file.id
+    let implicit = true
+    queryAuthorities({ isUser, principleId, fileId, implicit }).then(data => {
+      this.authority = (data && data[0]) || null
+    })
+  }
+
+  @Watch('props', { immediate: true }) propsChange () {
+    this.loadData()
   }
 }
 </script>
 
 <style lang="scss" module>
-.body {
-  display: flex;
-  height: calc(100vh - 320px);
-  overflow: auto;
+.container {
+  position: relative;
 }
 
-.bodyLeft {
-  width: 50%;
-  flex: 0 0 auto;
-}
-
-.bodyRight {
-  width: 50%;
-  flex: 0 0 auto;
+.action {
+  position: absolute;
+  bottom: 12px;
+  right: 24px;
 }
 </style>

@@ -59,3 +59,7 @@ export function getAuthority (id: number, isUser: boolean) {
 export function deleteAuthority (id: number, isUser: boolean) {
   return http().delete<void>(`/authorities/${id}`, { params: { isUser: isUser } })
 }
+
+export function deleteAuthorities (ids: number[] = [], isUser: boolean) {
+  return http().delete<void>(`/authorities/batch/${ids.join(',')}`, { params: { isUser } })
+}

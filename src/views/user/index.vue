@@ -44,13 +44,11 @@
                     <template slot-scope="{row}">
                         <span class="icon-btn" @click="onEdit(row)" title="编辑"><v-icon type="edit"></v-icon></span>
                         <span class="ml-3 icon-btn" @click="onDelete(row.id)" title="删除"><v-icon type="delete"></v-icon></span>
-                        <span class="ml-3 icon-btn" @click="onViewAuthority(row.id)" title="查看权限"><v-icon type="safety"></v-icon></span>
                         <span class="ml-3 icon-btn" :disabled="!hasAdminRole(row)" @click="onViewUserFile(row)" title="管理员目录"><v-icon type="folder-add"></v-icon></span>
                     </template>
                 </v-table-column>
             </v-table>
         </div>
-        <user-authority :visible.sync="authorityVisible" v-bind="authorityProps"></user-authority>
         <edit-user ref="editUser"></edit-user>
         <user-file ref="userFile"></user-file>
     </div>
@@ -61,13 +59,12 @@
 import { Vue, Component } from 'vue-property-decorator'
 import { queryUsers, deleteUser } from '@/api/user'
 import { queryDepts } from '@/api/dept'
-import UserAuthority from './user-authority/index.vue'
 import EditUser from './edit-user/index.vue'
 import UserFile from './user-file/index.vue'
 import { clone } from '@/helpers/lang'
 
 @Component({
-  components: { UserAuthority, EditUser, UserFile }
+  components: { EditUser, UserFile }
 })
 export default class User extends Vue {
     form = {
@@ -80,12 +77,6 @@ export default class User extends Vue {
     loading: boolean = false
 
     dataSource: any[] = []
-
-    authorityProps = {
-      principleId: null
-    }
-
-    authorityVisible: boolean = false
 
     depts: any[] = []
 
@@ -124,11 +115,6 @@ export default class User extends Vue {
           this.query()
         })
       })
-    }
-
-    onViewAuthority (id: any) {
-      this.authorityVisible = true
-      this.authorityProps.principleId = id
     }
 
     onViewUserFile (row: any) {

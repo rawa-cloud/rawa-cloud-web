@@ -11,8 +11,16 @@
           </div>
 
           <div class="mt-4">
-            <section-header>权限列表</section-header>
-            <authority-list :principle-id="id" :is-user="false" v-if="dept"></authority-list>
+            <section-header>用户列表</section-header>
+            <v-table pageable :data-source="dataSource">
+                <v-table-column prop="username" label="用户名"></v-table-column>
+                <v-table-column prop="cname" label="姓名"></v-table-column>
+                <v-table-column prop="deptName" label="所属部门"></v-table-column>
+                <v-table-column prop="ip" label="ip"></v-table-column>
+                <v-table-column prop="status" label="状态">
+                  <template slot-scope="{row}">{{row.status | transcode('status')}}</template>
+                </v-table-column>
+            </v-table>
           </div>
         </div>
         <div v-else>
@@ -25,15 +33,15 @@
 
 import { Vue, Component, Prop, Watch } from 'vue-property-decorator'
 import { getDept } from '@/api/dept'
-import AuthorityList from '@/views/authority/index.vue'
+import { queryUsers } from '@/api/user'
 
-@Component({
-  components: { AuthorityList }
-})
+@Component
 export default class DeptDetail extends Vue {
     @Prop(Number) id!: number
 
     dept: any = null
+
+    dataSource: any[] = []
 
     loadDept () {
       if (!this.id) {
@@ -45,8 +53,19 @@ export default class DeptDetail extends Vue {
       })
     }
 
+    loadUser () {
+      if (!this.id) {
+        this.dataSource = []
+        return
+      }
+      queryUsers({ deptId: this.id }).then(data => {
+        this.dataSource = data || []
+      })
+    }
+
     @Watch('id', { immediate: true }) idChange () {
       this.loadDept()
+      this.loadUser()
     }
 }
 </script>
