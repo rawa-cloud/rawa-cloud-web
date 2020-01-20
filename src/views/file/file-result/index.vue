@@ -110,7 +110,8 @@ export default class FileResult extends Vue {
       { title: '重命名', batch: false, umask: UMASK.RENAME.value, action: this.onRename },
       { title: '复制到', batch: true, umask: UMASK.DOWNLOAD.value, action: this.onCopyTo },
       { title: '移动到', batch: true, umask: UMASK.RECYCLE.value | UMASK.DOWNLOAD.value, action: this.onMoveTo },
-      { title: '收藏', batch: false, umask: UMASK.ACCESS.value, action: this.onCollect }
+      { title: '收藏', batch: false, umask: UMASK.ACCESS.value, action: this.onCollect },
+      { title: '权限', batch: false, umask: UMASK.ACCESS.value, action: this.onGoAuthority }
     ]
 
     @Inject() reload!: (id?: number) => void
@@ -302,6 +303,15 @@ export default class FileResult extends Vue {
         this.$message.success('收藏成功')
         this.refresh()
       })
+    }
+
+    @Provide() onGoAuthority (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('只能选择一条')
+      }
+      let f = file || this.checkedRows[0]
+      this.$router.push(`/authority?fileId=${f.id}&t=${Date.now()}`)
     }
 
     @Provide() onDetail (file?: any) {

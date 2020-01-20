@@ -99,9 +99,9 @@ export default class Authority extends Vue {
     if ($e) $e.loadData(deptId)
   }
 
-  @Watch('query') queryChange () {
+  @Watch('query', { immediate: true }) queryChange () {
     let { principleId, isUser, fileId } = this.query
-    if (!principleId || !fileId) return
+    if (!principleId && !fileId) return
     let all: any[] = []
     if (principleId) {
       if (isUser) {
