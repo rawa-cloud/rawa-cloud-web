@@ -73,6 +73,9 @@ export default class DeptTree extends Vue {
         return deleteDept(dept.id)
       }).then(() => {
         this.$message.success('删除成功')
+        if (this.id === dept.id) {
+          this.updateId(null)
+        }
         this.loadDepts()
       })
     }

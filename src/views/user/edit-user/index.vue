@@ -14,9 +14,15 @@
           </v-form-item>
 
           <v-form-item label="归属部门" prop="deptId">
-            <v-select clearable searchable v-model="form.deptId">
+            <!-- <v-select clearable searchable v-model="form.deptId">
               <v-option :label="dept.name" :value="dept.id" v-for="dept in depts" :key="dept.id"></v-option>
-            </v-select>
+            </v-select> -->
+            <v-cascader
+                    node-key="key"
+                    :data-source="depts"
+                    change-on-select
+                    v-model="form.deptIds"
+                    clearable placeholder="请选择"></v-cascader>
           </v-form-item>
 
           <v-form-item label="中文名" prop="cname" required>
@@ -61,6 +67,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { queryDepts } from '@/api/dept'
 import { addUser, patchUser } from '@/api/user'
 import { randomString } from '@/helpers/lang'
+import { toCascade } from '@/helpers/data'
 
 @Component
 export default class EditUser extends Vue {
@@ -72,12 +79,15 @@ export default class EditUser extends Vue {
     username: '',
     password: '',
     cname: '',
-    deptId: null,
+    deptIds: [],
     role: 'USER',
     ip: '',
     status: true,
     get roles () {
       return this.role ? [this.role] : []
+    },
+    get deptId () {
+      return this.deptIds.slice(-1) || null
     }
   }
 
@@ -134,7 +144,7 @@ export default class EditUser extends Vue {
       username: (this.user && this.user.username) || '',
       password: '',
       cname: (this.user && this.user.cname) || '',
-      deptId: (this.user && this.user.deptId) || null,
+      deptIds: (this.user && this.user.deptId) ? [this.user.deptId] : null,
       role: (this.user && this.user.roles && this.user.roles[0]) || 'USER',
       ip: (this.user && this.user.ip) || '',
       status: (this.user && this.user.status) || true
@@ -184,7 +194,8 @@ export default class EditUser extends Vue {
 
   loadDepts () {
     queryDepts({}).then(data => {
-      this.depts = data || []
+      let d = (data || []).map((v: any) => Object.assign({ key: v.id, label: v.name }, v))
+      this.depts = toCascade(d, 'id', 'parentId')
     })
   }
 }

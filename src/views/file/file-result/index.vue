@@ -11,15 +11,15 @@
                 </v-dropdown> -->
                 <v-dropdown trigger="click" class="d-inline-block mr-2">
                   <v-button-group>
-                      <v-button color="primary"  @click="onUpload(true, false)"> 上 传 </v-button>
-                      <v-button color="primary"  x-reference slim><i class="anticon anticon-down"></i></v-button>
+                      <v-button color="primary"  @click="onUpload(true, false)" :disabled="!canUpload"> 上 传 </v-button>
+                      <v-button color="primary"  x-reference slim :disabled="!canUpload"><i class="anticon anticon-down"></i></v-button>
                   </v-button-group>
                   <v-dropdown-menu slot="dropdown">
                     <v-dropdown-item @click.native="onUpload(true, false)">上传文件</v-dropdown-item>
                     <v-dropdown-item @click.native="onUpload(true, true)">上传文件夹</v-dropdown-item>
                   </v-dropdown-menu>
                 </v-dropdown>
-                <v-button color="primary" class="mr-2" @click="onNew">新建文件夹</v-button>
+                <v-button color="primary" class="mr-2" @click="onNew" :disabled="!canMkDir">新建文件夹</v-button>
 
                 <v-button-group class="mr-2">
                     <v-button color="primary" @click="row.action()" v-for="(row, i) in renderedActions" :key="i">{{row.title}}</v-button>
@@ -43,7 +43,7 @@
 
         <div class="d-flex justify-content-between align-content-center m-2">
             <file-navigator :id="parentId"></file-navigator>
-            <v-alert type="info" style="flex: 0 0 auto;" class="ml-5 w-14">
+            <v-alert type="info" style="flex: 0 0 auto;" class="ml-5 w-15">
                 <template slot="description">
                     已选择 <span>{{checkedRows.length}}</span> 项
                     <a class="ml-2" @click="onClearSelection">清空选择</a>
@@ -71,7 +71,7 @@
 <script lang="ts">
 
 import { Vue, Component, Prop, Watch, Provide, Inject } from 'vue-property-decorator'
-import { queryFiles, downloadFile, deleteFiles, moveFiles, copyFiles } from '@/api/file'
+import { queryFiles, downloadFile, deleteFiles, moveFiles, copyFiles, getFile } from '@/api/file'
 import { download } from '@/helpers/download'
 import FileList from './file-list/index.vue'
 import FileThumbnail from './file-thumbnail/index.vue'
@@ -99,6 +99,8 @@ export default class FileResult extends Vue {
 
     loading: boolean = false
 
+    parent: any = null
+
     actions = [
       { title: '打开', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
       { title: '更新', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, action: this.onRenew },
@@ -111,7 +113,7 @@ export default class FileResult extends Vue {
       { title: '复制到', batch: true, umask: UMASK.DOWNLOAD.value, action: this.onCopyTo },
       { title: '移动到', batch: true, umask: UMASK.RECYCLE.value | UMASK.DOWNLOAD.value, action: this.onMoveTo },
       { title: '收藏', batch: false, umask: UMASK.ACCESS.value, action: this.onCollect },
-      { title: '权限', batch: false, umask: UMASK.ACCESS.value, action: this.onGoAuthority }
+      { title: '权限', batch: false, admin: true, action: this.onGoAuthority }
     ]
 
     @Inject() reload!: (id?: number) => void
@@ -124,6 +126,16 @@ export default class FileResult extends Vue {
       return this.filterActions()
     }
 
+    get canUpload () {
+      const umask = (this.parent && this.parent.umask) || 0
+      return hasAllAuthority(umask, UMASK.NEW_FILE.value)
+    }
+
+    get canMkDir () {
+      const umask = (this.parent && this.parent.umask) || 0
+      return hasAllAuthority(umask, UMASK.MK_DIR.value)
+    }
+
     @Provide() filterActions (row?: any) {
       const rows = row ? [row] : this.checkedRows
       if (rows.length < 1) return []
@@ -132,6 +144,9 @@ export default class FileResult extends Vue {
         if (v.onlyFile && rows.some((w: any) => w.dir)) return false
         return true
       }).filter((v: any) => {
+        if (v.admin) {
+          return rows.every((w: any) => w.admin)
+        }
         return rows.every((w: any) => {
           return hasAllAuthority(w.umask, v.umask)
         })
@@ -362,6 +377,13 @@ export default class FileResult extends Vue {
 
     @Watch('parentId', { immediate: true }) parentIdChange (parentId: number) {
       this.refresh()
+      if (parentId) {
+        getFile(parentId).then(data => {
+          this.parent = data || null
+        })
+      } else {
+        this.parent = null
+      }
     }
 }
 </script>

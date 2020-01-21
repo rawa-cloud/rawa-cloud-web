@@ -9,7 +9,7 @@
 <script lang="ts">
 
 import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator'
-import { queryFiles, getRootFile } from '@/api/file'
+import { queryFiles, getAdminRootFiles } from '@/api/file'
 
 @Component
 export default class FileTree extends Vue {
@@ -39,8 +39,8 @@ export default class FileTree extends Vue {
   }
 
   loadData () {
-    return getRootFile().then(data => {
-      this.dataSource = (data ? [data] : []).map(v => {
+    return getAdminRootFiles().then(data => {
+      this.dataSource = (data || []).map(v => {
         return Object.assign(v, { key: v.id, label: v.name })
       })
       this.$nextTick(() => {

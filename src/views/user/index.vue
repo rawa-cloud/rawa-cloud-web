@@ -9,10 +9,16 @@
                     <v-input v-model.trim="form.cname" clearable class="w-10"></v-input>
                 </v-form-item>
                 <v-form-item prop="deptId" label="归属部门">
-                  <v-select clearable searchable v-model="form.deptId" class="w-10">
+                  <!-- <v-select clearable searchable v-model="form.deptId" class="w-10">
                     <v-option label="无" :value="-1"></v-option>
                     <v-option :label="dept.name" :value="dept.id" v-for="dept in depts" :key="dept.id"></v-option>
-                </v-select>
+                </v-select> -->
+                  <v-cascader
+                    node-key="key"
+                    :data-source="depts"
+                    change-on-select
+                    v-model="form.deptIds"
+                    clearable placeholder="请选择"></v-cascader>
                 </v-form-item>
                 <v-form-item prop="status" label="状态">
                     <v-select v-model="form.status" clearable class="w-8">
@@ -62,6 +68,7 @@ import { queryDepts } from '@/api/dept'
 import EditUser from './edit-user/index.vue'
 import UserFile from './user-file/index.vue'
 import { clone } from '@/helpers/lang'
+import { toCascade } from '../../helpers/data'
 
 @Component({
   components: { EditUser, UserFile }
@@ -70,8 +77,12 @@ export default class User extends Vue {
     form = {
       username: '',
       cname: '',
-      deptId: null,
-      status: null
+      deptIds: [],
+      status: null,
+
+      get deptId () {
+        return this.deptIds.slice(-1) || null
+      }
     }
 
     loading: boolean = false
@@ -140,7 +151,8 @@ export default class User extends Vue {
 
     loadDepts () {
       queryDepts({}).then(data => {
-        this.depts = data || []
+        let d = (data || []).map((v: any) => Object.assign({ key: v.id, label: v.name }, v))
+        this.depts = toCascade(d, 'id', 'parentId')
       })
     }
 

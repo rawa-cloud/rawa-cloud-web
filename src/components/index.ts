@@ -5,6 +5,7 @@ import FilePreview from './file-preview/index.vue'
 import FileSelector from './file-selector/index.vue'
 import NoData from './no-data/index.vue'
 import FileChooser from './file-chooser/index.vue'
+import FileTransfer from './file-transfer/index.vue'
 import { hyphenate } from '@/helpers/lang'
 
 const components: any = {
@@ -13,7 +14,8 @@ const components: any = {
   FilePreview,
   FileSelector,
   NoData,
-  FileChooser
+  FileChooser,
+  FileTransfer
 }
 
 Object.keys(components).forEach((key: string) => {

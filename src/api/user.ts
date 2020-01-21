@@ -28,13 +28,16 @@ export interface UserAddReq {
   files: number[]
 }
 
+export interface UserFilesAddReq {
+  files: number[]
+}
+
 export interface UserUpdateReq {
   cname: string
   ip?: string
   deptId: number
   status: boolean
   roles?: number[]
-  files?: number[]
 }
 
 export interface UserRes {
@@ -67,4 +70,8 @@ export function getUser (id: number) {
 
 export function deleteUser (id: number) {
   return http().delete<void>(`/users/${id}`)
+}
+
+export function addUserFiles (id: number, req: UserFilesAddReq) {
+  return http().post<number[]>(`/users/${id}/files`, req)
 }

@@ -29,12 +29,6 @@ export const menus: Array<MenuOption> = [
     link: '/link'
   },
   {
-    name: '回收站',
-    icon: 'delete',
-    pid: `${HOME}.recycle`,
-    link: '/recycle'
-  },
-  {
     name: '部门管理',
     icon: 'layout',
     pid: `${HOME}.dept`,
@@ -69,6 +63,12 @@ export const menus: Array<MenuOption> = [
     icon: 'heart-o',
     pid: `${HOME}.favorite`,
     link: '/favorite'
+  },
+  {
+    name: '回收站',
+    icon: 'delete',
+    pid: `${HOME}.recycle`,
+    link: '/recycle'
   },
   {
     name: '系统管理',

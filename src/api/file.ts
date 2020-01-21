@@ -199,3 +199,7 @@ export function batchAddFile (req: FileBatchAddReq[]) {
 export function searchFiles (req: FileSearchReq) {
   return http().get<FileRes[]>(`/files/search`, { params: req })
 }
+
+export function getAdminRootFiles () {
+  return http().get<FileRes[]>(`/files/admin-roots`)
+}

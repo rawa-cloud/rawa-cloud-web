@@ -1,8 +1,8 @@
 <template>
     <div>
       <v-modal :visible.sync="actualVisible" width="640px" :title="title">
-        <div>
-          <file-selector :ids.sync="form.files" multiple v-if="actualVisible"></file-selector>
+        <div :class="[$style.body]">
+          <file-transfer v-model="files" only-dir peer></file-transfer>
         </div>
 
         <div slot="footer" class="text-right">
@@ -17,19 +17,15 @@
 
 import { Vue, Component } from 'vue-property-decorator'
 import { queryDepts } from '@/api/dept'
-import { addUser, patchUser } from '@/api/user'
+import { addUser, addUserFiles } from '@/api/user'
 import { randomString } from '@/helpers/lang'
+import { getFile } from '@/api/file'
 
 @Component
 export default class UserFile extends Vue {
   row: any = null
 
-  form = {
-    files: []
-  }
-
-  rules = {
-  }
+  files: any[] = []
 
   resolve: Function | null = null
 
@@ -58,7 +54,11 @@ export default class UserFile extends Vue {
     const origin = {
       files: (this.row && this.row.files) || []
     }
-    Object.assign(this.form, origin)
+    let files = (this.row && this.row.files) || []
+    const all = files.map((v: number) => getFile(v))
+    Promise.all(all).then((list: any[]) => {
+      this.files = (list || []).filter(v => !!v)
+    })
     this.visible = true
     return new Promise((resolve, reject) => {
       this.resolve = resolve
@@ -72,21 +72,30 @@ export default class UserFile extends Vue {
   }
 
   onConfirm () {
+    if (this.files.length < 1) {
+      this.$message.warning('请至少选择一个文件夹')
+    }
     this.request().then(data => {
       this.visible = false
       if (this.resolve) this.resolve(data)
     })
   }
 
-  request (): Promise<number | void> {
+  request (): Promise<any> {
     let req: any = this.generateReq()
-    return patchUser(this.row.id, req)
+    return addUserFiles(this.row.id, req)
   }
 
   generateReq () {
-    let req: any = {}
-    Object.assign(req, this.form)
-    return req
+    return {
+      files: this.files.map((v: any) => v.id)
+    }
   }
 }
 </script>
+<style lang="scss" module>
+.body {
+  height: calc(60vh - 120px);
+  overflow: auto;
+}
+</style>
