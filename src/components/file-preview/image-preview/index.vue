@@ -11,7 +11,6 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { mixins } from 'vue-class-component'
 import BasePreview from '../BasePreview'
-import { previewFile } from '@/api/file'
 import { getType } from '@/common/content-type'
 
 const baseUrl = process.env.VUE_APP_API_BASE_URL
@@ -33,7 +32,11 @@ export default class ImagePreview extends mixins(BasePreview) {
 
   get images (): string[] {
     return this.ids.map(v => {
-      return `${baseUrl}/files/${v}/preview`
+      let url
+      if (this.linkId) {
+        url = `${baseUrl}/shares/${this.linkId}/files/${v}/preview?password=${this.password}`
+      } else url = `${baseUrl}/files/${v}/preview`
+      return url
     })
   }
 

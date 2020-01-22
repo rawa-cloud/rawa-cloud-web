@@ -15,7 +15,7 @@
             <span class="ml-2 text-link">{{link && link.fileName}}</span>
           </span>
           <span>
-            <v-button type="primary" icon="close-circle-o" @click="onCancelShare">取消分享</v-button>
+            <v-button type="primary" icon="close-circle-o" @click="onCancelShare" :disabled="!canCancel">取消分享</v-button>
             <v-button type="primary" icon="cloud-download-o" class="ml-2" disabled>下载</v-button>
           </span>
         </div>
@@ -99,6 +99,11 @@ export default class Share extends Vue {
     return time ? time.slice(0, 10) : '永久'
   }
 
+  get canCancel () {
+    if (!this.link || !this.link.creationBy) return false
+    return (this.link.creationBy === this.$auth.username)
+  }
+
   onClearSelection () {
     this.checkedRows = []
   }
@@ -117,7 +122,7 @@ export default class Share extends Vue {
       this.$router.push({ path: path, query: { fileId: row.id } })
     } else {
       const $e = this.$refs.filePreview as any
-      $e.preview(row, this.dataSource)
+      $e.previewForShare(row, this.link.id, this.password, this.dataSource)
     }
   }
 

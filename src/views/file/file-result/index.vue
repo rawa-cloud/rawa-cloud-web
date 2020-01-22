@@ -83,7 +83,7 @@ import FileRename from './file-rename/index.vue'
 import FileRecord from './file-record/index.vue'
 import FileCollect from './file-collect/index.vue'
 import FileDetail from './file-detail/index.vue'
-import { UMASK, hasAllAuthority } from '@/common/umask'
+import { UMASK, hasAllAuthority, hasAnyAuthority } from '@/common/umask'
 
 @Component({
   components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename, FileRecord, FileCollect, FileDetail }
@@ -145,7 +145,7 @@ export default class FileResult extends Vue {
         return true
       }).filter((v: any) => {
         if (v.admin) {
-          return rows.every((w: any) => w.admin)
+          return rows.every((w: any) => w.admin && !w.userId)
         }
         return rows.every((w: any) => {
           return hasAllAuthority(w.umask, v.umask)
@@ -171,6 +171,10 @@ export default class FileResult extends Vue {
       if (row.dir) {
         this.$router.push({ path: '/file', query: { id: row.id } })
       } else {
+        if (!hasAnyAuthority(row.umask, UMASK.PREVIW.value)) {
+          this.$message.info(`没有该文件的预览权限`)
+          return
+        }
         const $e = this.$refs.filePreview as any
         $e.preview(row, this.dataSource)
       }

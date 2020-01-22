@@ -87,7 +87,7 @@ export default class EditUser extends Vue {
       return this.role ? [this.role] : []
     },
     get deptId () {
-      return this.deptIds.slice(-1) || null
+      return this.deptIds.slice(-1)[0] || null
     }
   }
 
@@ -144,7 +144,7 @@ export default class EditUser extends Vue {
       username: (this.user && this.user.username) || '',
       password: '',
       cname: (this.user && this.user.cname) || '',
-      deptIds: (this.user && this.user.deptId) ? [this.user.deptId] : null,
+      deptIds: (this.user && this.user.deptId) ? [this.user.deptId] : [],
       role: (this.user && this.user.roles && this.user.roles[0]) || 'USER',
       ip: (this.user && this.user.ip) || '',
       status: (this.user && this.user.status) || true

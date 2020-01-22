@@ -8,5 +8,9 @@ export default class BasePreview extends Vue {
 
   @Prop() type!: string
 
+  @Prop() linkId!: any
+
+  @Prop() password!: string
+
   @Emit() close () {}
 }

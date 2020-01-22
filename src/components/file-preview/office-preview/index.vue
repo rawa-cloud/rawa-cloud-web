@@ -13,6 +13,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator'
 import { mixins } from 'vue-class-component'
 import BasePreview from '../BasePreview'
 import { previewFile } from '@/api/file'
+import { preview as previewFileForShare } from '@/api/share'
 import { preview } from '@/helpers/download'
 
 @Component
@@ -27,7 +28,10 @@ export default class OfficePreview extends mixins(BasePreview) {
 
   mounted () {
     this.loading = true
-    previewFile(this.row.id).then(data => {
+    let request
+    if (this.linkId) request = previewFileForShare(this.linkId, this.password, this.row.id)
+    else request = previewFile(this.row.id)
+    request.then(data => {
       this.src = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }))
       // const win = window.open() as any
       // const html = `'<iframe name="${name}" src="${url}" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>`

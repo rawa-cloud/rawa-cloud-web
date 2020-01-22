@@ -44,10 +44,11 @@
     let params = query()
     let src = params.src
     let type = params.type
+    let password = params.password
     if(type === 'audio') {
       player.poster = "http://img.mp.itc.cn/q_mini,c_zoom,w_640/upload/20170708/2188edbf9c8b4271a8227da4898ddbd3_th.jpg"
     }
-    source.src = src
+    source.src = src + (password ? `?password=${password}` : '')
 
     function query () {
       let p = window.location.search.slice(1)

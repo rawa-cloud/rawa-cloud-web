@@ -1,6 +1,6 @@
 <template>
 <div :class="[$style.container]">
-  <iframe :src="`./video/index.html?src=${src}&type=${type}`" frameborder="0" :class="[$style.content]" v-if="src"></iframe>
+  <iframe :src="`./video/index.html?src=${src}&type=${type}&password=${password}`" frameborder="0" :class="[$style.content]" v-if="src"></iframe>
   <div :class="[$style.loading]" v-if="loading">
     <p class="ft-32"><v-icon type="loading-3-quarters" spin></v-icon></p>
     <p>加载中...</p>
@@ -12,7 +12,6 @@
 import { Component, Prop, Vue } from 'vue-property-decorator'
 import { mixins } from 'vue-class-component'
 import BasePreview from '../BasePreview'
-import { previewFile } from '@/api/file'
 import { preview } from '@/helpers/download'
 
 @Component
@@ -27,7 +26,10 @@ export default class VideoPreview extends mixins(BasePreview) {
 
   mounted () {
     const baseUrl = process.env.VUE_APP_API_BASE_URL
-    const url = `${baseUrl}/files/${this.row.id}/preview`
+    let url
+    if (this.linkId) {
+      url = `${baseUrl}/shares/${this.linkId}/files/${this.row.id}/preview`
+    } else url = `${baseUrl}/files/${this.row.id}/preview`
     this.src = url
     // this.loading = true
     // previewFile(this.row.id).then(data => {

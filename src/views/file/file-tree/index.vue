@@ -7,7 +7,9 @@
         </div>
         <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" ref="tree" :class="[$style.tree]">
             <span slot="content"  slot-scope="{node}" @click="onSelect(node)">
-                <file-icon v-bind="iconProps(node)"></file-icon> <span class="ml-2">{{node.data.name}}</span>
+                <file-icon v-bind="iconProps(node)"></file-icon>
+                <span class="ml-2">{{node.data.name}}</span>
+                <v-icon type="tags-o" class="ml-2" v-if="node.data.admin && !node.data.userId"></v-icon>
             </span>
         </v-tree>
     </div>

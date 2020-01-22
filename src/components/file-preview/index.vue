@@ -15,6 +15,10 @@ export default class FilePreview extends Vue {
 
   rows: any[] = []
 
+  linkId: any = null
+
+  password: any = null
+
   get type (): 'image' | 'video' | 'audio' | 'office' | string {
     if (!this.row) return ''
     return getType(this.row.contentType || '')
@@ -23,12 +27,22 @@ export default class FilePreview extends Vue {
   preview (row: any, rows: any = []) {
     this.row = row || null
     this.rows = rows
+    this.linkId = null
+    this.password = null
+    this.visible = true
+  }
+
+  previewForShare (row: any, linkId: any, password: any, rows: any = []) {
+    this.row = row || null
+    this.rows = rows
+    this.linkId = linkId
+    this.password = password
     this.visible = true
   }
 
   render (h: any) {
     if (!this.visible || !this.type) return h('div')
-    let props = { row: this.row, rows: this.rows, type: this.type }
+    let props = { row: this.row, rows: this.rows, type: this.type, linkId: this.linkId, password: this.password }
     let on = {
       close: () => { this.visible = false }
     }
