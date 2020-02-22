@@ -18,6 +18,9 @@ const user = [
       },
       {
         pid: 'favorite'
+      },
+      {
+        pid: 'library'
       }
     ]
   }
@@ -47,6 +50,9 @@ const admin = [
       },
       {
         pid: 'favorite'
+      },
+      {
+        pid: 'library'
       }
     ]
   }
@@ -85,6 +91,12 @@ const root = [
       },
       {
         pid: 'favorite'
+      },
+      {
+        pid: 'library'
+      },
+      {
+        pid: 'library-config'
       }
     ]
   }

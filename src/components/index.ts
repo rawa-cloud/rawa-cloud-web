@@ -6,6 +6,9 @@ import FileSelector from './file-selector/index.vue'
 import NoData from './no-data/index.vue'
 import FileChooser from './file-chooser/index.vue'
 import FileTransfer from './file-transfer/index.vue'
+import TileTree from './tile-tree/index.vue'
+import TileTreeColumn from './tile-tree/tile-tree-column/index.vue'
+import DictOption from './dict-option/index.vue'
 import { hyphenate } from '@/helpers/lang'
 
 const components: any = {
@@ -15,7 +18,10 @@ const components: any = {
   FileSelector,
   NoData,
   FileChooser,
-  FileTransfer
+  FileTransfer,
+  TileTree,
+  TileTreeColumn,
+  DictOption
 }
 
 Object.keys(components).forEach((key: string) => {

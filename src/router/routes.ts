@@ -70,6 +70,18 @@ const routes: Array<RouteConfig> = [
         component: () => import('@/views/favorite/index.vue'),
         meta: { pid: `${HOME}.favorite`, cname: '我的收藏' }
       },
+      {
+        path: 'library',
+        name: 'library',
+        component: () => import('@/views/library/index.vue'),
+        meta: { pid: `${HOME}.library`, cname: '库' }
+      },
+      {
+        path: 'library-config',
+        name: 'library-config',
+        component: () => import('@/views/library-config/index.vue'),
+        meta: { pid: `${HOME}.library-config`, cname: '库配置' }
+      },
       // 系统管理
       {
         path: 'system/user',

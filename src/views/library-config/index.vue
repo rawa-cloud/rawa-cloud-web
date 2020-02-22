@@ -1,0 +1,126 @@
+<template>
+<div>
+  <tile-tree :data="data" row-key="key">
+    <tile-tree-column title="库模板名称" :level="1" v-on="handler"></tile-tree-column>
+    <tile-tree-column title="字段" :level="2" v-on="handler"></tile-tree-column>
+    <tile-tree-column title="字段选项" :level="3" v-on="handler" :add-fn="addFn"></tile-tree-column>
+  </tile-tree>
+  <edit-lib ref="editLib"></edit-lib>
+</div>
+</template>
+
+<script lang="ts">
+
+import { Vue, Component, Provide } from 'vue-property-decorator'
+import Node from '@/components/tile-tree/Node'
+import EditLib from './eidt-lib/index.vue'
+import { queryLibCatalogs, deleteLibCatalog, deleteLibCatalogField, deleteLibCatalogFieldDict } from '@/api/library'
+
+// const data = [
+//   {
+//     id: '1',
+//     name: '图片库',
+//     children: [
+//       {
+//         id: '1-1',
+//         name: '类型',
+//         type: 'radio',
+//         children: [
+//           {
+//             id: '1-1-1',
+//             name: 'png'
+//           }
+//         ]
+//       }
+//     ]
+//   },
+//   {
+//     id: '2',
+//     name: '视频库',
+//     children: []
+//   }
+// ]
+
+@Component({
+  components: { EditLib }
+})
+export default class LibraryConfig extends Vue {
+  data: any[] = []
+
+  handler = {
+    add: this.onAdd,
+    edit: this.onEdit,
+    del: this.onDel
+  }
+
+  addFn (parent: Node) {
+    if (parent && parent.level === 2 && ['radio', 'checkbox'].includes(parent.data.type)) return false
+    return true
+  }
+
+  onAdd (node: Node) {
+    const $e = this.$refs.editLib as EditLib
+    $e.add(node).then(() => {
+      this.loadData()
+      this.$message.success('新增成功')
+    })
+  }
+
+  onEdit (node: Node) {
+    const $e = this.$refs.editLib as EditLib
+    $e.edit(node).then(() => {
+      this.loadData()
+      this.$message.success('编辑成功')
+    })
+  }
+
+  onDel (node: Node) {
+    this.$modal.confirm({ title: '确认', content: '是否确认删除？' }).then(() => {
+      let id = node.data.id
+      if (node.level === 1) return deleteLibCatalog(id)
+      if (node.level === 1) return deleteLibCatalogField(id)
+      if (node.level === 3) return deleteLibCatalogFieldDict(id)
+      return Promise.reject(new Error('error level'))
+    }).then(() => {
+      this.loadData()
+      this.$message.success('删除成功')
+    })
+  }
+
+  loadData () {
+    queryLibCatalogs().then(data => {
+      this.data = transform(data)
+    })
+
+    function transform (data: any[] = []) {
+      return data.map((v: any) => {
+        let extra = {
+          key: v.id,
+          children: (v.fieldDefs || []).map((w: any) => {
+            let extra = {
+              key: `${v.id}-${w.id}`,
+              children: (w.typeDictList || []).map((k: any) => {
+                return Object.assign({ key: `${v.id}-${w.id}-${k.id}` }, k)
+              })
+            }
+            delete w.typeDictList
+            return Object.assign(extra, w)
+          })
+        }
+        delete v.fieldDefs
+        return Object.assign(extra, v)
+      })
+    }
+  }
+
+  mounted () {
+    this.loadData()
+  }
+}
+</script>
+
+<style lang="scss" module>
+.body {
+  display: flex;
+}
+</style>
