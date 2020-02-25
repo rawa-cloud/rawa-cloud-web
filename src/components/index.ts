@@ -9,6 +9,7 @@ import FileTransfer from './file-transfer/index.vue'
 import TileTree from './tile-tree/index.vue'
 import TileTreeColumn from './tile-tree/tile-tree-column/index.vue'
 import DictOption from './dict-option/index.vue'
+import ConfigTable from './config-table/index.vue'
 import { hyphenate } from '@/helpers/lang'
 
 const components: any = {
@@ -21,7 +22,8 @@ const components: any = {
   FileTransfer,
   TileTree,
   TileTreeColumn,
-  DictOption
+  DictOption,
+  ConfigTable
 }
 
 Object.keys(components).forEach((key: string) => {

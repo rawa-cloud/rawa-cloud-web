@@ -1,4 +1,4 @@
-import { http } from '.'
+import { http, Pageable, Page } from '.'
 
 export interface LibraryCatalogAddReq {
   name: string
@@ -28,13 +28,42 @@ export interface LibraryCatalogFiledDictUpdateReq {
   name: string,
 }
 
+export interface LibraryQueryReq extends Pageable {
+  catalogId: number
+  name?: string
+}
+
+export interface LibraryAddReq {
+  catalogId: number
+  name: string
+}
+
+export interface LibraryUpdateReq {
+  name: string
+}
+
+export interface LibraryQueryRes {
+  id: number
+  name: string
+  catalogId: number
+  fields: {
+    name: string
+    type: string
+    fieldDefId: number
+    value?: string
+    options?: {
+      name: string
+    }[]
+  }[]
+  [key: string]: any
+}
+
 export interface LibraryCatalogQueryRes {
   id: number
   name: string
   fieldDefs?: {
     name: string,
     type: string,
-    parentId: number,
     typeDictList?: {
       name: string
       parentId: number
@@ -80,4 +109,26 @@ export function deleteLibCatalogField (id: number) {
 
 export function deleteLibCatalogFieldDict (id: number) {
   return http().delete<number>(`/libraries/catalog/field/dicts/${id}`)
+}
+
+// Library
+
+export function queryLibraries (params: LibraryQueryReq) {
+  return http().get<Page<LibraryQueryRes>>(`/libraries`, { params })
+}
+
+export function addLibrary (req: LibraryAddReq) {
+  return http().post<number>(`/libraries`, req)
+}
+
+export function updateLibrary (id: number, req: LibraryUpdateReq) {
+  return http().put<any>(`/libraries/${id}`, req)
+}
+
+export function deleteLibrary (id: number) {
+  return http().delete<any>(`/libraries/${id}`)
+}
+
+export function updateLibraryFields (id: number, req: { fieldDefId: number, value: string }[]) {
+  return http().post<number>(`/libraries/${id}/fields`, req)
 }

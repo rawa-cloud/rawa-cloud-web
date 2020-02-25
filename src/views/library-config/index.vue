@@ -2,7 +2,9 @@
 <div>
   <tile-tree :data="data" row-key="key">
     <tile-tree-column title="库模板名称" :level="1" v-on="handler"></tile-tree-column>
-    <tile-tree-column title="字段" :level="2" v-on="handler"></tile-tree-column>
+    <tile-tree-column title="字段" :level="2" v-on="handler">
+      <div slot-scope="{node}"><span>{{node.data.name}}</span> <span class="ml-3 ft-sm text-info">{{node.data.type | transcode('libraryFieldType')}}</span></div>
+    </tile-tree-column>
     <tile-tree-column title="字段选项" :level="3" v-on="handler" :add-fn="addFn"></tile-tree-column>
   </tile-tree>
   <edit-lib ref="editLib"></edit-lib>
@@ -78,7 +80,7 @@ export default class LibraryConfig extends Vue {
     this.$modal.confirm({ title: '确认', content: '是否确认删除？' }).then(() => {
       let id = node.data.id
       if (node.level === 1) return deleteLibCatalog(id)
-      if (node.level === 1) return deleteLibCatalogField(id)
+      if (node.level === 2) return deleteLibCatalogField(id)
       if (node.level === 3) return deleteLibCatalogFieldDict(id)
       return Promise.reject(new Error('error level'))
     }).then(() => {

@@ -6,7 +6,7 @@
     </div>
     <ul :class="[$style.list]">
       <li :class="[$style.item, itemActiveCls(node), itemParentCls(node)]" v-for="(node, i) in rows" :key="i" @click="onSelect(node)">
-        <div>{{node.data.name}}</div>
+        <div><slot :node="node">{{node.data.name}}</slot></div>
         <div>
           <span class="icon-btn" @click="onEdit(node)"> <v-icon type="edit"></v-icon></span>
           <span class="icon-btn ml-2" @click="onDel(node)"> <v-icon type="delete"></v-icon></span>

@@ -8,6 +8,10 @@ export default {
     date: '日期',
     datetime: '日期时间',
     date_range: '日期范围',
-    time_range: '时间范围'
+    datetime_range: '日期时间范围'
+  },
+  status: {
+    true: '有效',
+    false: '无效'
   }
 }

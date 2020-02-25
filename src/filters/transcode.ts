@@ -1,12 +1,9 @@
-const dict: any = {
-  status: {
-    true: '有效',
-    false: '无效'
-  }
-}
+import dict from '@/common/dict'
+
+let map: any = dict
 
 export default function (value: any, key: string, defaultValue?: any) {
-  let ret = dict[key] && dict[key][value]
+  let ret = map[key] && map[key][value]
   if (ret === undefined) return defaultValue === undefined ? value : defaultValue
   return ret
 }
