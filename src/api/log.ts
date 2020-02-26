@@ -1,7 +1,9 @@
-import { http } from '.'
+import { http, Pageable, Page } from '.'
 
-export interface LogQueryReq {
-  [key: string]: any
+export interface LogQueryReq extends Pageable{
+  module?: string
+  type?: string
+  operateBy?: string
 }
 
 export interface LogQueryRes {
@@ -14,5 +16,5 @@ export interface LogQueryRes {
 }
 
 export function queryLogs (req?: LogQueryReq) {
-  return http().get<LogQueryRes[]>(`/logs`, { params: req })
+  return http().get<Page<LogQueryRes>>(`/logs`, { params: req })
 }

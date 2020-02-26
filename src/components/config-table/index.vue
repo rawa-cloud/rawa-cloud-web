@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="d-flex justify-content-between align-content-center m-2">
+        <div class="d-flex justify-content-between align-content-center m-2" v-if="!simple">
             <v-alert type="info" style="flex: 1 1 auto;">
                 <template slot="description">
                     已选择 <span>{{checkedRows.length}}</span> 项
@@ -16,7 +16,7 @@
           @current-page-change="onCurrentPageChange"
           @page-size-change="onPageSizeChange"
           @selection-change="onSelectionChange" :height="height">
-            <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
+            <v-table-column type="selection" fixed="left" width="80px" v-if="!simple"></v-table-column>
             <v-table-column :prop="i + '__config_table__'" :label="col.label" :order="i + 10" v-for="(col, i) in renderedColumns" :key="i">
             <template slot-scope="{row}">
               <template v-if="col.formatter">{{col.formatter(col.name, row)}}</template>
@@ -58,6 +58,8 @@ export default class ConfigTable extends Vue {
 
     @Prop() height!: string
 
+    @Prop(Boolean) simple!: string
+
     checkedRows: any = []
 
     seq: number = 1
@@ -86,7 +88,7 @@ export default class ConfigTable extends Vue {
     }
 
     get renderedColumns () {
-      return this.columns.filter((v: any) => !this.excludes.includes(v.name))
+      return (this.columns || []).filter((v: any) => !this.excludes.includes(v.name))
     }
 
     onSelectionChange (rows: any[]) {

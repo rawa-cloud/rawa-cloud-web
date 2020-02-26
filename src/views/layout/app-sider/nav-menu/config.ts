@@ -71,16 +71,16 @@ export const menus: Array<MenuOption> = [
     link: '/recycle'
   },
   {
-    name: '库',
-    icon: 'book',
-    pid: `${HOME}.library`,
-    link: '/library'
-  },
-  {
     name: '库配置',
     icon: 'tool',
     pid: `${HOME}.library-config`,
     link: '/library-config'
+  },
+  {
+    name: '自定义库',
+    icon: 'book',
+    pid: `${HOME}.library`,
+    link: '/library'
   },
   {
     name: '系统管理',

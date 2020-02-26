@@ -13,5 +13,20 @@ export default {
   status: {
     true: '有效',
     false: '无效'
+  },
+  logModule: {
+    DEPT: '部门',
+    USER: '用户',
+    FILE: '文件',
+    RECYCLE: '回收站',
+    AUTHORITY: '权限',
+    LIB_CONFIG: '库模板',
+    LIB: '自定义库',
+    AUTH: '认证'
+  },
+  logType: {
+    ADD: '新增',
+    UPDATE: '更新',
+    DELETE: '删除'
   }
 }
