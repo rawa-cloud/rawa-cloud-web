@@ -18,12 +18,17 @@
           <div :class="[$style.action]" class="text-right m-2">
             <v-button type="primary" @click="onAdd">新 增</v-button>
           </div>
-          <config-table row-key="id" :api="api" :columns="columns" height="calc(100vh - 360px)" ref="configTable">
+          <config-table row-key="id" :storage-key="storageKey" :api="api" :columns="columns" height="calc(100vh - 360px)" ref="configTable">
             <v-table-column prop="name" label="名称" :order="1"></v-table-column>
-            <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="120px">
+            <v-table-column prop="filePath" label="文件路径" :order="2">
+              <a slot-scope="{row}" @click="onForwardFile(row)">{{row.filePath}}</a>
+            </v-table-column>
+            <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="160px">
                 <template slot-scope="{row}">
                     <span class="icon-btn" @click="onEdit(row)"><v-icon type="edit"></v-icon></span>
                     <span class="icon-btn ml-2" @click="onEditFields(row)"><v-icon type="tag-o"></v-icon></span>
+                    <span class="icon-btn ml-2" @click="onInvite(row)"><v-icon type="usergroup-add"></v-icon></span>
+                    <span class="icon-btn ml-2" @click="onAddFile(row)"><v-icon type="file-add"></v-icon></span>
                     <span class="icon-btn ml-2" @click="onDelete(row.id)"><v-icon type="delete"></v-icon></span>
                     <!-- <span class="ml-3 icon-btn" @click="onRecover(row.id)"><svg-icon icon="recover"></svg-icon></span> -->
                 </template>
@@ -36,17 +41,20 @@
         <user-file ref="userFile"></user-file> -->
     </div>
     <no-data v-else></no-data>
+    <file-chooser ref="fileChooser"></file-chooser>
+    <invite-user ref="inviteUser"></invite-user>
 </div>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component, Inject, Watch } from 'vue-property-decorator'
-import { queryLibraries, deleteLibrary } from '@/api/library'
+import { queryLibraries, deleteLibrary, addLibraryFile } from '@/api/library'
 import EditLib from './edit-lib/index.vue'
 import EditFields from './edit-fields/index.vue'
+import InviteUser from './invite-user/index.vue'
 @Component({
-  components: { EditLib, EditFields }
+  components: { EditLib, EditFields, InviteUser }
 })
 export default class LibResult extends Vue {
     api = queryLibraries
@@ -66,6 +74,11 @@ export default class LibResult extends Vue {
     get catalogId () {
       let current = this.getCurrent()
       return current && current.id
+    }
+
+    get storageKey () {
+      let b = 'library_list'
+      return this.catalogId ? `${b}_${this.catalogId}` : ''
     }
 
     get columns () {
@@ -136,6 +149,28 @@ export default class LibResult extends Vue {
           this.refresh()
         })
       })
+    }
+
+    onInvite (row: any) {
+      const $e = (this as any).$refs.inviteUser as InviteUser
+      $e.invite(row).then(() => {
+        this.$message.success('更新成员成功')
+        this.refresh()
+      })
+    }
+
+    onAddFile (row: any) {
+      const $e = (this as any).$refs.fileChooser as any
+      $e.choose().then((fileId: number) => {
+        addLibraryFile(row.id, fileId).then(() => {
+          this.$message.success('添加文件链接成功')
+          this.refresh()
+        })
+      })
+    }
+
+    onForwardFile (row: any) {
+      this.$router.push(`/file?id=${row.fileParentId}&filter=${row.fileId}`)
     }
 
     query (params: any) {

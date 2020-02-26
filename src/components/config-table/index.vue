@@ -8,7 +8,7 @@
                 </template>
             </v-alert>
             <div class="ml-3">
-                <v-button color="primary" icon="filter">筛选列</v-button>
+                <v-button color="primary" icon="filter" @click="onFilter">筛选列</v-button>
             </div>
         </div>
 
@@ -17,7 +17,7 @@
           @page-size-change="onPageSizeChange"
           @selection-change="onSelectionChange" :height="height">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
-            <v-table-column :prop="i + '__config_table__'" :label="col.label" :order="i + 10" v-for="(col, i) in columns" :key="i">
+            <v-table-column :prop="i + '__config_table__'" :label="col.label" :order="i + 10" v-for="(col, i) in renderedColumns" :key="i">
             <template slot-scope="{row}">
               <template v-if="col.formatter">{{col.formatter(col.name, row)}}</template>
               <template v-else>{{row[col.name]}}</template>
@@ -25,6 +25,8 @@
             </v-table-column>
             <slot></slot>
         </v-table>
+
+        <column-filter ref="columnFilter"></column-filter>
     </div>
 </template>
 
@@ -32,6 +34,8 @@
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
 import { Pageable, Page } from '@/api'
+import ColumnFilter from './column-filter/index.vue'
+import storage from './storage'
 
 export interface Column {
   name?: string
@@ -40,8 +44,12 @@ export interface Column {
   formatter?: (row: any) => string
 }
 
-@Component
+@Component({
+  components: { ColumnFilter }
+})
 export default class ConfigTable extends Vue {
+    @Prop(String) storageKey!: string
+
     @Prop(String) rowKey!: string
 
     @Prop() columns!: any[]
@@ -68,6 +76,19 @@ export default class ConfigTable extends Vue {
       loading: false
     }
 
+    get excludes (): any[] {
+      return this.storageKey ? (storage.get(this.storageKey) || []) : []
+    }
+
+    set excludes (value: any[]) {
+      if (!this.storageKey) return
+      storage.set(this.storageKey, value)
+    }
+
+    get renderedColumns () {
+      return this.columns.filter((v: any) => !this.excludes.includes(v.name))
+    }
+
     onSelectionChange (rows: any[]) {
       this.checkedRows = rows || []
     }
@@ -86,6 +107,19 @@ export default class ConfigTable extends Vue {
 
     onPageSizeChange (pageSize: number) {
       this.loadData(1, pageSize, this.params)
+    }
+
+    onFilter () {
+      const $e = (this as any).$refs.columnFilter as ColumnFilter
+      let dataSource = this.columns.map((v: any) => {
+        return {
+          key: v.name,
+          label: v.label
+        }
+      })
+      $e.select(dataSource, this.excludes).then(data => {
+        this.excludes = data
+      })
     }
 
     query (params: Record<string, any> = {}) {

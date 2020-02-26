@@ -132,3 +132,11 @@ export function deleteLibrary (id: number) {
 export function updateLibraryFields (id: number, req: { fieldDefId: number, value: string }[]) {
   return http().post<number>(`/libraries/${id}/fields`, req)
 }
+
+export function addLibraryFile (id: number, fileId: number) {
+  return http().post<any>(`/libraries/${id}/file/${fileId}`)
+}
+
+export function updateLibraryAuthorities (id: number, req: { username: string, opt: string }[]) {
+  return http().post<any>(`/libraries/${id}/authorities`, req)
+}
