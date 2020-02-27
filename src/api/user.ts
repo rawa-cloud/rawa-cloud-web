@@ -56,6 +56,10 @@ export function queryUsers (req: UserQueryReq) {
   return http().get<UserQueryRes[]>(`/users`, { params: req })
 }
 
+export function queryUsersForPage (req: UserQueryReq) {
+  return http().get<UserQueryRes[]>(`/users/page`, { params: req })
+}
+
 export function addUser (req: UserAddReq) {
   return http().post<number>(`/users`, req)
 }

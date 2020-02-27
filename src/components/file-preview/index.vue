@@ -4,9 +4,10 @@ import { getType } from '@/common/content-type'
 import ImagePreview from './image-preview/index.vue'
 import OfficePreview from './office-preview/index.vue'
 import VideoPreview from './video-preview/index.vue'
+import TextPreview from './text-preview/index.vue'
 
 @Component({
-  components: { ImagePreview, OfficePreview, VideoPreview }
+  components: { ImagePreview, OfficePreview, VideoPreview, TextPreview }
 })
 export default class FilePreview extends Vue {
   visible: boolean = false
@@ -19,7 +20,7 @@ export default class FilePreview extends Vue {
 
   password: any = null
 
-  get type (): 'image' | 'video' | 'audio' | 'office' | string {
+  get type (): 'image' | 'video' | 'audio' | 'office' | 'text' | string {
     if (!this.row) return ''
     return getType(this.row.contentType || '')
   }

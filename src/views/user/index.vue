@@ -34,26 +34,26 @@
             </v-form>
         </div>
 
-        <div>
-          <div class="mb-2 text-right">
-            <v-button type="text" size="sm" color="primary" @click="onAdd">新增用户</v-button>
+        <div style="position: relative;">
+          <div class="mb-2 text-right" style="position: absolute; top: -64px; right: 20px;">
+            <v-button type="primary" color="primary" @click="onAdd">新增用户</v-button>
           </div>
-            <v-table pageable :data-source="dataSource" height="calc(100vh - 330px)">
-                <v-table-column prop="username" label="用户名"></v-table-column>
-                <v-table-column prop="cname" label="姓名"></v-table-column>
-                <v-table-column prop="deptName" label="所属部门"></v-table-column>
-                <v-table-column prop="ip" label="ip"></v-table-column>
-                <v-table-column prop="status" label="状态">
-                  <template slot-scope="{row}">{{row.status | transcode('status')}}</template>
-                </v-table-column>
-                <v-table-column prop="opt" label="操作" fixed="right" width="160px">
-                    <template slot-scope="{row}">
-                        <span class="icon-btn" @click="onEdit(row)" title="编辑"><v-icon type="edit"></v-icon></span>
-                        <span class="ml-3 icon-btn" @click="onDelete(row.id)" title="删除"><v-icon type="delete"></v-icon></span>
-                        <span class="ml-3 icon-btn" :disabled="!hasAdminRole(row)" @click="onViewUserFile(row)" title="管理员目录"><v-icon type="folder-add"></v-icon></span>
-                    </template>
-                </v-table-column>
-            </v-table>
+          <config-table row-key="id" :api="api" simple height="calc(100vh - 280px)" ref="configTable">
+            <v-table-column prop="username" label="用户名"></v-table-column>
+            <v-table-column prop="cname" label="姓名"></v-table-column>
+            <v-table-column prop="deptName" label="所属部门"></v-table-column>
+            <v-table-column prop="ip" label="ip"></v-table-column>
+            <v-table-column prop="status" label="状态">
+              <template slot-scope="{row}">{{row.status | transcode('status')}}</template>
+            </v-table-column>
+            <v-table-column prop="opt" label="操作" fixed="right" width="160px">
+                <template slot-scope="{row}">
+                    <span class="icon-btn" @click="onEdit(row)" title="编辑" :disabled="isDefault(row)"><v-icon type="edit"></v-icon></span>
+                    <span class="ml-3 icon-btn" @click="onDelete(row.id)" title="删除" :disabled="isDefault(row)"><v-icon type="delete"></v-icon></span>
+                    <span class="ml-3 icon-btn" :disabled="!hasAdminRole(row)" @click="onViewUserFile(row)" title="管理员目录"><v-icon type="folder-add"></v-icon></span>
+                </template>
+            </v-table-column>
+          </config-table>
         </div>
         <edit-user ref="editUser"></edit-user>
         <user-file ref="userFile"></user-file>
@@ -63,7 +63,7 @@
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator'
-import { queryUsers, deleteUser } from '@/api/user'
+import { queryUsers, deleteUser, queryUsersForPage } from '@/api/user'
 import { queryDepts } from '@/api/dept'
 import EditUser from './edit-user/index.vue'
 import UserFile from './user-file/index.vue'
@@ -74,6 +74,8 @@ import { toCascade } from '../../helpers/data'
   components: { EditUser, UserFile }
 })
 export default class User extends Vue {
+    api = queryUsersForPage
+
     form = {
       username: '',
       cname: '',
@@ -85,15 +87,7 @@ export default class User extends Vue {
       }
     }
 
-    loading: boolean = false
-
-    dataSource: any[] = []
-
     depts: any[] = []
-
-    onQuery () {
-      this.query()
-    }
 
     onReset () {
       const $form = this.$refs.form as any
@@ -104,15 +98,16 @@ export default class User extends Vue {
       const $e = this.$refs.editUser as EditUser
       $e.add().then(() => {
         this.$message.success('添加用户成功')
-        this.query()
+        this.refresh()
       })
     }
 
     onEdit (row: any) {
+      if (this.isDefault(row)) return
       const $e = this.$refs.editUser as EditUser
       $e.edit(row).then(() => {
         this.$message.success('编辑用户成功')
-        this.query()
+        this.refresh()
       })
     }
 
@@ -123,7 +118,7 @@ export default class User extends Vue {
       }).then(() => {
         deleteUser(id).then(() => {
           this.$message.success('删除用户成功')
-          this.query()
+          this.refresh()
         })
       })
     }
@@ -132,7 +127,7 @@ export default class User extends Vue {
       const $e = this.$refs.userFile as UserFile
       $e.view(row).then(() => {
         this.$message.success('修改管理员目录成功')
-        this.query()
+        this.refresh()
       })
     }
 
@@ -140,13 +135,22 @@ export default class User extends Vue {
       return (row.roles || []).includes('ADMIN')
     }
 
-    query () {
-      this.loading = true
-      queryUsers(clone(this.form, true)).then(data => {
-        this.dataSource = data || []
-      }).finally(() => {
-        this.loading = false
-      })
+    isDefault (row: any) {
+      return row.username === 'root'
+    }
+
+    onQuery () {
+      this.query(this.form)
+    }
+
+    query (params: any) {
+      const $e = (this as any).$refs.configTable
+      if ($e) $e.query(params)
+    }
+
+    refresh () {
+      const $e = (this as any).$refs.configTable
+      $e.refresh()
     }
 
     loadDepts () {
@@ -157,7 +161,7 @@ export default class User extends Vue {
     }
 
     mounted () {
-      this.query()
+      this.onQuery()
       this.loadDepts()
     }
 }

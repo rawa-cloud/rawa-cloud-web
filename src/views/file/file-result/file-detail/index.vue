@@ -21,6 +21,7 @@
 
 import { Vue, Component } from 'vue-property-decorator'
 import size from '@/filters/size'
+import transcode from '../../../../filters/transcode'
 
 @Component
 export default class EditDir extends Vue {
@@ -55,7 +56,7 @@ export default class EditDir extends Vue {
     let extra: any[] = []
     if (this.dir) {
       extra = [
-        { key: 'limitSize', title: '容量', formatter: (row: any) => row.limitSize || '不限' },
+        { key: 'limitSize', title: '容量', formatter: (row: any) => row.limitSize ? size(row.limitSize) : '不限' },
         { key: 'limitSuffix', title: '文件类型', formatter: (row: any) => row.limitSuffix || '不限' }
       ]
     } else {

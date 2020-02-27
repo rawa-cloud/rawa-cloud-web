@@ -68,7 +68,7 @@ export default class DeptTree extends Vue {
     onDelete (dept: any) {
       this.$modal.confirm({
         title: '确认删除',
-        content: `确认删除部门 [${dept && dept.name}] ?`
+        content: `删除部门 [${dept && dept.name}], 其下用户也将被同时删除, 确认删除 ?`
       }).then(() => {
         return deleteDept(dept.id)
       }).then(() => {

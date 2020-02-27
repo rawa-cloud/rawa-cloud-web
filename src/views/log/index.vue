@@ -14,6 +14,9 @@
                       <dict-option name="logType"></dict-option>
                     </v-select>
                 </v-form-item>
+                <v-form-item prop="operateBy" label="操作人">
+                    <v-select clearable v-model="form.operateBy" searchable :search-fn="searchFn" class="w-10"></v-select>
+                </v-form-item>
                 <v-form-item >
                    <v-button type="primary" @click="onQuery">查询</v-button>
                    <v-button class="ml-3" @click="onReset">重置</v-button>
@@ -22,7 +25,7 @@
         </div>
 
         <div>
-          <config-table row-key="id" :api="api" simple height="calc(100vh - 360px)" ref="configTable">
+          <config-table row-key="id" :api="api" simple height="calc(100vh - 280px)" ref="configTable">
             <v-table-column prop="module" label="操作模块"><template slot-scope="{row}">{{row.module | transcode('logModule')}}</template></v-table-column>
             <v-table-column prop="type" label="操作类型"><template slot-scope="{row}">{{row.type | transcode('logType')}}</template></v-table-column>
             <v-table-column prop="operateBy" label="操作人"></v-table-column>
@@ -38,6 +41,7 @@
 
 import { Vue, Component, Inject, Watch } from 'vue-property-decorator'
 import { queryLogs } from '@/api/log'
+import { queryUsers } from '@/api/user'
 @Component({
 })
 export default class Log extends Vue {
@@ -45,8 +49,13 @@ export default class Log extends Vue {
 
     form = {
       module: '',
-      type: ''
+      type: '',
+      operateBy: ''
     }
+
+    value: string = ''
+
+    users: any[] = []
 
     get req () {
       let r: any = { }
@@ -73,8 +82,28 @@ export default class Log extends Vue {
       $e.refresh()
     }
 
+    searchFn (input: string, cb: (items: any[])=>void) {
+      let ret = this.users.filter((v: any) => {
+        if (!input) return true
+        return v.username.includes(input) || v.cname.includes(input)
+      }).slice(0, 15).map((v: any) => {
+        return {
+          label: v.cname + ' - ' + v.username,
+          value: v.username
+        }
+      })
+      cb(ret)
+    }
+
+    loadUser () {
+      queryUsers({}).then(data => {
+        this.users = data || []
+      })
+    }
+
     mounted () {
       this.onQuery()
+      this.loadUser()
     }
 }
 </script>

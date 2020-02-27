@@ -24,6 +24,10 @@ const map: any = {
     'mp4': 'video',
     'webm': 'video',
     'ogv': 'video'
+  },
+  text: {
+    'txt': 'text',
+    'md': 'text'
   }
 }
 

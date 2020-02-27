@@ -5,7 +5,7 @@
           <v-form-item label="名称" prop="name" required>
             <v-input clearable v-model.trim="form.name" maxlength="16"></v-input>
           </v-form-item>
-          <v-form-item label="容量" prop="limitSize">
+          <v-form-item label="容量(M)" prop="limitSize">
             <v-input-number v-model="form.limitSize" maxlength="16" :min="0"></v-input-number>
           </v-form-item>
           <v-form-item label="文件类型" prop="limitSuffix">
@@ -123,6 +123,7 @@ export default class EditDir extends Vue {
   generateReq () {
     let req: any = { dir: true }
     Object.assign(req, this.form)
+    if (req.limitSize) req.limitSize = req.limitSize * 1024 * 1024
     if (this.isEdit) {
       req.parentId = this.file.parentId
     } else {
