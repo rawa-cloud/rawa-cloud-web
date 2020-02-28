@@ -38,13 +38,11 @@ export default class TextPreview extends mixins(BasePreview) {
       // win.document.write(html)
       // win.document.title = name
       // window.URL.revokeObjectURL(url) // 释放掉blob对象
+    }).catch((e) => {
+      this.close()
+    }).finally(() => {
+      this.loading = false
     })
-      .catch((e) => {
-        this.close()
-      })
-      .finally(() => {
-        this.loading = false
-      })
   }
 
   beforeDestroy () {
