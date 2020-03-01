@@ -39,7 +39,7 @@
               <v-table-column prop="creationTime" label="创建日期"></v-table-column>
               <v-table-column prop="creationBy" label="日创建人期"></v-table-column>
               <v-table-column prop="filePath" label="原文件路径">
-                <template slot-scope="{row}"><a @click="onForward(row.parentId)">{{row.filePath}}</a></template>
+                <template slot-scope="{row}"><a @click="onForward(row.id, row.parentId)">{{row.filePath}}</a></template>
               </v-table-column>
             </v-table>
         </div>
@@ -50,7 +50,7 @@
 
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { queryUsers } from '@/api/user'
-import { searchFiles } from '@/api/file'
+import { searchFiles, getFile } from '@/api/file'
 import { normalizeDate } from '@/helpers/date'
 
 @Component
@@ -102,8 +102,14 @@ export default class Search extends Vue {
       })
     }
 
-    onForward (parentId: number) {
-      this.$router.push(`/file?id=${parentId}`)
+    onForward (id: number, parentId: number) {
+      getFile(id).then(data => {
+        if (!data || !data.status) {
+          this.$message.error('文件已不存在')
+          return
+        }
+        this.$router.push(`/file?id=${parentId}`)
+      })
     }
 
     mounted () {

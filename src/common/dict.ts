@@ -20,6 +20,7 @@ export default {
     FILE: '文件',
     RECYCLE: '回收站',
     AUTHORITY: '权限',
+    SHARE: '分享',
     LIB_CONFIG: '库模板',
     LIB: '自定义库',
     AUTH: '认证'

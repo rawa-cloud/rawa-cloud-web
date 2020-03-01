@@ -6,12 +6,12 @@
             <v-form-item label="收藏名称" prop="name" required>
               <v-input clearable v-model="form.name" maxlength="16"></v-input>
             </v-form-item>
-            <v-form-item label="收藏类别" prop="catalogId">
+            <v-form-item label="收藏类别" prop="catalogId" required>
               <v-select clearable v-model="form.catalogId">
                 <v-option :label="row.name" :value="row.id" v-for="row in catalogs" :key="row.id"></v-option>
               </v-select>
             </v-form-item>
-            <v-form-item label="备注" prop="name" required>
+            <v-form-item label="备注" prop="name">
               <v-textarea v-model.trim="form.remark" maxlength="100"></v-textarea>
             </v-form-item>
           </v-form>
@@ -53,6 +53,9 @@ export default class FileCollect extends Vue {
 
   rules = {
     name: [
+      { validator: 'required', message: '收藏名称必填', trigger: 'blur' }
+    ],
+    catalogId: [
       { validator: 'required', message: '收藏名称必填', trigger: 'blur' }
     ]
   }

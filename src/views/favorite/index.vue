@@ -1,7 +1,7 @@
 <template>
 <div :class="[$style.container]">
   <div :class="[$style.sider]">
-    <div><span class="text-heading">收藏分类</span><a class="ml-3" @click="editting = true"><v-icon type="plus-circle-o"></v-icon></a></div>
+    <div :class="[$style.header]"><span class="text-heading">收藏分类</span><a class="ml-3" @click="editting = true"><v-icon type="plus-circle-o"></v-icon></a></div>
     <div class="d-flex align-items-center mt-2" v-if="editting">
       <v-input v-model.trim="form.name" placeholder="请填写名称" size="sm" class="w-8"></v-input>
       <a class="ml-2" @click="onSave">保存</a>
@@ -16,15 +16,15 @@
       </li>
     </ul>
   </div>
-  <div :class="[$style.content]" class="pl-3">
-    <v-list :data-source="items" :bordered="false" size="sm" v-if="items.length > 0">
-      <v-list-item slot-scope="{item}">
-        <v-list-item-meta slot="meta"
-          :description="item.remark">
-          <a slot="title" @click="onForward(item)">{{item.name}}</a>
-        </v-list-item-meta>
-      </v-list-item>
-    </v-list>
+  <div :class="[$style.content]">
+    <div :class="[$style.header]" class="mb-2">收藏列表</div>
+    <ul :class="[$style.ul]" v-if="items.length > 0">
+      <li :class="[$style.li]" v-for="(row, i) in items" :key="i">
+        <div><a @click="onForward(row)">{{row.name}}</a></div>
+        <div class="mx-4"><span class="caption">{{row.remark}}</span></div>
+        <div><span class="icon-btn mr-3" @click="onDelete(row)"><v-icon type="delete"></v-icon></span></div>
+      </li>
+    </ul>
     <no-data v-else></no-data>
   </div>
 </div>
@@ -34,7 +34,8 @@
 
 import { Vue, Component, Watch } from 'vue-property-decorator'
 
-import { queryCatalogs, addCatalog, deleteCatalog, queryItems } from '@/api/favorite'
+import { queryCatalogs, addCatalog, deleteCatalog, queryItems, deleteItem } from '@/api/favorite'
+import { getFile } from '@/api/file'
 
 @Component
 export default class Favorite extends Vue {
@@ -81,7 +82,20 @@ export default class Favorite extends Vue {
   }
 
   onForward (row: any) {
-    this.$router.push(`/file?id=${row.fileParentId}&filter=${row.fileId}`)
+    getFile(row.fileId).then(data => {
+      if (!data || !data.status) {
+        this.$message.error('文件已不存在')
+        return
+      }
+      this.$router.push(`/file?id=${row.fileParentId}&filter=${row.fileId}`)
+    })
+  }
+
+  onDelete (row: any) {
+    deleteItem(row.id).then(data => {
+      this.$message.success('删除成功')
+      this.loadItems()
+    })
   }
 
   loadCatalogs () {
@@ -123,15 +137,23 @@ export default class Favorite extends Vue {
 <style lang="scss" module>
 .container{
   display: flex;
-  padding: 8px 12px;
 }
 
 .sider{
-  width: 200px;
+  width: 320px;
+  border-right: 1px solid var(--border-color-split);
+  height: calc(100vh - 160px);
+  overflow: auto;
+}
+
+.header {
+  line-height: 36px;
+  background-color: var(--bg-color-2);
+  padding: 0 8px;
 }
 
 .content{
-  width: calc(100% - 200px);
+  width: calc(100% - 320px);
 }
 
 .list {
@@ -169,5 +191,24 @@ export default class Favorite extends Vue {
   right: 8px;
   top: 50%;
   transform: translateY(-50%);
+}
+
+.ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.li {
+  min-height: 42px;
+  border-bottom: 1px solid var(--border-color-split);
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+
+  &:hover {
+    background-color: var(--bg-color-2);
+  }
 }
 </style>

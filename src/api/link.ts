@@ -1,7 +1,7 @@
-import { http } from '.'
+import { http, Pageable, Page } from '.'
 import { FileQueryReq, FileRes } from './file'
 
-export interface LinkQueryReq {
+export interface LinkQueryReq extends Pageable{
 }
 
 export interface LinkQueryRes {
@@ -43,7 +43,7 @@ export interface LinkRes {
 }
 
 export function queryLinks (req: LinkQueryReq) {
-  return http().get<LinkQueryRes[]>(`/links`, { params: req })
+  return http().get<Page<LinkQueryRes>>(`/links`, { params: req })
 }
 
 export function addLink (req: LinkAddReq) {

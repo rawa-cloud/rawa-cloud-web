@@ -1,6 +1,7 @@
-import { http } from '.'
+import { http, Pageable } from '.'
+import { Page } from './index'
 
-export interface RecycleQueryReq {
+export interface RecycleQueryReq extends Pageable{
     // creationBy?: string
 }
 
@@ -27,7 +28,7 @@ export interface RecycleRes {
 }
 
 export function queryRecycles (req: RecycleQueryReq) {
-  return http().get<RecycleQueryRes[]>(`/recycles`, { params: req })
+  return http().get <Page<RecycleQueryRes>>(`/recycles`, { params: req })
 }
 
 export function addRecycle (req: RecycleAddReq) {
@@ -51,5 +52,9 @@ export function deleteRecycles (ids: number[]) {
 // 批量恢复
 export function recoverRecycles (ids: number[]) {
   const d = ids.join(',')
-  return http().delete<void>(`/recycles/recover/${d}`)
+  return http().delete<void>(`/recycles/batch/recover/${d}`)
+}
+
+export function clearRecycle () {
+  return http().delete<void>(`/recycles/clear`)
 }

@@ -53,6 +53,7 @@ import { queryLibraries, deleteLibrary, addLibraryFile } from '@/api/library'
 import EditLib from './edit-lib/index.vue'
 import EditFields from './edit-fields/index.vue'
 import InviteUser from './invite-user/index.vue'
+import { getFile } from '@/api/file'
 @Component({
   components: { EditLib, EditFields, InviteUser }
 })
@@ -170,7 +171,13 @@ export default class LibResult extends Vue {
     }
 
     onForwardFile (row: any) {
-      this.$router.push(`/file?id=${row.fileParentId}&filter=${row.fileId}`)
+      getFile(row.fileId).then(data => {
+        if (!data || !data.status) {
+          this.$message.error('文件已不存在')
+          return
+        }
+        this.$router.push(`/file?id=${row.fileParentId}&filter=${row.fileId}`)
+      })
     }
 
     query (params: any) {

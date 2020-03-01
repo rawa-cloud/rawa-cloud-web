@@ -8,7 +8,8 @@
                 </template>
             </v-alert>
             <div class="ml-3">
-                <v-button color="primary" icon="filter" @click="onFilter">筛选列</v-button>
+                <slot name="extra" :rows="checkedRows"></slot>
+                <v-button color="primary" icon="filter" @click="onFilter" v-if="storageKey">筛选列</v-button>
             </div>
         </div>
 
@@ -16,7 +17,7 @@
           @current-page-change="onCurrentPageChange"
           @page-size-change="onPageSizeChange"
           @selection-change="onSelectionChange" :height="height" :size="size">
-            <v-table-column type="selection" fixed="left" width="80px" v-if="!simple"></v-table-column>
+            <v-table-column type="selection" fixed="left" width="80px" v-if="!simple" :order="-1"></v-table-column>
             <v-table-column :prop="i + '__config_table__'" :label="col.label" :order="i + 10" v-for="(col, i) in renderedColumns" :key="i">
             <template slot-scope="{row}">
               <template v-if="col.formatter">{{col.formatter(col.name, row)}}</template>
