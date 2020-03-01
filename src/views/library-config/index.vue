@@ -1,13 +1,19 @@
 <template>
 <div>
   <tile-tree :data="data" row-key="key">
-    <tile-tree-column title="库模板名称" :level="1" v-on="handler"></tile-tree-column>
+    <tile-tree-column title="库模板名称" :level="1" v-on="handler">
+      <template slot="action" slot-scope="{node}">
+        <span class="icon-btn mr-2" @click.stop="onInviteUser(node)"> <v-icon type="usergroup-add"></v-icon></span>
+      </template>
+    </tile-tree-column>
     <tile-tree-column title="字段" :level="2" v-on="handler">
       <div slot-scope="{node}"><span>{{node.data.name}}</span> <span class="ml-3 ft-sm text-info">{{node.data.type | transcode('libraryFieldType')}}</span></div>
     </tile-tree-column>
     <tile-tree-column title="字段选项" :level="3" v-on="handler" :add-fn="addFn"></tile-tree-column>
   </tile-tree>
   <edit-lib ref="editLib"></edit-lib>
+  <invite-user ref="inviteUser" catalog></invite-user>
+
 </div>
 </template>
 
@@ -16,35 +22,11 @@
 import { Vue, Component, Provide } from 'vue-property-decorator'
 import Node from '@/components/tile-tree/Node'
 import EditLib from './eidt-lib/index.vue'
+import InviteUser from '../library/lib-result/invite-user/index.vue'
 import { queryLibCatalogs, deleteLibCatalog, deleteLibCatalogField, deleteLibCatalogFieldDict } from '@/api/library'
 
-// const data = [
-//   {
-//     id: '1',
-//     name: '图片库',
-//     children: [
-//       {
-//         id: '1-1',
-//         name: '类型',
-//         type: 'radio',
-//         children: [
-//           {
-//             id: '1-1-1',
-//             name: 'png'
-//           }
-//         ]
-//       }
-//     ]
-//   },
-//   {
-//     id: '2',
-//     name: '视频库',
-//     children: []
-//   }
-// ]
-
 @Component({
-  components: { EditLib }
+  components: { EditLib, InviteUser }
 })
 export default class LibraryConfig extends Vue {
   data: any[] = []
@@ -86,6 +68,14 @@ export default class LibraryConfig extends Vue {
     }).then(() => {
       this.loadData()
       this.$message.success('删除成功')
+    })
+  }
+
+  onInviteUser (node: Node) {
+    const $e = (this as any).$refs.inviteUser as InviteUser
+    $e.invite(node.data).then(() => {
+      this.$message.success('更新成员成功')
+      this.loadData()
     })
   }
 

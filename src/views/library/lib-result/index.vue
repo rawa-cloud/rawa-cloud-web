@@ -24,7 +24,7 @@
               <a slot-scope="{row}" @click="onForwardFile(row)">{{row.filePath}}</a>
             </v-table-column>
             <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="160px">
-                <template slot-scope="{row}">
+                <template slot-scope="{row}" v-if="hasAdmin(row)">
                     <span class="icon-btn" @click="onEdit(row)"><v-icon type="edit"></v-icon></span>
                     <span class="icon-btn ml-2" @click="onEditFields(row)"><v-icon type="tag-o"></v-icon></span>
                     <span class="icon-btn ml-2" @click="onInvite(row)"><v-icon type="usergroup-add"></v-icon></span>
@@ -188,6 +188,12 @@ export default class LibResult extends Vue {
     refresh () {
       const $e = (this as any).$refs.configTable
       $e.refresh()
+    }
+
+    hasAdmin (row: any) {
+      let username = this.$auth.username
+      let ls = row.authorities || []
+      return ls.some((v: any) => v.username === username && v.opt === 'w')
     }
 
     mounted () {

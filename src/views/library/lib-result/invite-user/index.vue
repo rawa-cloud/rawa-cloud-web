@@ -6,7 +6,7 @@
           <div class="text-center">
             <v-input-group>
               <v-select clearable v-model="value" searchable :search-fn="searchFn" style="width: 320px;" Search...></v-select>
-              <v-button color="primary" icon="plus" @click="onAdd"></v-button>
+              <v-button color="primary" icon="plus" @click="onAdd" :disabled="!value"></v-button>
             </v-input-group>
           </div>
 
@@ -14,9 +14,15 @@
             <v-list :data-source="data" bordered size="sm" class="mt-3" v-if="data.length > 0" >
               <v-list-item slot-scope="{item}">
                 <v-list-item-meta slot="meta" :title="item.username" :description="item.cname" class="w-12"></v-list-item-meta>
-                <div>
-                  <div class="mb-2">权限</div>
-                  <v-switch v-model="item.w" inactive-text="普通用户" active-text="管理员"></v-switch>
+                <div class="d-flex">
+                  <div class="text-center">
+                    <div class="mb-2">权限</div>
+                    <v-switch v-model="item.w" inactive-text="普通用户" active-text="管理人员"></v-switch>
+                  </div>
+                  <div class="ml-4 text-center" v-if="!catalog">
+                    <div class="mb-2">继承</div>
+                    <v-switch v-model="item.inherit" inactive-text="否" active-text="是" :disabled="item.disabledInherit"></v-switch>
+                  </div>
                 </div>
                 <div slot="action">
                   <a class="ft-lg" @click="onDelete(item)"><v-icon type="delete"></v-icon></a>
@@ -37,12 +43,14 @@
 
 <script lang="ts">
 
-import { Vue, Component } from 'vue-property-decorator'
-import { updateLibraryAuthorities } from '@/api/library'
+import { Vue, Component, Prop } from 'vue-property-decorator'
+import { updateLibraryAuthorities, updateLibraryCatalogAuthorities } from '@/api/library'
 import { queryUsers } from '@/api/user'
 
 @Component
 export default class InviteUser extends Vue {
+  @Prop(Boolean) catalog!: boolean
+
   row: any = null
 
   data: any[] = []
@@ -75,8 +83,9 @@ export default class InviteUser extends Vue {
   }
 
   init (): Promise<any> {
-    ((this.row && this.row.authorityList) || []).map((v: any) => {
-      this.add(v.username, v.opt === 'w')
+    let data = this.catalog ? (this.row && this.row.authorityList) || [] : (this.row && this.row.authorities) || []
+    data.map((v: any) => {
+      this.add(v.username, v.opt === 'w', v.inherit)
     })
     this.value = ''
     this.visible = true
@@ -104,11 +113,12 @@ export default class InviteUser extends Vue {
   }
 
   request (): Promise<number | void> {
-    return updateLibraryAuthorities(this.row.id, this.generateReq())
+    return this.catalog ? updateLibraryCatalogAuthorities(this.row.id, this.generateReq())
+      : updateLibraryAuthorities(this.row.id, this.generateReq())
   }
 
   generateReq () {
-    let req: any = this.data.map((v: any) => {
+    let req: any = this.data.filter((v: any) => !v.inherit).map((v: any) => {
       return {
         username: v.username,
         opt: v.opt
@@ -117,13 +127,15 @@ export default class InviteUser extends Vue {
     return req
   }
 
-  add (username: string, w: boolean) {
+  add (username: string, w: boolean, inherit: boolean) {
     const vm = this
     let has = this.data.some(v => v.username === username)
     if (has) return
     this.data.push({
       username,
       w,
+      inherit,
+      disabledInherit: !inherit,
       get opt () {
         return this.w ? 'w' : 'r'
       },
@@ -137,7 +149,8 @@ export default class InviteUser extends Vue {
   onAdd () {
     let vm = this
     if (!this.value) return
-    this.add(this.value, false)
+    this.add(this.value, false, false)
+    this.value = ''
   }
 
   searchFn (input: string, cb: (items: any[])=>void) {

@@ -111,6 +111,10 @@ export function deleteLibCatalogFieldDict (id: number) {
   return http().delete<number>(`/libraries/catalog/field/dicts/${id}`)
 }
 
+export function updateLibraryCatalogAuthorities (id: number, req: { username: string, opt: string }[]) {
+  return http().post<any>(`/libraries/catalogs/${id}/authorities`, req)
+}
+
 // Library
 
 export function queryLibraries (params: LibraryQueryReq) {
