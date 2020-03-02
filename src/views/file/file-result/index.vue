@@ -11,18 +11,18 @@
                 </v-dropdown> -->
                 <v-dropdown trigger="click" class="d-inline-block mr-2">
                   <v-button-group>
-                      <v-button color="primary"  @click="onUpload(true, false)" :disabled="!canUpload"> 上 传 </v-button>
-                      <v-button color="primary"  x-reference slim :disabled="!canUpload"><i class="anticon anticon-down"></i></v-button>
+                      <v-button color="primary" :size="size"  @click="onUpload(true, false)" :disabled="!canUpload"> 上 传 </v-button>
+                      <v-button color="primary" :size="size"  x-reference slim :disabled="!canUpload"><i class="anticon anticon-down"></i></v-button>
                   </v-button-group>
                   <v-dropdown-menu slot="dropdown">
                     <v-dropdown-item @click.native="onUpload(true, false)">上传文件</v-dropdown-item>
                     <v-dropdown-item @click.native="onUpload(true, true)">上传文件夹</v-dropdown-item>
                   </v-dropdown-menu>
                 </v-dropdown>
-                <v-button color="primary" class="mr-2" @click="onNew" :disabled="!canMkDir">新建文件夹</v-button>
+                <v-button :size="size" color="primary" class="mr-2" @click="onNew" :disabled="!canMkDir">新建文件夹</v-button>
 
                 <v-button-group class="mr-2">
-                    <v-button color="primary" @click="row.action()" v-for="(row, i) in renderedActions" :key="i">{{row.title}}</v-button>
+                    <v-button :size="size" color="primary" @click="row.action()" v-for="(row, i) in renderedActions" :key="i">{{row.title}}</v-button>
                     <!-- <v-button color="primary" @click="onRenew()">更新</v-button>
                     <v-button color="primary" @click="onFileRecord()">版本</v-button>
                     <v-button color="primary" @click="onShare()">分享</v-button>
@@ -90,6 +90,8 @@ import { UMASK, hasAllAuthority, hasAnyAuthority } from '@/common/umask'
 })
 export default class FileResult extends Vue {
     @Prop(Number) parentId!: number
+
+    size: string = 'sm'
 
     view: 'list' | 'thumbnail' = 'list'
 
@@ -185,6 +187,7 @@ export default class FileResult extends Vue {
       $e.upload(this.parentId, multiple, directory).then(() => {
         this.$message.success('上传成功')
         this.refresh()
+        if (directory) this.reload()
       })
     }
 
@@ -396,5 +399,6 @@ export default class FileResult extends Vue {
 .toolbar {
     display: flex;
     justify-content: space-between;
+    align-items: center;
 }
 </style>

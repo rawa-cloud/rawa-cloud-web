@@ -56,7 +56,7 @@ export default class FileCollect extends Vue {
       { validator: 'required', message: '收藏名称必填', trigger: 'blur' }
     ],
     catalogId: [
-      { validator: 'required', message: '收藏名称必填', trigger: 'blur' }
+      { validator: 'required', message: '收藏名称必填', trigger: 'change' }
     ]
   }
 

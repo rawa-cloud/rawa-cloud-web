@@ -17,7 +17,7 @@
                 <div class="d-flex">
                   <div class="text-center">
                     <div class="mb-2">权限</div>
-                    <v-switch v-model="item.w" inactive-text="普通用户" active-text="管理人员"></v-switch>
+                    <v-switch v-model="item.w" inactive-text="普通用户" active-text="管理人员" :disabled="item.inherit"></v-switch>
                   </div>
                   <div class="ml-4 text-center" v-if="!catalog">
                     <div class="mb-2">继承</div>
@@ -84,6 +84,7 @@ export default class InviteUser extends Vue {
 
   init (): Promise<any> {
     let data = this.catalog ? (this.row && this.row.authorityList) || [] : (this.row && this.row.authorities) || []
+    this.data = []
     data.map((v: any) => {
       this.add(v.username, v.opt === 'w', v.inherit)
     })

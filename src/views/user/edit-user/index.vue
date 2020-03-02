@@ -13,7 +13,7 @@
             </div>
           </v-form-item>
 
-          <v-form-item label="归属部门" prop="deptId">
+          <v-form-item label="归属部门" prop="deptId" required>
             <!-- <v-select clearable searchable v-model="form.deptId">
               <v-option :label="dept.name" :value="dept.id" v-for="dept in depts" :key="dept.id"></v-option>
             </v-select> -->
@@ -100,6 +100,9 @@ export default class EditUser extends Vue {
     ],
     cname: [
       { validator: 'required', message: '中文名必填', trigger: 'blur' }
+    ],
+    deptId: [
+      { validator: 'required', message: '请选择组织部门', trigger: 'change' }
     ]
   }
 

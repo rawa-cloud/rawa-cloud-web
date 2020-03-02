@@ -3,7 +3,7 @@
       <v-modal :visible.sync="actualVisible" width="320px" :title="title">
         <v-form ref="form" :rules="rules" :model="form" label-width="80px" label-position="left" class="ml-3" v-if="visible">
           <v-form-item label="名称" prop="name" required>
-            <v-input clearable v-model="form.name" maxlength="16"></v-input>
+            <v-input clearable v-model="form.name" maxlength="64"></v-input>
           </v-form-item>
         </v-form>
 
