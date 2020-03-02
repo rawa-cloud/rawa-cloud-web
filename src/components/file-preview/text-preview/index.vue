@@ -62,7 +62,7 @@ export default class TextPreview extends mixins(BasePreview) {
   top: 0;
   height: 100vh;
   width: 100vw;
-  background-color: rgba(0, 0, 0, .35);
+  background-color: rgba(0, 0, 0, .85);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -81,6 +81,7 @@ export default class TextPreview extends mixins(BasePreview) {
   top: .5rem;
   font-size: 2rem;
   cursor: pointer;
+  color: #fff;
 }
 
 .loading {

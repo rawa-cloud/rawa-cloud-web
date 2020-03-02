@@ -79,6 +79,7 @@ export default class OfficePreview extends mixins(BasePreview) {
   top: .5rem;
   font-size: 2rem;
   cursor: pointer;
+  color: #fff;
 }
 
 .loading {

@@ -14,7 +14,8 @@ const map: any = {
     'xls': 'excel',
     'xlsx': 'excel',
     'ppt': 'ppt',
-    'pptx': 'ppt'
+    'pptx': 'ppt',
+    'pdf': 'pdf'
   },
   audio: {
     'mp3': 'audio',
@@ -27,7 +28,8 @@ const map: any = {
   },
   text: {
     'txt': 'text',
-    'md': 'text'
+    'md': 'text',
+    'log': 'text'
   }
 }
 

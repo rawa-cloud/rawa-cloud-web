@@ -50,8 +50,8 @@ export default class FileTree extends Vue {
 
   iconProps (node: any) {
     let dir = node.data.dir
-    let personal = !!node.data.user
-    let root = !(node.parent && node.parent.parent)
+    let personal = !!node.data.userId
+    let root = node.data.system
     let contentType = node.data.contentType
     return { dir, personal, root, contentType }
   }
