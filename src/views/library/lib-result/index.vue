@@ -21,7 +21,13 @@
           <config-table row-key="id" :storage-key="storageKey" :api="api" :columns="columns" height="calc(100vh - 360px)" ref="configTable">
             <v-table-column prop="name" label="名称" :order="1"></v-table-column>
             <v-table-column prop="filePath" label="文件路径" :order="2">
-              <a slot-scope="{row}" @click="onForwardFile(row)">{{row.filePath}}</a>
+              <template slot-scope="{row}">
+                <a @click="onForwardFile(row)" :title="row.file.filePath" v-if="row.file">{{row.file.filePath | ellipsis(10, true)}}</a>
+                <template v-if="row.file">
+                  <v-button size="sm" class="ml-2" @click="onPreview(row)" :disabled="row.file.dir">预览</v-button>
+                  <v-button size="sm" class="ml-2" @click="onDownload(row)">下载</v-button>
+                </template>
+              </template>
             </v-table-column>
             <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="160px">
                 <template slot-scope="{row}" v-if="hasAdmin(row)">
@@ -43,17 +49,19 @@
     <no-data v-else></no-data>
     <file-chooser ref="fileChooser"></file-chooser>
     <invite-user ref="inviteUser"></invite-user>
+    <file-preview ref="filePreview"></file-preview>
 </div>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component, Inject, Watch } from 'vue-property-decorator'
-import { queryLibraries, deleteLibrary, addLibraryFile } from '@/api/library'
+import { queryLibraries, deleteLibrary, addLibraryFile, downloadFileForLibrary } from '@/api/library'
 import EditLib from './edit-lib/index.vue'
 import EditFields from './edit-fields/index.vue'
 import InviteUser from './invite-user/index.vue'
 import { getFile } from '@/api/file'
+import { download } from '@/helpers/download'
 @Component({
   components: { EditLib, EditFields, InviteUser }
 })
@@ -171,12 +179,24 @@ export default class LibResult extends Vue {
     }
 
     onForwardFile (row: any) {
-      getFile(row.fileId).then(data => {
+      getFile(row.file.id).then(data => {
         if (!data || !data.status) {
           this.$message.error('文件已不存在')
           return
         }
-        this.$router.push(`/file?id=${row.fileParentId}&filter=${row.fileId}`)
+        this.$router.push(`/file?id=${row.file.parentId}&filter=${row.file.id}`)
+      })
+    }
+
+    onPreview (row: any) {
+      const $e = this.$refs.filePreview as any
+      $e.previewForLibrary(Object.assign({}, row.file, { libraryId: row.id }))
+    }
+
+    onDownload (row: any) {
+      let file = row.file
+      downloadFileForLibrary(row.id).then(data => {
+        download(data, file.dir ? `${file.name}.zip` : file.name)
       })
     }
 

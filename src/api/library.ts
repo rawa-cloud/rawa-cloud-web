@@ -144,3 +144,11 @@ export function addLibraryFile (id: number, fileId: number) {
 export function updateLibraryAuthorities (id: number, req: { username: string, opt: string }[]) {
   return http().post<any>(`/libraries/${id}/authorities`, req)
 }
+
+export function downloadFileForLibrary (id: number) {
+  return http().get<Blob>(`/libraries/${id}/download`, { responseType: 'blob' })
+}
+
+export function previewFileForLibrary (id: number) {
+  return http().get<Blob>(`/libraries/${id}/preview`, { responseType: 'blob' })
+}

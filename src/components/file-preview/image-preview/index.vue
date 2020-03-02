@@ -23,6 +23,7 @@ export default class ImagePreview extends mixins(BasePreview) {
 
   get ids (): number[] {
     let id = this.row && this.row.id
+    if (this.library) return [this.row.libraryId]
     return (this.rows || [])
       .filter((v: any) => getType(v.contentType) === 'image')
       .map((v: any) => v.id).sort((a: number, b: number) => {
@@ -33,7 +34,9 @@ export default class ImagePreview extends mixins(BasePreview) {
   get images (): string[] {
     return this.ids.map(v => {
       let url
-      if (this.linkId) {
+      if (this.library) {
+        url = `${baseUrl}/libraries/${this.row.libraryId}/preview`
+      } else if (this.linkId) {
         url = `${baseUrl}/shares/${this.linkId}/files/${v}/preview?password=${this.password}`
       } else url = `${baseUrl}/files/${v}/preview`
       return url

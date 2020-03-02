@@ -20,6 +20,8 @@ export default class FilePreview extends Vue {
 
   password: any = null
 
+  library: boolean = false
+
   get type (): 'image' | 'video' | 'audio' | 'office' | 'text' | string {
     if (!this.row) return ''
     return getType(this.row.contentType || '')
@@ -30,6 +32,7 @@ export default class FilePreview extends Vue {
     this.rows = rows
     this.linkId = null
     this.password = null
+    this.library = false
     this.visible = true
   }
 
@@ -38,12 +41,22 @@ export default class FilePreview extends Vue {
     this.rows = rows
     this.linkId = linkId
     this.password = password
+    this.library = false
+    this.visible = true
+  }
+
+  previewForLibrary (row: any, libraryId: any) {
+    this.row = row || null
+    this.rows = []
+    this.linkId = null
+    this.password = null
+    this.library = true
     this.visible = true
   }
 
   render (h: any) {
     if (!this.visible || !this.type) return h('div')
-    let props = { row: this.row, rows: this.rows, type: this.type, linkId: this.linkId, password: this.password }
+    let props = { row: this.row, rows: this.rows, type: this.type, linkId: this.linkId, password: this.password, library: this.library }
     let on = {
       close: () => { this.visible = false }
     }

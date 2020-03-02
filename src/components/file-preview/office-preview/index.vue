@@ -14,6 +14,7 @@ import { mixins } from 'vue-class-component'
 import BasePreview from '../BasePreview'
 import { previewFile } from '@/api/file'
 import { preview as previewFileForShare } from '@/api/share'
+import { previewFileForLibrary } from '@/api/library'
 import { preview } from '@/helpers/download'
 
 @Component
@@ -29,7 +30,9 @@ export default class OfficePreview extends mixins(BasePreview) {
   mounted () {
     this.loading = true
     let request
-    if (this.linkId) request = previewFileForShare(this.linkId, this.password, this.row.id)
+    if (this.library) {
+      request = previewFileForLibrary(this.row.libraryId)
+    } else if (this.linkId) request = previewFileForShare(this.linkId, this.password, this.row.id)
     else request = previewFile(this.row.id)
     request.then(data => {
       this.src = URL.createObjectURL(new Blob([data], { type: 'application/pdf' }))

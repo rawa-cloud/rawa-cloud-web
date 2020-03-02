@@ -12,5 +12,7 @@ export default class BasePreview extends Vue {
 
   @Prop() password!: string
 
+  @Prop(Boolean) library!: boolean
+
   @Emit() close () {}
 }

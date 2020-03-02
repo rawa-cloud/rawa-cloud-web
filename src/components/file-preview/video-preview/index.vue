@@ -27,7 +27,9 @@ export default class VideoPreview extends mixins(BasePreview) {
   mounted () {
     const baseUrl = process.env.VUE_APP_API_BASE_URL
     let url
-    if (this.linkId) {
+    if (this.library) {
+      url = `${baseUrl}/libraries/${this.row.libraryId}/preview`
+    } else if (this.linkId) {
       url = `${baseUrl}/shares/${this.linkId}/files/${this.row.id}/preview`
     } else url = `${baseUrl}/files/${this.row.id}/preview`
     this.src = url
