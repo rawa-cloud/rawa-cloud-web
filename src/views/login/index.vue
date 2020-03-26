@@ -1,10 +1,10 @@
 <template>
     <div :class="[$style.container]">
         <div :class="[$style.box]" class="rounded p-4" @keyup.enter="onLogin">
-            <div :class="[$style.logo]">
+            <!-- <div :class="[$style.logo]">
                 <img src="@/assets/logo.png" alt="&times;" class="w-3 circle">
-            </div>
-            <div :class="[$style.title]">瑞柚云盘</div>
+            </div> -->
+            <div :class="[$style.title]">瑞柚文档管理</div>
 
             <form @submit.prevent>
                 <div class="mb-3">
@@ -21,14 +21,18 @@
                 <v-button type="primary" size="lg" block @click="onLogin" :loading="loading">登 录</v-button>
             </form>
         </div>
+        <menu-icon :class="[$style.footer]"></menu-icon>
     </div>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator'
+import MenuIcon from './menu-icon/index.vue'
 
-@Component
+@Component({
+  components: { MenuIcon }
+})
 export default class Login extends Vue {
     form = {
       username: '',
@@ -45,6 +49,7 @@ export default class Login extends Vue {
 
 <style lang="scss" module>
 .container {
+    position: relative;
     height: 100vh;
     width: 100vw;
     display: flex;
@@ -55,9 +60,9 @@ export default class Login extends Vue {
 
 .box {
     position: relative;
-    width: 360px;
+    width: 320px;
     height: 280px;
-    background: rgba(255, 255, 255, .4);
+    background: rgba(255, 255, 255, 1);
 }
 
 .logo {
@@ -72,5 +77,12 @@ export default class Login extends Vue {
     color: rgba(0, 0, 0, .6);
     margin: 0 0 12px 0;
     font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
+}
+
+.footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 </style>

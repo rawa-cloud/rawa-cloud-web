@@ -7,7 +7,7 @@ const routes: Array<RouteConfig> = [
     path: '/',
     name: `${HOME}`,
     component: () => import('@/views/layout/index.vue'),
-    redirect: '/portal',
+    redirect: '/file',
     meta: { pid: `${HOME}`, cname: '首页' },
     children: [
       {
@@ -97,11 +97,11 @@ const routes: Array<RouteConfig> = [
       }
     ]
   },
-  {
-    path: '/portal',
-    name: 'portal',
-    component: () => import('@/views/portal/index.vue')
-  },
+  // {
+  //   path: '/portal',
+  //   name: 'portal',
+  //   component: () => import('@/views/portal/index.vue')
+  // },
   {
     path: '/share/:id',
     name: 'share',
