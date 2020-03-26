@@ -1,18 +1,18 @@
 <template>
     <v-layout :class="[$style.container]">
-        <v-sider :dark="sider.dark ? {} : undefined">
-            <app-sider></app-sider>
-        </v-sider>
-        <v-layout>
             <v-header :class="[$style.header]" class="shadow-1-down" :dark="header.dark ? {} : undefined">
                 <app-header></app-header>
             </v-header>
+        <v-layout>
+            <v-sider :dark="sider.dark ? {} : undefined">
+                <app-sider></app-sider>
+            </v-sider>
             <v-content :class="[$style.content]">
                 <router-view/>
             </v-content>
-            <v-footer :class="[$style.footer]">
+            <!-- <v-footer :class="[$style.footer]">
                 <app-footer></app-footer>
-            </v-footer>
+            </v-footer> -->
         </v-layout>
     </v-layout>
 </template>

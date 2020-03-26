@@ -1,6 +1,15 @@
 <template>
 <div :class="[$style.container]">
-    <span class="text-primary ft-24 ml-4">瑞柚云盘</span>
+    <div :class="[$style.logo]" @click="onIndex">
+        <span class="text-center">
+            <img src="@/assets/logo.png" alt="&times;" class="w-4 circle"/>
+        </span>
+        <span class="text-primary">瑞柚文档管理</span>
+    </div>
+
+    <div>
+
+    </div>
 
     <span :class="[$style.opt]">
         <global-search></global-search>
@@ -23,7 +32,9 @@ import ThemeChooser from './theme-chooser/index.vue'
   components: { GlobalSearch, GlobalMessage, GlobalAction, ThemeChooser }
 })
 export default class AppHeader extends Vue {
-
+  onIndex () {
+    this.$router.push('/')
+  }
 }
 </script>
 
@@ -40,5 +51,12 @@ export default class AppHeader extends Vue {
     display: flex;
     align-items: center;
     height: 100%;
+}
+
+.logo {
+    font-size: 20px;
+    &:hover {
+        cursor: pointer;
+    }
 }
 </style>
