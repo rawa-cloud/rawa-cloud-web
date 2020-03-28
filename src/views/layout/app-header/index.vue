@@ -1,14 +1,14 @@
 <template>
 <div :class="[$style.container]">
-    <div :class="[$style.logo]" @click="onIndex">
+    <div class="d-flex">
+      <div :class="[$style.logo]" @click="onIndex">
         <span class="text-center">
             <img src="@/assets/logo.png" alt="&times;" class="w-4 circle"/>
         </span>
         <span class="text-primary">瑞柚文档管理</span>
-    </div>
+      </div>
 
-    <div>
-
+      <catalog-menu :class="[$style.menu]"></catalog-menu>
     </div>
 
     <span :class="[$style.opt]">
@@ -27,9 +27,10 @@ import GlobalSearch from './global-search/index.vue'
 import GlobalMessage from './global-message/index.vue'
 import GlobalAction from './global-action/index.vue'
 import ThemeChooser from './theme-chooser/index.vue'
+import CatalogMenu from './catalog-menu/index.vue'
 
 @Component({
-  components: { GlobalSearch, GlobalMessage, GlobalAction, ThemeChooser }
+  components: { GlobalSearch, GlobalMessage, GlobalAction, ThemeChooser, CatalogMenu }
 })
 export default class AppHeader extends Vue {
   onIndex () {
@@ -58,5 +59,9 @@ export default class AppHeader extends Vue {
     &:hover {
         cursor: pointer;
     }
+}
+
+.menu {
+  margin-left: 24px;
 }
 </style>

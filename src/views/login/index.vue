@@ -54,6 +54,7 @@ export default class Login extends Vue {
     width: 100vw;
     display: flex;
     align-items: center;
+    padding-bottom: 200px;
     justify-content: center;
     background-image: linear-gradient(180deg,hsla(0,0%,100%,0) 60%,#fff),linear-gradient(70deg,#dbedff 32%,#ebfff0);
 }
