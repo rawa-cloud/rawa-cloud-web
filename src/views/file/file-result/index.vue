@@ -36,6 +36,12 @@
             </span>
 
             <span class="mr-2 ft-24 d-flex">
+                <v-dropdown trigger="click" class="d-inline-block mr-2">
+                  <span class="icon-btn"><svg-icon icon="sort"></svg-icon></span>
+                  <v-dropdown-menu slot="dropdown">
+                    <v-dropdown-item @click.native="onSort('dir')">文件类型</v-dropdown-item>
+                  </v-dropdown-menu>
+                </v-dropdown>
                 <span v-if="view === 'list'" class="icon-btn" @click="onSelectView('thumbnail')"><v-icon type="appstore"></v-icon></span>
                 <span v-if="view === 'thumbnail'" class="icon-btn" @click="onSelectView('list')"><v-icon type="bars"></v-icon></span>
             </span>
@@ -102,6 +108,11 @@ export default class FileResult extends Vue {
     loading: boolean = false
 
     parent: any = null
+
+    sort = {
+      prop: 'dir',
+      asc: true
+    }
 
     actions = [
       { title: '打开', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
@@ -344,6 +355,21 @@ export default class FileResult extends Vue {
       let f = file || this.checkedRows[0]
       const $e = this.$refs.fileDetail as FileDetail
       $e.view(f).then(() => {})
+    }
+
+    onSort (prop: string) {
+      if (this.sort.prop === prop) {
+        this.sort.asc = !this.sort.asc
+      } else {
+        this.sort.prop = prop
+        this.sort.asc = true
+      }
+
+      this.dataSource = this.dataSource.sort((a: any, b: any) => {
+        const x = a[this.sort.prop]
+        const y = a[this.sort.prop]
+        return (this.sort.asc ? a > b : a < b) ? 1 : -1
+      })
     }
 
     disabled (type: 'share' | 'download' | 'delete' | 'rename', file?: any) {

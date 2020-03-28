@@ -1,22 +1,23 @@
 <template>
     <div>
         <v-table :data-source="dataSource"  :class="[$style.table]" highlight-current-row
-            @selection-change="onSelectionChange" height="calc(100vh - 260px)" @row-menu="onRowMenu" ref="table">
+            @selection-change="onSelectionChange" height="calc(100vh - 260px)" @row-menu="onRowMenu" ref="table"
+            @row-click="onRowClick">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
-            <v-table-column prop="name" label="文件名" width="480px">
+            <v-table-column prop="name" label="文件名" width="480px" sortable>
                 <template slot-scope="{row}">
                    <file-icon v-bind="iconProps(row)"></file-icon>
                    <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
-                   <v-icon type="tags-o" class="ml-2" v-if="row.admin && !row.userId"></v-icon>
+                   <v-icon type="info" class="ml-2" v-if="row.admin && !row.userId"></v-icon>
                 </template>
             </v-table-column>
-            <v-table-column prop="size" label="大小">
+            <v-table-column prop="size" label="大小" sortable>
               <template slot-scope="{row}">
                 <template v-if="row.dir"></template>
                 <template v-else>{{row.size | size}}</template>
               </template>
             </v-table-column>
-            <v-table-column prop="lastChangeTime" label="修改日期"></v-table-column>
+            <v-table-column prop="lastChangeTime" label="修改日期" sortable></v-table-column>
             <v-table-column prop="umask" label="权限">
               <template slot-scope="{row}">{{row.umask | umask}}</template>
             </v-table-column>
@@ -96,6 +97,15 @@ export default class FileList extends Vue {
       if ($e.hasSelection(row)) return
       $e.resetSelection()
       $e.selectRow(row, true)
+    }
+
+    onRowClick (row: any) {
+      const $e = this.$refs.table as any
+      if ($e.hasSelection(row)) {
+        $e.selectRow(row, false)
+      } else {
+        $e.selectRow(row, true)
+      }
     }
 
     iconProps (row: any) {

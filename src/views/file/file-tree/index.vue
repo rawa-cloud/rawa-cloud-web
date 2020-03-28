@@ -1,15 +1,10 @@
 <template>
     <div :class="[$style.container]" class="border-right">
-        <div :class="[$style.toolbar]" class="text-right pr-3">
-            <!-- <span class="mx-2 icon-btn" @click="onRefresh"><v-icon type="sync"></v-icon></span> -->
-            <span class="mx-2 icon-btn" @click="onExpand"><v-icon type="plus-square-o"></v-icon></span>
-            <span class="mx-2 icon-btn" @click="onCollapse"><v-icon type="switcher"></v-icon></span>
-        </div>
         <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" ref="tree" :class="[$style.tree]">
             <span slot="content"  slot-scope="{node}" @click="onSelect(node)">
                 <file-icon v-bind="iconProps(node)"></file-icon>
                 <span class="ml-2">{{node.data.name}}</span>
-                <v-icon type="tags-o" class="ml-2" v-if="node.data.admin && !node.data.userId"></v-icon>
+                <v-icon type="info" class="ml-2" v-if="node.data.admin && !node.data.userId"></v-icon>
             </span>
         </v-tree>
     </div>
@@ -50,8 +45,8 @@ export default class FileTree extends Vue {
 
   iconProps (node: any) {
     let dir = node.data.dir
-    let personal = !!node.data.userId
-    let root = node.data.system
+    let personal = false
+    let root = false
     let contentType = node.data.contentType
     return { dir, personal, root, contentType }
   }
@@ -130,16 +125,6 @@ export default class FileTree extends Vue {
 
   onRefresh () {
   //   this.loadDepts()
-  }
-
-  onExpand () {
-    const $e = this.$refs.tree as any
-    $e.expandAll(true)
-  }
-
-  onCollapse () {
-    const $e = this.$refs.tree as any
-    $e.expandAll(false)
   }
 
   onSelect (node: any) {
