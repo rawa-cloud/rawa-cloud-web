@@ -2,7 +2,7 @@
     <div>
         <v-table :data-source="dataSource"  :class="[$style.table]" highlight-current-row
             @selection-change="onSelectionChange" height="calc(100vh - 260px)" @row-menu="onRowMenu" ref="table"
-            @row-click="onRowClick">
+            @row-click="onRowClick" @row-dbclick="onRowDbclick">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
             <v-table-column prop="name" label="文件名" width="480px" sortable>
                 <template slot-scope="{row}">
@@ -106,6 +106,10 @@ export default class FileList extends Vue {
       } else {
         $e.selectRow(row, true)
       }
+    }
+
+    onRowDbclick (row: any) {
+      this.onPreview(row)
     }
 
     iconProps (row: any) {
