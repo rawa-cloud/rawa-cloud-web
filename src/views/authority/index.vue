@@ -9,8 +9,16 @@
             <v-card :class="[$style.bodyCard]"><file-tree @select="onSelectFile"></file-tree></v-card>
           </v-col>
           <v-col :span="8">
-            <div :class="[$style.title]">选择部门/用户</div>
-            <v-card :class="[$style.bodyCard]"><dept-tree @select="onSelectDept" @view-user="onViewUser"></dept-tree></v-card>
+            <div :class="[$style.title]">
+              <span>选择{{userDept ? '用户' : '部门'}}</span>
+              <a class="ml-3" @click="onBackToDept" v-if="userDept">返回部门</a>
+            </div>
+            <div>
+              <v-card :class="[$style.bodyCard]">
+                <dept-tree @select="onSelectDept" @view-user="onViewUser" v-if="!userDept"></dept-tree>
+                <user-list @select="onSelectUser" :dept="userDept" v-else></user-list>
+              </v-card>
+            </div>
           </v-col>
           <v-col :span="8">
             <div :class="[$style.title]">编辑权限</div>
@@ -19,7 +27,7 @@
             </v-card>
           </v-col>
           <!-- <v-col :span="8">
-            <v-card :class="[$style.bodyCard]"><user-list @select="onSelectUser" ref="userList"></user-list></v-card>
+
           </v-col> -->
         </v-row>
       </div>
@@ -61,6 +69,8 @@ export default class Authority extends Vue {
 
   user: any = null
 
+  userDept: any = null
+
   tag: string = ''
 
   get tags () {
@@ -100,9 +110,12 @@ export default class Authority extends Vue {
     this.tag = tag
   }
 
-  onViewUser (deptId: number) {
-    const $e = this.$refs.userList as any
-    if ($e) $e.loadData(deptId)
+  onViewUser (dept: any) {
+    this.userDept = dept
+  }
+
+  onBackToDept () {
+    this.userDept = null
   }
 
   @Watch('query', { immediate: true }) queryChange () {

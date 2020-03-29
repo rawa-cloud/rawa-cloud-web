@@ -20,7 +20,7 @@ import { queryUsers } from '../../../api/user'
 
 @Component
 export default class UserList extends Vue {
-  deptId: any = null
+  @Prop() dept!: any
 
   data: any = []
 
@@ -37,14 +37,14 @@ export default class UserList extends Vue {
     return items[i % items.length]
   }
 
-  loadData (deptId: number) {
-    this.deptId = deptId
-    if (!this.deptId) {
+  loadData () {
+    const deptId = this.dept && this.dept.id
+    if (!deptId) {
       this.data = []
       return
     }
     let req = {
-      deptId: this.deptId,
+      deptId: deptId,
       status: true
     }
     queryUsers(req).then(data => {
@@ -55,6 +55,10 @@ export default class UserList extends Vue {
   onSelect (row: any) {
     this.current = row
     this.select(row)
+  }
+
+  mounted () {
+    this.loadData()
   }
 }
 </script>

@@ -3,7 +3,7 @@
       <div slot="content"  slot-scope="{node}" @click="onSelect(node)" :class="[$style.content]" class="d-flex justify-content-between">
           <span class="mr-4">{{node.data.label}}</span>
           <div @click.stop="" class="_flag_actions">
-              <span class="icon-btn" @click="onViewUser(node.data.key)"><v-icon type="user"></v-icon></span>
+              <span class="icon-btn" @click="onViewUser(node.data)"><a>选择用户</a></span>
           </div>
       </div>
   </v-tree>
@@ -33,12 +33,12 @@ export default class DeptTree extends Vue {
 
     dataSource: any[] = []
 
-    @Emit() viewUser (id: number) {}
+    @Emit() viewUser (dept: any) {}
 
     @Emit() select (dept: any) {}
 
-    onViewUser (id: number) {
-      this.viewUser(id)
+    onViewUser (dept: any) {
+      this.viewUser(dept)
     }
 
     onSelect (node: any) {

@@ -3,7 +3,7 @@
     <v-dropdown placement="bottom-end" :class="[$style.dropdown]" trigger="click">
         <div :class="[$style.reference]">
             <div style="height: auto;" class="px-2">
-                <v-icon type="global" class="ft-lg"></v-icon>
+                <v-icon type="global" class="ft-lg" style="color: #fff;"></v-icon>
             </div>
         </div>
         <v-dropdown-menu slot="dropdown">

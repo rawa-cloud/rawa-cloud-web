@@ -1,11 +1,11 @@
 <template>
 <div :class="[$style.container]">
-    <div class="d-flex">
+    <div class="d-flex align-items-center">
       <div :class="[$style.logo]" @click="onIndex">
         <span class="text-center">
-            <img src="@/assets/logo.png" alt="&times;" class="w-4 circle"/>
+            <img src="@/assets/logo.png" alt="&times;" class="w-2 circle"/>
         </span>
-        <span class="text-primary">瑞柚文档管理</span>
+        <span class="ml-3">瑞柚文档管理</span>
       </div>
 
       <catalog-menu :class="[$style.menu]"></catalog-menu>
@@ -56,6 +56,7 @@ export default class AppHeader extends Vue {
 }
 
 .logo {
+    margin-left: 12px;
     font-size: 20px;
     &:hover {
         cursor: pointer;

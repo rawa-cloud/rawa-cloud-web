@@ -164,6 +164,7 @@ export default class EditAuthority extends Vue {
   }
 
   loadData () {
+    this.editable = false
     let isUser = !!this.user
     let principleId = !isUser ? (this.dept && this.dept.id) : (this.user && this.user.id)
     if (!principleId) {
