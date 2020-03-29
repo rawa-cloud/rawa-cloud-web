@@ -75,6 +75,10 @@ export function queryLibCatalogs () {
   return http().get<LibraryCatalogQueryRes[]>(`/libraries/catalogs`, { params: {} })
 }
 
+export function queryLibCatalog (id: number) {
+  return http().get<LibraryCatalogQueryRes>(`/libraries/catalogs/${id}`, { params: {} })
+}
+
 export function addLibCatalog (req: LibraryCatalogAddReq) {
   return http().post<number>(`/libraries/catalogs`, req)
 }

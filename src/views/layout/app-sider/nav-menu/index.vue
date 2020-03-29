@@ -1,9 +1,11 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator'
 import { CreateElement, VNode } from 'vue'
-import { MenuOption, menus } from './config'
+import { MenuOption, menus as fixedMenus } from './config'
 import { MenuCssVariable } from 'vua'
 import { AppModule } from '@/store'
+import { queryLibCatalogs } from '@/api/library'
+import { CLIENT, HOME } from '../../../../helpers/context'
 
 @Component
 export default class NavMenu extends Vue {
@@ -11,9 +13,15 @@ export default class NavMenu extends Vue {
 
   @AppModule.State expand!: boolean
 
+  libraryMenus: any[] = []
+
+  get menus () {
+    return [...fixedMenus, ...this.libraryMenus]
+  }
+
   get current (): MenuOption | null {
     // if (this.$route.path.startsWith())
-    let validItems = this.filterByAcl(getLastItems(this.data || menus))
+    let validItems = this.filterByAcl(getLastItems(this.data || this.menus))
     return validItems.find(v => {
       return !!v.link && this.$route.path.startsWith(v.link)
     }) || null
@@ -49,7 +57,7 @@ export default class NavMenu extends Vue {
         // cssVariable: this.cssVariable
       }
     }
-    return h('v-menu', data, this.generateList(h, this.data || menus))
+    return h('v-menu', data, this.generateList(h, this.data || this.menus))
   }
 
   generateList (h: CreateElement, list: MenuOption[]): VNode[] {
@@ -93,6 +101,23 @@ export default class NavMenu extends Vue {
       const authorities = vm.$auth.principle.authorities || []
       return authorities.some((v: any) => v.pid === pid)
     }
+  }
+
+  loadLibraryMenus () {
+    queryLibCatalogs().then(data => {
+      this.libraryMenus = (data || []).map((v: any) => {
+        return {
+          name: v.name,
+          icon: 'book',
+          pid: `${HOME}.library`,
+          link: `/library/${v.id}`
+        }
+      })
+    })
+  }
+
+  created () {
+    this.loadLibraryMenus()
   }
 
   // cssVariable: MenuCssVariable = {

@@ -71,7 +71,7 @@ const routes: Array<RouteConfig> = [
         meta: { pid: `${HOME}.favorite`, cname: '我的收藏' }
       },
       {
-        path: 'library',
+        path: 'library/:id',
         name: 'library',
         component: () => import('@/views/library/index.vue'),
         meta: { pid: `${HOME}.library`, cname: '库' }

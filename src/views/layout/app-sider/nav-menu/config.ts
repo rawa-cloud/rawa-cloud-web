@@ -76,12 +76,12 @@ export const menus: Array<MenuOption> = [
     pid: `${HOME}.library-config`,
     link: '/library-config'
   },
-  {
-    name: '自定义库',
-    icon: 'book',
-    pid: `${HOME}.library`,
-    link: '/library'
-  },
+  // {
+  //   name: '自定义库',
+  //   icon: 'book',
+  //   pid: `${HOME}.library`,
+  //   link: '/library'
+  // },
   {
     name: '系统管理',
     icon: 'setting',
