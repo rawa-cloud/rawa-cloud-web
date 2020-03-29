@@ -34,11 +34,11 @@ export default class AppSider extends Vue {
 
 <style lang="scss" module>
 .container {
-    height: 100vh;
-    overflow: auto;
     background-color: var(--bg-color);
     box-shadow: 2px 0 6px var(--bg-color-2);
     position: relative;
+    height: 100%;
+    overflow: auto;
 }
 
 .hoverTrigger {

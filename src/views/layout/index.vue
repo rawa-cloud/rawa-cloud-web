@@ -4,7 +4,7 @@
                 <app-header></app-header>
             </v-header>
         <v-layout>
-            <v-sider :dark="sider.dark ? {} : undefined">
+            <v-sider :dark="sider.dark ? {} : undefined" :class="[$style.sider]">
                 <app-sider></app-sider>
             </v-sider>
             <v-content :class="[$style.content]">
@@ -41,7 +41,7 @@ export default class Layout extends Vue {
 
 <style lang="scss" module>
 .container {
-    background-color: var(--bg-color-1);
+  background-color: var(--bg-color-1);
 }
 
 .header {
@@ -50,11 +50,16 @@ export default class Layout extends Vue {
     background-color: var(--bg-color);
 }
 
+.sider {
+  height: calc(100vh - 4rem);
+}
+
 .content {
     overflow: auto;
-    height: calc(100vh - 9rem);
+    height: calc(100vh - 6rem);
     margin: 1rem;
     background-color: var(--bg-color);
+    border-radius: 4px;
 }
 
 .footer {
