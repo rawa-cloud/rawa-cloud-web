@@ -1,13 +1,15 @@
 <template>
     <div>
-      <v-modal :visible.sync="actualVisible" width="30vw" :title="title">
-        <div>
-          <ul :class="[$style.list]">
-            <li v-for="row in rows" :key="row.key" :class="[$style.item]">
-              <span :class="[$style.title]">{{row.title}} : </span>
-              <span :class="[$style.text]">{{resolveText(row)}}</span>
-            </li>
-          </ul>
+      <v-modal :visible.sync="actualVisible" width="70vw" :title="title">
+        <div :class="[$style.body]">
+          <basic-info :file="file"></basic-info>
+          <v-tabs v-model="value" size="sm">
+             <v-tab-pane name="1" label="版本列表">
+              <file-record :id="file && file.id"></file-record>
+            </v-tab-pane>
+            <v-tab-pane name="2" label="权限管理">Content of Tab Pane 1</v-tab-pane>
+            <v-tab-pane name="3" label="操作历史">Content of Tab Pane 3</v-tab-pane>
+          </v-tabs>
         </div>
 
         <div slot="footer" class="text-right">
@@ -21,9 +23,13 @@
 
 import { Vue, Component } from 'vue-property-decorator'
 import size from '@/filters/size'
-import transcode from '../../../../filters/transcode'
+import transcode from '@/filters/transcode'
+import BasicInfo from './basic-info/index.vue'
+import FileRecord from './file-record/index.vue'
 
-@Component
+@Component({
+  components: { BasicInfo, FileRecord }
+})
 export default class EditDir extends Vue {
   file: any = null
 
@@ -32,6 +38,8 @@ export default class EditDir extends Vue {
   reject: Function | null = null
 
   visible: boolean = false
+
+  value: string = '1'
 
   get actualVisible () {
     return this.visible
@@ -47,25 +55,6 @@ export default class EditDir extends Vue {
 
   get title () {
     return this.dir ? '文件夹详情' : '文件详情'
-  }
-
-  get rows () {
-    let ret: any[] = [
-      { key: 'name', title: '名称' }
-    ]
-    let extra: any[] = []
-    if (this.dir) {
-      extra = [
-        { key: 'limitSize', title: '容量', formatter: (row: any) => row.limitSize ? size(row.limitSize) : '不限' },
-        { key: 'limitSuffix', title: '文件类型', formatter: (row: any) => row.limitSuffix || '不限' }
-      ]
-    } else {
-      extra = [
-        { key: 'size', title: '大小', formatter: (row: any) => size(row.size) }
-      ]
-    }
-    ret.push(...extra)
-    return ret
   }
 
   resolveText (row: any) {
@@ -113,5 +102,10 @@ export default class EditDir extends Vue {
 
 .title {
   margin-right: 12px;
+}
+
+.body {
+  height: calc(70vh - 40px);
+  overflow: auto;
 }
 </style>

@@ -64,7 +64,7 @@ export default class FileTree extends Vue {
     Promise.all(all).then(([root, userRoot]) => {
       let ret = []
       if (root) {
-        root.name = '全部文件'
+        root.name = '公司文档'
         ret.push(root)
       }
       if (userRoot) {
