@@ -77,6 +77,8 @@ export default class FileList extends Vue {
 
     @Inject() filterActions!: (row?: any) => any[]
 
+    timestamp: number = Date.now()
+
     get menus () {
       return this.filterActions()
     }
@@ -100,12 +102,20 @@ export default class FileList extends Vue {
     }
 
     onRowClick (row: any) {
-      const $e = this.$refs.table as any
-      if ($e.hasSelection(row)) {
-        $e.selectRow(row, false)
-      } else {
-        $e.selectRow(row, true)
-      }
+      const timestamp = Date.now()
+      this.timestamp = timestamp
+      setTimeout(() => { // 排除双击操作
+        if (timestamp !== this.timestamp) {
+          this.timestamp = Date.now()
+          return
+        }
+        const $e = this.$refs.table as any
+        if ($e.hasSelection(row)) {
+          $e.selectRow(row, false)
+        } else {
+          $e.selectRow(row, true)
+        }
+      }, 350)
     }
 
     onRowDbclick (row: any) {

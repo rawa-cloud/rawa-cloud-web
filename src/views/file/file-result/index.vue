@@ -49,7 +49,7 @@
 
         <div class="d-flex justify-content-between align-content-center m-2">
             <file-navigator :id="parentId"></file-navigator>
-            <v-alert type="info" style="flex: 0 0 auto;" class="ml-5 w-15">
+            <v-alert type="info" style="flex: 0 0 auto;" class="ml-5 w-15 alert-selection">
                 <template slot="description">
                     已选择 <span>{{checkedRows.length}}</span> 项
                     <a class="ml-2" @click="onClearSelection">清空选择</a>
