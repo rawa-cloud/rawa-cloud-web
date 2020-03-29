@@ -4,7 +4,7 @@
             <span slot="content"  slot-scope="{node}" @click="onSelect(node)">
                 <file-icon v-bind="iconProps(node)"></file-icon>
                 <span class="ml-2">{{node.data.name}}</span>
-                <v-icon type="info" class="ml-2" v-if="node.data.admin && !node.data.userId"></v-icon>
+                <span class="ml-2 text-error" v-if="node.data.admin && !node.data.userId"><svg-icon icon="dot"></svg-icon></span>
             </span>
         </v-tree>
     </div>
