@@ -1,9 +1,9 @@
 <template>
     <div :class="[$style.container]">
         <div :class="[$style.box]" class="rounded p-4" @keyup.enter="onLogin">
-            <!-- <div :class="[$style.logo]">
-                <img src="@/assets/logo.png" alt="&times;" class="w-3 circle">
-            </div> -->
+            <div :class="[$style.logo]">
+                <img src="@/assets/logo.png" alt="&times;" class="w-4 circle">
+            </div>
             <div :class="[$style.title]">瑞柚文档管理</div>
 
             <form @submit.prevent>

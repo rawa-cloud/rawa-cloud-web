@@ -42,7 +42,8 @@ export default class AppHeader extends Vue {
 <style lang="scss" module>
 .container {
     height: 100%;
-    // background-color: #354052;
+    background-color: var(--primary-base);
+    color: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;

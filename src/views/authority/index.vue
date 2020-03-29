@@ -65,9 +65,9 @@ export default class Authority extends Vue {
 
   get tags () {
     const origin = [
+      { name: 'file', visible: !!this.file, checked: this.tag === 'file', text: `文件(夹) : ${this.file && this.file.name}`, type: 'info' },
       { name: 'dept', visible: !!this.dept, checked: this.tag === 'dept', text: `部门 : ${this.dept && this.dept.name}`, type: 'info' },
-      { name: 'user', visible: !!this.user, checked: this.tag === 'user', text: `用户 : ${this.user && this.user.username}`, type: 'info' },
-      { name: 'file', visible: !!this.file, checked: this.tag === 'file', text: `文件(夹) : ${this.file && this.file.name}`, type: 'info' }
+      { name: 'user', visible: !!this.user, checked: this.tag === 'user', text: `用户 : ${this.user && this.user.username}`, type: 'info' }
     ]
     return origin
   }
