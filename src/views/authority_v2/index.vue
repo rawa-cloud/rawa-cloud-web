@@ -5,22 +5,14 @@
       <div :class="[$style.body]">
         <v-row :gutter="24">
           <v-col :span="8">
-            <div :class="[$style.title]">选择文件</div>
-            <v-card :class="[$style.bodyCard]"><file-tree @select="onSelectFile"></file-tree></v-card>
-          </v-col>
-          <v-col :span="8">
-            <div :class="[$style.title]">选择部门/用户</div>
             <v-card :class="[$style.bodyCard]"><dept-tree @select="onSelectDept" @view-user="onViewUser"></dept-tree></v-card>
           </v-col>
           <v-col :span="8">
-            <div :class="[$style.title]">编辑权限</div>
-            <v-card :class="[$style.bodyCard]">
-              <edit-authority :dept="dept" :user="user" :file="file" v-if="file && (dept || user)"></edit-authority>
-            </v-card>
-          </v-col>
-          <!-- <v-col :span="8">
             <v-card :class="[$style.bodyCard]"><user-list @select="onSelectUser" ref="userList"></user-list></v-card>
-          </v-col> -->
+          </v-col>
+          <v-col :span="8">
+            <v-card :class="[$style.bodyCard]"><file-tree @select="onSelectFile"></file-tree></v-card>
+          </v-col>
         </v-row>
       </div>
       <div :class="[$style.footer]" class="mt-3">
@@ -33,6 +25,7 @@
         </div>
 
         <v-card v-if="tag">
+          <edit-authority :dept="dept" :user="user" :file="file" v-if="tag === 'authority'"></edit-authority>
           <authority-list :dept="dept" :user="user" :file="file" :tag="tag" v-if="tag && tag !== 'authority'"></authority-list>
         </v-card>
       </div>
@@ -67,7 +60,8 @@ export default class Authority extends Vue {
     const origin = [
       { name: 'dept', visible: !!this.dept, checked: this.tag === 'dept', text: `部门 : ${this.dept && this.dept.name}`, type: 'info' },
       { name: 'user', visible: !!this.user, checked: this.tag === 'user', text: `用户 : ${this.user && this.user.username}`, type: 'info' },
-      { name: 'file', visible: !!this.file, checked: this.tag === 'file', text: `文件(夹) : ${this.file && this.file.name}`, type: 'info' }
+      { name: 'file', visible: !!this.file, checked: this.tag === 'file', text: `文件(夹) : ${this.file && this.file.name}`, type: 'info' },
+      { name: 'authority', visible: (this.file && (this.dept || this.user)), checked: this.tag === 'authority', text: `权限详细`, type: 'error' }
     ]
     return origin
   }
@@ -151,22 +145,6 @@ export default class Authority extends Vue {
 }
 
 .header{
-}
-
-.title {
-  line-height: 32px;
-  position: relative;
-  padding: 0 0 0 6px;
-
-  &:before {
-    content: " ";
-    position: absolute;
-    top: 9px;
-    bottom: 9px;
-    left: 0;
-    width: 3px;
-    background-color: var(--primary-base);
-  }
 }
 
 .bodyCard{

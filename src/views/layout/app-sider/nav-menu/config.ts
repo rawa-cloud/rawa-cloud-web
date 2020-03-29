@@ -71,7 +71,7 @@ export const menus: Array<MenuOption> = [
     link: '/recycle'
   },
   {
-    name: '库配置',
+    name: '自定义表单',
     icon: 'tool',
     pid: `${HOME}.library-config`,
     link: '/library-config'

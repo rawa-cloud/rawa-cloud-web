@@ -2,22 +2,23 @@
 <div :class="[$style.container]">
   <div class="my-2" v-if="visible">
       <div>
-        <div v-if="authority && authority.implicit" class="caption my-2">
-          继承于 <span>部门/用户</span> <span class="text-info"> {{authority.principleName}} </span>, <span>文件(夹) </span> <span class="text-info"> {{authority.fileName}} </span> <a @click="onUp(authority)"> &gt;&gt; 前往</a>
-        </div>
         <v-checkbox v-model="allChecked" :disabled="!editable">全部</v-checkbox>
         <v-checkbox v-model="noneChecked" :disabled="!editable">禁用</v-checkbox>
+
+        <span v-if="authority && authority.implicit" class="caption">
+          (继承于 <span>部门/用户</span> <span class="text-info"> {{authority.principleName}} </span>, <span>文件(夹) </span> <span class="text-info"> {{authority.fileName}} </span> <a @click="onUp(authority)"> &gt;&gt; 前往</a>)
+        </span>
       </div>
       <v-checkbox-group v-model="form.bits" v-if="editable">
         <v-row :gutter="16">
-          <v-col :span="12" v-for="(item, key) in umasks" :key="key">
+          <v-col :span="4" v-for="(item, key) in umasks" :key="key">
             <v-checkbox :label="item.value">{{item.desc}}</v-checkbox>
           </v-col>
         </v-row>
       </v-checkbox-group>
       <v-checkbox-group :value="originForm.bits" v-else>
         <v-row :gutter="16">
-          <v-col :span="12" v-for="(item, key) in umasks" :key="key">
+          <v-col :span="4" v-for="(item, key) in umasks" :key="key">
             <v-checkbox :label="item.value" disabled>{{item.desc}}</v-checkbox>
           </v-col>
         </v-row>
@@ -35,14 +36,14 @@
   <div :class="[$style.action]">
     <div v-if="!editable">
       <span v-if="authority && !authority.implicit">
-        <v-button type="primary" @click="onEdit" size="sm">更改权限</v-button>
-        <v-button type="error" @click="onDelete" class="ml-2" size="sm">删除权限</v-button>
+        <v-button type="primary" @click="onEdit" >更改权限</v-button>
+        <v-button type="error" @click="onDelete" class="ml-2">删除权限</v-button>
       </span>
-      <v-button type="primary" @click="onEdit" v-else size="sm">新增权限</v-button>
+      <v-button type="primary" @click="onEdit" v-else>新增权限</v-button>
     </div>
     <span v-else>
-      <v-button @click="onCancel" size="sm">取 消</v-button>
-      <v-button type="primary" class="ml-2" @click="onSave" size="sm">保 存</v-button>
+      <v-button @click="onCancel">取 消</v-button>
+      <v-button type="primary" class="ml-2" @click="onSave">保 存</v-button>
     </span>
   </div>
 </div>
@@ -189,6 +190,8 @@ export default class EditAuthority extends Vue {
 }
 
 .action {
-  margin-top: 12px;
+  position: absolute;
+  bottom: 12px;
+  right: 24px;
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
 <div>
   <tile-tree :data="data" row-key="key">
-    <tile-tree-column title="库模板名称" :level="1" v-on="handler">
+    <tile-tree-column title="表单名称" :level="1" v-on="handler">
       <template slot="action" slot-scope="{node}">
         <span class="icon-btn mr-2" @click.stop="onInviteUser(node)"> <v-icon type="usergroup-add"></v-icon></span>
       </template>
