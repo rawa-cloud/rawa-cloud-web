@@ -2,16 +2,7 @@
 <div :class="[$style.container]">
   <div v-if="catalogId">
         <div>
-            <v-form layout="horizontal" class="mx-3 mt-3" :model="form" ref="form">
-                <v-form-item prop="username" label="名称">
-                    <v-input v-model.trim="form.name" clearable class="w-10"></v-input>
-                </v-form-item>
-
-                <v-form-item >
-                   <v-button type="primary" @click="onQuery">查询</v-button>
-                   <v-button class="ml-3" @click="onReset">重置</v-button>
-                </v-form-item>
-            </v-form>
+          <dynamic-form :fields="current && current.fieldDefs" @query="onQuery"></dynamic-form>
         </div>
 
         <div :class="[$style.content]">
@@ -60,10 +51,11 @@ import { queryLibraries, deleteLibrary, addLibraryFile, downloadFileForLibrary }
 import EditLib from './edit-lib/index.vue'
 import EditFields from './edit-fields/index.vue'
 import InviteUser from './invite-user/index.vue'
+import DynamicForm from './dynamic-form/index.vue'
 import { getFile } from '@/api/file'
 import { download } from '@/helpers/download'
 @Component({
-  components: { EditLib, EditFields, InviteUser }
+  components: { EditLib, EditFields, InviteUser, DynamicForm }
 })
 export default class LibResult extends Vue {
     api = queryLibraries
@@ -79,6 +71,10 @@ export default class LibResult extends Vue {
     @Inject() getCurrent!: () => any
 
     @Inject() setCurrent!: (row: any) => void
+
+    get current () {
+      return this.getCurrent()
+    }
 
     get catalogId () {
       let current = this.getCurrent()
@@ -109,14 +105,12 @@ export default class LibResult extends Vue {
       return ret
     }
 
-    get req () {
-      let r: any = { catalogId: this.catalogId }
-      Object.assign(r, this.form)
-      return r
-    }
-
-    onQuery () {
-      this.query(this.req)
+    onQuery (params: any = {}) {
+      const req: any = {
+        catalogId: this.catalogId,
+        params
+      }
+      this.query(req)
     }
 
     onReset () {
@@ -223,7 +217,7 @@ export default class LibResult extends Vue {
       if (!this.catalogId) return
       this.form.name = ''
       this.$nextTick(() => {
-        this.query(this.req)
+        this.onQuery()
       })
     }
 }

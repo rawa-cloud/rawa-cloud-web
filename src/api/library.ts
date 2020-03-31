@@ -122,7 +122,7 @@ export function updateLibraryCatalogAuthorities (id: number, req: { username: st
 // Library
 
 export function queryLibraries (params: LibraryQueryReq) {
-  return http().get<Page<LibraryQueryRes>>(`/libraries`, { params })
+  return http().post<Page<LibraryQueryRes>>(`/libraries/query`, params)
 }
 
 export function addLibrary (req: LibraryAddReq) {
