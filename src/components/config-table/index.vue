@@ -1,12 +1,14 @@
 <template>
     <div>
         <div class="d-flex justify-content-between align-content-center m-2" v-if="!simple">
-            <v-alert type="info" style="flex: 1 1 auto;">
+            <div style="flex: 1 1 auto;">
+              <v-alert type="info" v-if="checkable">
                 <template slot="description">
-                    已选择 <span>{{checkedRows.length}}</span> 项
-                    <a class="ml-2" @click="onClearSelection">清空选择</a>
-                </template>
-            </v-alert>
+                      已选择 <span>{{checkedRows.length}}</span> 项
+                      <a class="ml-2" @click="onClearSelection">清空选择</a>
+                  </template>
+              </v-alert>
+            </div>
             <div class="ml-3">
                 <slot name="extra" :rows="checkedRows"></slot>
                 <v-button color="primary" icon="filter" @click="onFilter" v-if="storageKey">筛选列</v-button>
@@ -17,7 +19,7 @@
           @current-page-change="onCurrentPageChange"
           @page-size-change="onPageSizeChange"
           @selection-change="onSelectionChange" :height="height" :size="size">
-            <v-table-column type="selection" fixed="left" width="80px" v-if="!simple" :order="-1"></v-table-column>
+            <v-table-column type="selection" fixed="left" width="80px" v-if="!simple && checkable" :order="-1"></v-table-column>
             <v-table-column :prop="i + '__config_table__'" :label="col.label" :order="i + 10" v-for="(col, i) in renderedColumns" :key="i">
             <template slot-scope="{row}">
               <template v-if="col.formatter">{{col.formatter(col.name, row)}}</template>
@@ -62,6 +64,8 @@ export default class ConfigTable extends Vue {
     @Prop(Boolean) simple!: string
 
     @Prop(String) size!: string
+
+    @Prop({ type: Boolean, default: true }) checkable!: boolean
 
     checkedRows: any = []
 

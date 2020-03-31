@@ -6,10 +6,7 @@
         </div>
 
         <div :class="[$style.content]">
-          <div :class="[$style.action]" class="text-right m-2">
-            <v-button type="primary" @click="onAdd">新 增</v-button>
-          </div>
-          <config-table row-key="id" :storage-key="storageKey" :api="api" :columns="columns" height="calc(100vh - 360px)" ref="configTable">
+          <config-table :checkable="false" row-key="id" :storage-key="storageKey" :api="api" :columns="columns" height="calc(100vh - 360px)" ref="configTable">
             <v-table-column prop="name" label="名称" :order="1"></v-table-column>
             <v-table-column prop="filePath" label="文件路径" :order="2">
               <template slot-scope="{row}">
@@ -30,6 +27,9 @@
                     <!-- <span class="ml-3 icon-btn" @click="onRecover(row.id)"><svg-icon icon="recover"></svg-icon></span> -->
                 </template>
             </v-table-column>
+            <template slot="extra">
+              <v-button type="primary" @click="onAdd" class="mr-2">新 增</v-button>
+            </template>
           </config-table>
         </div>
         <edit-lib ref="editLib"></edit-lib>
@@ -230,11 +230,5 @@ export default class LibResult extends Vue {
 
 .content {
   position: relative;
-}
-
-.action {
-  position: absolute;
-  right: 20px;
-  top: -78px;
 }
 </style>

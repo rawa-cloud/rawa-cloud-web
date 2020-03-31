@@ -1,13 +1,17 @@
 <template>
 <v-form layout="horizontal" class="mx-3 mt-3" :model="form" ref="form">
    <v-row :gutter="16">
-      <v-col :span="8" v-for="row in fields" :key="row.i">
+      <v-col :span="8" v-for="row in renderedFields" :key="row.i">
         <form-control :form="form" :prop="row.id + ''" :label="row.name" :type="resolveType(row)" :options="resolveOptions(row)"></form-control>
       </v-col>
       <v-col :span="8">
         <v-form-item >
           <v-button type="primary" @click="onQuery">查询</v-button>
           <v-button class="ml-3" @click="onReset">重置</v-button>
+          <v-button type="text" @click="collapse = !collapse">
+            <v-icon type="down" v-if="collapse"></v-icon>
+            <v-icon type="up" v-else></v-icon>
+          </v-button>
         </v-form-item>
       </v-col>
     </v-row>
@@ -38,6 +42,12 @@ export default class DynamicForm extends Vue {
   @Emit() query (params: any) {}
 
   form: any = {}
+
+  collapse = true
+
+  get renderedFields () {
+    return this.collapse ? (this.fields || []).slice(0, 5) : this.fields
+  }
 
   onQuery () {
     this.query(Object.assign({}, this.form))
