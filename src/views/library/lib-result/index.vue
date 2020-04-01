@@ -18,9 +18,9 @@
             </v-table-column>
             <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="160px">
                 <template slot-scope="{row}" v-if="hasAdmin(row)">
-                    <!-- <span class="icon-btn" @click="onEdit(row)"><v-icon type="edit"></v-icon></span> -->
+                    <span class="icon-btn" @click="onEdit(row)" title="编辑"><v-icon type="edit"></v-icon></span>
                     <span class="icon-btn ml-2" @click="onEditFields(row)" title="编辑字段"><v-icon type="tag-o"></v-icon></span>
-                    <span class="icon-btn ml-2" @click="onInvite(row)" title="邀请成员"><v-icon type="usergroup-add"></v-icon></span>
+                    <span class="icon-btn ml-2" @click="onInvite(row)" title="邀请成员" v-if="row.visibility === 'assign'"><v-icon type="usergroup-add"></v-icon></span>
                     <span class="icon-btn ml-2" @click="onAddFile(row)" title="关联文件"><v-icon type="file-add"></v-icon></span>
                     <span class="icon-btn ml-2" @click="onDelete(row.id)" title="删除"><v-icon type="delete"></v-icon></span>
                     <!-- <span class="ml-3 icon-btn" @click="onRecover(row.id)"><svg-icon icon="recover"></svg-icon></span> -->
@@ -46,7 +46,7 @@
 <script lang="ts">
 
 import { Vue, Component, Inject, Watch } from 'vue-property-decorator'
-import { queryLibraries, deleteLibrary, addLibraryFile, downloadFileForLibrary, addLibrary } from '@/api/library'
+import { queryLibraries, deleteLibrary, addLibraryFile, downloadFileForLibrary } from '@/api/library'
 import EditLib from './edit-lib/index.vue'
 import EditFields from './edit-fields/index.vue'
 import InviteUser from './invite-user/index.vue'
@@ -118,15 +118,15 @@ export default class LibResult extends Vue {
     }
 
     onAdd () {
-      // const $e = (this as any).$refs.editLib as EditLib
-      // $e.add({ catalogId: this.catalogId }).then(() => {
-      //   this.$message.success('新增成功')
-      //   this.refresh()
-      // })
-      addLibrary({ catalogId: this.catalogId }).then(() => {
+      const $e = (this as any).$refs.editLib as EditLib
+      $e.add({ catalogId: this.catalogId }).then(() => {
         this.$message.success('新增成功')
         this.refresh()
       })
+      // addLibrary({ catalogId: this.catalogId }).then(() => {
+      //   this.$message.success('新增成功')
+      //   this.refresh()
+      // })
     }
 
     onEditFields (row: any) {
@@ -140,7 +140,7 @@ export default class LibResult extends Vue {
     onEdit (row: any) {
       const $e = (this as any).$refs.editLib as EditLib
       $e.edit(row).then(() => {
-        this.$message.success('编辑库成功')
+        this.$message.success('编辑成功')
         this.refresh()
       })
     }
@@ -208,6 +208,7 @@ export default class LibResult extends Vue {
     }
 
     hasAdmin (row: any) {
+      if (row.visibility === 'all') return true
       let username = this.$auth.username
       let ls = row.authorities || []
       return ls.some((v: any) => v.username === username && v.opt === 'w')

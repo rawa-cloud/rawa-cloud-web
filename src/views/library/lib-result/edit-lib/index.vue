@@ -2,8 +2,14 @@
     <div>
       <v-modal :visible.sync="actualVisible" width="320px" :title="title">
         <v-form ref="form" :rules="rules" :model="form" label-width="80px" label-position="left" class="ml-3" v-if="visible">
-          <v-form-item label="名称" prop="name" required>
+          <!-- <v-form-item label="名称" prop="name" required>
             <v-input clearable v-model="form.name" maxlength="64"></v-input>
+          </v-form-item> -->
+          <v-form-item label="可见性" prop="visibility">
+            <v-radio-group v-model="form.visibility">
+              <v-radio label="all">所有人</v-radio>
+              <v-radio label="assign">指定分配</v-radio>
+            </v-radio-group>
           </v-form-item>
         </v-form>
 
@@ -25,13 +31,13 @@ export default class EditLib extends Vue {
   lib: any = null
 
   form = {
-    name: ''
+    visibility: 'all'
   }
 
   rules = {
-    name: [
-      { validator: 'required', message: '名称必填', trigger: 'blur' }
-    ]
+    // name: [
+    //   { validator: 'required', message: '名称必填', trigger: 'blur' }
+    // ]
   }
 
   resolve: Function | null = null
@@ -68,7 +74,7 @@ export default class EditLib extends Vue {
 
   init (): Promise<any> {
     const origin = {
-      name: (this.lib && this.lib.name) || ''
+      name: (this.lib && this.lib.visibility) || 'all'
     }
     Object.assign(this.form, origin)
     this.visible = true

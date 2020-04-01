@@ -18,13 +18,13 @@
                   <div class="text-center" v-if="!catalog">
                     <div class="mb-2">权限</div>
                     <v-radio-group v-model="item.opt">
-                      <v-radio label="w">管理人员</v-radio>
-                      <v-radio label="r">普通用户</v-radio>
+                      <v-radio label="w" :disabled="item.system">管理人员</v-radio>
+                      <v-radio label="r" :disabled="item.system">普通用户</v-radio>
                     </v-radio-group>
                   </div>
                 </div>
                 <div slot="action">
-                  <a class="ft-lg" @click="onDelete(item)"><v-icon type="delete"></v-icon></a>
+                  <a class="ft-lg" @click="onDelete(item)" v-if="!item.system"><v-icon type="delete"></v-icon></a>
                 </div>
               </v-list-item>
             </v-list>
@@ -85,7 +85,7 @@ export default class InviteUser extends Vue {
     let data = this.catalog ? (this.row && this.row.authorityList) || [] : (this.row && this.row.authorities) || []
     this.data = []
     data.map((v: any) => {
-      this.add(v.username, v.opt, v.inherit)
+      this.add(v.username, v.opt, v.system)
     })
     this.value = ''
     this.visible = true
@@ -127,15 +127,14 @@ export default class InviteUser extends Vue {
     return req
   }
 
-  add (username: string, opt = 'r', inherit: boolean) {
+  add (username: string, opt = 'r', system: boolean = false) {
     const vm = this
     let has = this.data.some(v => v.username === username)
     if (has) return
     this.data.push({
       username,
       opt,
-      inherit,
-      disabledInherit: !inherit,
+      system,
       get cname () {
         let t = vm.users.find((v: any) => v.username === this.username)
         return (t && t.cname) || ''

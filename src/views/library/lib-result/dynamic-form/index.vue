@@ -1,6 +1,6 @@
 <template>
 <v-form layout="horizontal" class="mx-3 mt-3" :model="form" ref="form">
-   <v-row :gutter="16">
+   <v-row :gutter="16" style="widh: 100%;">
       <v-col :span="8" v-for="row in renderedFields" :key="row.i">
         <form-control :form="form" :prop="row.id + ''" :label="row.name" :type="resolveType(row)" :options="resolveOptions(row)"></form-control>
       </v-col>
