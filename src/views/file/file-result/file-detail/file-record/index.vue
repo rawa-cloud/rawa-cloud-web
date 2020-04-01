@@ -1,5 +1,5 @@
 <template>
-<v-table pageable :data-source="dataSource" height="420px" size="sm">
+<v-table pageable :data-source="dataSource" size="sm">
     <v-table-column prop="name" label="文件名"></v-table-column>
     <v-table-column prop="lastChangeBy" label="修改人"></v-table-column>
     <v-table-column prop="lastChangeTime" label="修改时间"></v-table-column>

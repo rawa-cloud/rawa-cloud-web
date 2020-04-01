@@ -3,12 +3,16 @@
       <v-modal :visible.sync="actualVisible" width="70vw" :title="title">
         <div :class="[$style.body]">
           <basic-info :file="file"></basic-info>
-          <v-tabs v-model="value" size="sm">
-             <v-tab-pane name="1" label="版本列表">
+          <v-tabs v-model="value" size="sm" v-if="file">
+            <v-tab-pane name="1" label="版本列表">
               <file-record :id="file && file.id"></file-record>
             </v-tab-pane>
-            <v-tab-pane name="2" label="权限管理">Content of Tab Pane 1</v-tab-pane>
-            <v-tab-pane name="3" label="操作历史">Content of Tab Pane 3</v-tab-pane>
+            <v-tab-pane name="2" label="权限管理">
+              <file-authority :id="file && file.id"></file-authority>
+            </v-tab-pane>
+            <v-tab-pane name="3" label="操作历史">
+              <file-log :id="file && file.id"></file-log>
+            </v-tab-pane>
           </v-tabs>
         </div>
 
@@ -26,9 +30,11 @@ import size from '@/filters/size'
 import transcode from '@/filters/transcode'
 import BasicInfo from './basic-info/index.vue'
 import FileRecord from './file-record/index.vue'
+import FileLog from './file-log/index.vue'
+import FileAuthority from './file-authority/index.vue'
 
 @Component({
-  components: { BasicInfo, FileRecord }
+  components: { BasicInfo, FileRecord, FileLog, FileAuthority }
 })
 export default class EditDir extends Vue {
   file: any = null
