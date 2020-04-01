@@ -3,7 +3,7 @@
   <tile-tree :data="data" row-key="key">
     <tile-tree-column title="表单名称" :level="1" v-on="handler">
       <template slot="action" slot-scope="{node}">
-        <span class="icon-btn mr-2" @click.stop="onInviteUser(node)"> <v-icon type="usergroup-add"></v-icon></span>
+        <span class="icon-btn mr-2" @click.stop="onInviteUser(node)" v-if="node.data.visibility === 'assign'"> <v-icon type="usergroup-add"></v-icon></span>
       </template>
     </tile-tree-column>
     <tile-tree-column title="字段" :level="2" v-on="handler">

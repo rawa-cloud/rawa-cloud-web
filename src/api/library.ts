@@ -35,7 +35,7 @@ export interface LibraryQueryReq extends Pageable {
 
 export interface LibraryAddReq {
   catalogId: number
-  name: string
+  // name: string
 }
 
 export interface LibraryUpdateReq {

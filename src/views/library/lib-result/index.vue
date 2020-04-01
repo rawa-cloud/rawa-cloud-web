@@ -7,7 +7,6 @@
 
         <div :class="[$style.content]">
           <config-table :checkable="false" row-key="id" :storage-key="storageKey" :api="api" :columns="columns" height="calc(100vh - 360px)" ref="configTable">
-            <v-table-column prop="name" label="名称" :order="1"></v-table-column>
             <v-table-column prop="filePath" label="文件路径" :order="2">
               <template slot-scope="{row}">
                 <a @click="onForwardFile(row)" :title="row.file.filePath" v-if="row.file">{{row.file.filePath | ellipsis(10, true)}}</a>
@@ -19,11 +18,11 @@
             </v-table-column>
             <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="160px">
                 <template slot-scope="{row}" v-if="hasAdmin(row)">
-                    <span class="icon-btn" @click="onEdit(row)"><v-icon type="edit"></v-icon></span>
-                    <span class="icon-btn ml-2" @click="onEditFields(row)"><v-icon type="tag-o"></v-icon></span>
-                    <span class="icon-btn ml-2" @click="onInvite(row)"><v-icon type="usergroup-add"></v-icon></span>
-                    <span class="icon-btn ml-2" @click="onAddFile(row)"><v-icon type="file-add"></v-icon></span>
-                    <span class="icon-btn ml-2" @click="onDelete(row.id)"><v-icon type="delete"></v-icon></span>
+                    <!-- <span class="icon-btn" @click="onEdit(row)"><v-icon type="edit"></v-icon></span> -->
+                    <span class="icon-btn ml-2" @click="onEditFields(row)" title="编辑字段"><v-icon type="tag-o"></v-icon></span>
+                    <span class="icon-btn ml-2" @click="onInvite(row)" title="邀请成员"><v-icon type="usergroup-add"></v-icon></span>
+                    <span class="icon-btn ml-2" @click="onAddFile(row)" title="关联文件"><v-icon type="file-add"></v-icon></span>
+                    <span class="icon-btn ml-2" @click="onDelete(row.id)" title="删除"><v-icon type="delete"></v-icon></span>
                     <!-- <span class="ml-3 icon-btn" @click="onRecover(row.id)"><svg-icon icon="recover"></svg-icon></span> -->
                 </template>
             </v-table-column>
@@ -47,7 +46,7 @@
 <script lang="ts">
 
 import { Vue, Component, Inject, Watch } from 'vue-property-decorator'
-import { queryLibraries, deleteLibrary, addLibraryFile, downloadFileForLibrary } from '@/api/library'
+import { queryLibraries, deleteLibrary, addLibraryFile, downloadFileForLibrary, addLibrary } from '@/api/library'
 import EditLib from './edit-lib/index.vue'
 import EditFields from './edit-fields/index.vue'
 import InviteUser from './invite-user/index.vue'
@@ -119,8 +118,12 @@ export default class LibResult extends Vue {
     }
 
     onAdd () {
-      const $e = (this as any).$refs.editLib as EditLib
-      $e.add({ catalogId: this.catalogId }).then(() => {
+      // const $e = (this as any).$refs.editLib as EditLib
+      // $e.add({ catalogId: this.catalogId }).then(() => {
+      //   this.$message.success('新增成功')
+      //   this.refresh()
+      // })
+      addLibrary({ catalogId: this.catalogId }).then(() => {
         this.$message.success('新增成功')
         this.refresh()
       })

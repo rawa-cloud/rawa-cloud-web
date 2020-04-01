@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-modal :visible.sync="actualVisible" width="540px" :title="title">
+      <v-modal :visible.sync="actualVisible" width="720px" :title="title">
 
         <div>
           <div class="text-center">
@@ -15,13 +15,12 @@
               <v-list-item slot-scope="{item}">
                 <v-list-item-meta slot="meta" :title="item.username" :description="item.cname" class="w-12"></v-list-item-meta>
                 <div class="d-flex">
-                  <div class="text-center">
+                  <div class="text-center" v-if="!catalog">
                     <div class="mb-2">权限</div>
-                    <v-switch v-model="item.w" inactive-text="普通用户" active-text="管理人员" :disabled="item.inherit"></v-switch>
-                  </div>
-                  <div class="ml-4 text-center" v-if="!catalog">
-                    <div class="mb-2">继承</div>
-                    <v-switch v-model="item.inherit" inactive-text="否" active-text="是" :disabled="item.disabledInherit"></v-switch>
+                    <v-radio-group v-model="item.opt">
+                      <v-radio label="w">管理人员</v-radio>
+                      <v-radio label="r">普通用户</v-radio>
+                    </v-radio-group>
                   </div>
                 </div>
                 <div slot="action">
@@ -86,7 +85,7 @@ export default class InviteUser extends Vue {
     let data = this.catalog ? (this.row && this.row.authorityList) || [] : (this.row && this.row.authorities) || []
     this.data = []
     data.map((v: any) => {
-      this.add(v.username, v.opt === 'w', v.inherit)
+      this.add(v.username, v.opt, v.inherit)
     })
     this.value = ''
     this.visible = true
@@ -128,18 +127,15 @@ export default class InviteUser extends Vue {
     return req
   }
 
-  add (username: string, w: boolean, inherit: boolean) {
+  add (username: string, opt = 'r', inherit: boolean) {
     const vm = this
     let has = this.data.some(v => v.username === username)
     if (has) return
     this.data.push({
       username,
-      w,
+      opt,
       inherit,
       disabledInherit: !inherit,
-      get opt () {
-        return this.w ? 'w' : 'r'
-      },
       get cname () {
         let t = vm.users.find((v: any) => v.username === this.username)
         return (t && t.cname) || ''
@@ -150,7 +146,7 @@ export default class InviteUser extends Vue {
   onAdd () {
     let vm = this
     if (!this.value) return
-    this.add(this.value, false, false)
+    this.add(this.value, 'r', false)
     this.value = ''
   }
 

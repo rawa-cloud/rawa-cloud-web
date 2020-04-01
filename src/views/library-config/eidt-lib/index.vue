@@ -5,6 +5,12 @@
           <v-form-item label="名称" prop="name" required>
             <v-input clearable v-model.trim="form.name" maxlength="16"></v-input>
           </v-form-item>
+          <v-form-item label="可见性" prop="visibility" required v-if="isTop">
+            <v-radio-group v-model="form.visibility">
+              <v-radio label="all">所有人</v-radio>
+              <v-radio label="assign">指定分配</v-radio>
+            </v-radio-group>
+          </v-form-item>
           <v-form-item label="类型" prop="type" v-if="typeVisible">
             <v-select clearable v-model.trim="form.type">
               <dict-option name="libraryFieldType"></dict-option>
@@ -35,7 +41,8 @@ export default class EditLib extends Vue {
 
   form = {
     name: '',
-    type: ''
+    type: '',
+    visibility: 'all'
   }
 
   rules = {
@@ -72,6 +79,10 @@ export default class EditLib extends Vue {
     return false
   }
 
+  get isTop () {
+    return this.isEdit ? (this.node && this.node.level === 1) : !this.node
+  }
+
   add (node: Node): Promise<any> {
     this.isEdit = false
     this.node = node
@@ -88,7 +99,8 @@ export default class EditLib extends Vue {
     (this.$refs.form as any).resetFields()
     this.form = {
       name: !this.isEdit ? '' : (this.node && this.node.data.name) || '',
-      type: !this.isEdit ? '' : (this.node && this.node.data.type) || ''
+      type: !this.isEdit ? '' : (this.node && this.node.data.type) || '',
+      visibility: !this.isEdit ? 'all' : (this.node && this.node.data.visibility) || 'all'
     }
     this.visible = true
     return new Promise((resolve, reject) => {
@@ -135,9 +147,15 @@ export default class EditLib extends Vue {
         req.catalogId = this.node.data.id
         req.type = this.form.type
       }
+      if (!this.node) {
+        req.visibility = this.form.visibility
+      }
       if (this.node && this.node.level === 2) req.filedDefId = this.node.data.id
     } else {
       if (this.node && this.node.level === 2) req.type = this.form.type
+      if (this.node && this.node.level === 1) {
+        req.visibility = this.form.visibility
+      }
     }
     return req
   }
