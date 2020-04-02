@@ -139,7 +139,7 @@ export default class FileTree extends Vue {
 
 <style lang="scss" module>
 .container {
-    height: calc(100vh - 160px);
+    height: calc(100vh - 120px);
     overflow: auto;
 }
 
