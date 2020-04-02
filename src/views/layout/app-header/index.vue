@@ -8,7 +8,7 @@
         <span class="ml-3">瑞柚文档管理</span>
       </div>
 
-      <catalog-menu :class="[$style.menu]"></catalog-menu>
+      <catalog-menu :class="[$style.menu]" class="ml-3"></catalog-menu>
     </div>
 
     <span :class="[$style.opt]">

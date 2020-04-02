@@ -5,7 +5,7 @@ import { MenuOption, menus as fixedMenus } from './config'
 import { MenuCssVariable } from 'vua'
 import { AppModule } from '@/store'
 import { queryLibCatalogs } from '@/api/library'
-import { CLIENT, HOME } from '../../../../helpers/context'
+import { HOME, isAdminUrl, adminUrls } from '@/helpers/context'
 
 @Component
 export default class NavMenu extends Vue {
@@ -15,8 +15,13 @@ export default class NavMenu extends Vue {
 
   libraryMenus: any[] = []
 
+  get isAdmin () {
+    return isAdminUrl(this.$route)
+  }
+
   get menus () {
-    return [...fixedMenus, ...this.libraryMenus]
+    const ret = [...fixedMenus, ...this.libraryMenus]
+    return ret.filter(v => this.isAdmin ? adminUrls.includes(v.link) : !adminUrls.includes(v.link))
   }
 
   get current (): MenuOption | null {

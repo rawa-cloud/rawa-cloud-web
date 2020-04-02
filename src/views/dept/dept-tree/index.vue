@@ -1,10 +1,10 @@
 <template>
     <div :class="[$style.container]" class="border-right">
-        <div :class="[$style.toolbar]" class="text-right pr-3">
+        <!-- <div :class="[$style.toolbar]" class="text-right pr-3">
             <span class="mx-2 icon-btn" @click="onRefresh"><v-icon type="sync"></v-icon></span>
             <span class="mx-2 icon-btn" @click="onExpand"><v-icon type="plus-square-o"></v-icon></span>
             <span class="mx-2 icon-btn" @click="onCollapse"><v-icon type="switcher"></v-icon></span>
-        </div>
+        </div> -->
         <v-tree node-key="key" :data-source="dataSource" ref="tree" :class="[$style.tree]" class="mt-3">
             <div slot="content"  slot-scope="{node}" @click="onSelect(node)" :class="[$style.content]" class="d-flex justify-content-between">
                 <span class="mr-4">{{node.data.label}}</span>
@@ -89,10 +89,10 @@ export default class DeptTree extends Vue {
       $e.expandAll(true)
     }
 
-    onCollapse () {
-      const $e = this.$refs.tree as any
-      $e.expandAll(false)
-    }
+    // onCollapse () {
+    //   const $e = this.$refs.tree as any
+    //   $e.expandAll(false)
+    // }
 
     onSelect (node: any) {
       this.updateId(node.data.id)
