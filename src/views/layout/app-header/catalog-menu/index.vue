@@ -12,18 +12,21 @@ import { isAdminUrl } from '@/helpers/context'
 @Component
 export default class CatalogMenu extends Vue {
   get rows () {
-    return [
+    const ret = [
       {
         label: '公司文档',
         active: !this.isAdmin,
         url: '/file'
-      },
-      {
+      }
+    ]
+    if (this.$auth.hasRole('SUPER')) {
+      ret.push({
         label: '后台管理',
         active: this.isAdmin,
         url: '/dept'
-      }
-    ]
+      })
+    }
+    return ret
   }
 
   get isAdmin () {

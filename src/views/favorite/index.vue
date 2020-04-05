@@ -17,7 +17,7 @@
     </ul>
   </div>
   <div :class="[$style.content]">
-    <div :class="[$style.header]" class="mb-2">收藏列表</div>
+    <div :class="[$style.header]" class="mb-2">收藏名称</div>
     <ul :class="[$style.ul]" v-if="items.length > 0">
       <li :class="[$style.li]" v-for="(row, i) in items" :key="i">
         <div><a @click="onForward(row)">{{row.name}}</a></div>

@@ -5,7 +5,6 @@ export const HOME: string = 'home'
 export const adminUrls = [
   '/user',
   '/dept',
-  '/authority',
   '/log',
   '/library-config'
 ]
