@@ -8,7 +8,7 @@
                 <template slot-scope="{row}">
                    <file-icon v-bind="iconProps(row)"></file-icon>
                    <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
-                  <span class="ml-2 text-error" v-if="row.admin && !row.userId"><svg-icon icon="dot"></svg-icon></span>
+                  <!-- <span class="ml-2 text-error" v-if="row.admin && !row.userId"><svg-icon icon="dot"></svg-icon></span> -->
                 </template>
             </v-table-column>
             <v-table-column prop="size" label="大小" sortable>
