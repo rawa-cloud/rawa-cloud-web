@@ -2,9 +2,9 @@
 <div :class="[$style.container]">
     <div class="d-flex align-items-center">
       <div :class="[$style.logo]" @click="onIndex">
-        <span class="text-center">
+        <!-- <span class="text-center">
             <img src="@/assets/logo.png" alt="&times;" class="w-2 circle"/>
-        </span>
+        </span> -->
         <span class="ml-3">瑞柚文档管理</span>
       </div>
 
