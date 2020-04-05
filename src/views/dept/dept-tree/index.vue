@@ -108,6 +108,12 @@ export default class DeptTree extends Vue {
       this.loadDepts().then(() => {
         this.$nextTick(() => {
           this.onExpand()
+          const $e = this.$refs.tree as any
+          const root = $e.root.children && $e.root.children[0]
+          if (root) {
+            root.store.currentNodeKey = root.key
+            this.onSelect(root)
+          }
         })
       })
     }
