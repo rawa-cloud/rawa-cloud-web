@@ -1,5 +1,5 @@
 <template>
-    <div :class="[$style.container]" class="border-right">
+    <div :class="[$style.container]" class="border-right mt-2">
         <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" ref="tree" :class="[$style.tree]">
             <span slot="content"  slot-scope="{node}" @click="onSelect(node)">
                 <file-icon v-bind="iconProps(node)"></file-icon>
