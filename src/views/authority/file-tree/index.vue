@@ -1,7 +1,7 @@
 <template>
   <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" ref="tree" :class="[$style.tree]">
     <div slot="content"  slot-scope="{node}" @click="onSelect(node)">
-      <div><file-icon v-bind="iconProps(node.data)" class="mr-2"></file-icon>{{node.data.label}}</div>
+      <div><file-icon v-bind="iconProps(node.data)" class="mr-2"></file-icon>{{resolveFileName(node.data.label)}}</div>
     </div>
   </v-tree>
 </template>
@@ -10,6 +10,7 @@
 
 import { Vue, Component, Prop, Watch, Emit } from 'vue-property-decorator'
 import { queryFiles, getAdminRootFiles } from '@/api/file'
+import { resolveFileName } from '@/helpers/context'
 
 @Component
 export default class FileTree extends Vue {
@@ -29,6 +30,10 @@ export default class FileTree extends Vue {
     let root = false
     let contentType = row.contentType
     return { dir, personal, root, contentType }
+  }
+
+  resolveFileName (name: string) {
+    return resolveFileName(name)
   }
 
   loadFn ({ node }: any, resovle: any) {
