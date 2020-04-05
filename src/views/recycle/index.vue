@@ -1,13 +1,13 @@
 <template>
     <div>
-        <div :class="[$style.header]" class="text-right m-2">
-            <v-button color="primary" type="text" icon="delete" @click="onClear">清空回收站</v-button>
-        </div>
+        <!-- <div :class="[$style.header]" class="text-right m-2">
+        </div> -->
 
         <config-table row-key="id" :api="api" height="calc(100vh - 300px)" ref="configTable">
           <template slot="extra" slot-scope="{rows}">
             <v-button color="primary" icon="delete" :disabled="rows.length < 1" @click="onDelete(rows)">删除</v-button>
             <v-button color="primary" :disabled="rows.length < 1" class="ml-2" icon="recover" @click="onRecover(rows)">恢复</v-button>
+            <v-button type="primary" class="m-2" icon="delete" @click="onClear">清空回收站</v-button>
           </template>
           <v-table-column prop="name" label="文件名">
               <template slot-scope="{row}">
