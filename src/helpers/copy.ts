@@ -1,9 +1,10 @@
 export function copy (copyTxt: string) {
-  var createInput = document.createElement('input')
-  createInput.value = copyTxt
-  document.body.appendChild(createInput)
-  createInput.select() // 选择对象
-  document.execCommand('Copy') // 执行浏览器复制命令
-  createInput.className = 'createInput'
-  createInput.style.display = 'none'
+  document.addEventListener('copy', handler) // 增加copy监听
+  document.execCommand('copy') // 执行copy命令触发监听
+  document.removeEventListener('copy', handler)
+  function handler (event: any) {
+    event.clipboardData.setData('text/plain', copyTxt)
+    event.preventDefault()
+    document.removeEventListener('copy', handler)
+  }
 }

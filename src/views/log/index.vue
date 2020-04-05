@@ -30,7 +30,12 @@
             <v-table-column prop="type" label="操作类型"><template slot-scope="{row}">{{row.type | transcode('logType')}}</template></v-table-column>
             <v-table-column prop="operateBy" label="操作人"></v-table-column>
             <v-table-column prop="operateTime" label="操作时间"></v-table-column>
-            <v-table-column prop="remark" label="操作备注"></v-table-column>
+            <v-table-column prop="remark" label="操作备注">
+              <div slot-scope="{row}">
+                 <span>{{row.remark | ellipsis(50)}}</span>
+                 <span class="ml-2 icon-btn" @click="onCopy(row.remark)"> <v-icon type="copy"></v-icon> </span>
+              </div>
+            </v-table-column>
           </config-table>
         </div>
     </div>
@@ -42,6 +47,7 @@
 import { Vue, Component, Inject, Watch } from 'vue-property-decorator'
 import { queryLogs } from '@/api/log'
 import { queryUsers } from '@/api/user'
+import { copy } from '@/helpers/copy'
 @Component({
 })
 export default class Log extends Vue {
@@ -70,6 +76,11 @@ export default class Log extends Vue {
     onReset () {
       const $form = this.$refs.form as any
       $form.resetFields()
+    }
+
+    onCopy (text: string) {
+      copy(text)
+      this.$message.success('已复制到粘贴板')
     }
 
     query (params: any) {
