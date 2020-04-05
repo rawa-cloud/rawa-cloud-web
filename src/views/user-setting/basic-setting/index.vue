@@ -19,11 +19,11 @@
       </v-form>
 
       <div class="text-center">
-        <div>头像</div>
+        <!-- <div>头像</div>
         <div class="my-4">
           <img src="@/assets/avatar.png" class="w-6" alt="&times;">
-        </div>
-        <v-button type="outline" icon="upload">更换头像</v-button>
+        </div> -->
+        <!-- <v-button type="outline" icon="upload">更换头像</v-button> -->
       </div>
     </div>
   </div>
