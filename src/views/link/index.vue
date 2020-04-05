@@ -3,7 +3,7 @@
         <config-table row-key="id" :api="api" height="calc(100vh - 270px)" ref="configTable">
           <template slot="extra" slot-scope="{rows}">
             <v-button color="primary" :disabled="rows.length < 1" @click="onCancel(rows)">
-              <svg-icon icon="unshare"></svg-icon>
+              <v-icon type="delete"></v-icon>
               取消分享
             </v-button>
           </template>
@@ -27,7 +27,7 @@
           <v-table-column prop="expiryTime" label="失效时间"></v-table-column>
           <v-table-column prop="opt" label="操作" fixed="right" width="80px">
               <template slot-scope="{row}">
-                  <span class="icon-btn" @click="onCancel(row.id)"><svg-icon icon="unshare"></svg-icon></span>
+                  <span class="icon-btn" @click="onCancel(row.id)"><v-icon type="delete"></v-icon></span>
               </template>
           </v-table-column>
         </config-table>
