@@ -57,7 +57,7 @@ export default class FileTransfer extends Vue {
       return
     }
     if (this.value.length > 0 && this.peer && this.value[0].parentId !== this.current.parentId) {
-      this.$message.info('只能选择同一集目录')
+      this.$message.info('只能选择同级目录')
       return
     }
     this.input([...this.value, this.current])

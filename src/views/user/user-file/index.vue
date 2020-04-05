@@ -42,7 +42,7 @@ export default class UserFile extends Vue {
   }
 
   get title () {
-    return '编辑管理员目录'
+    return '设置文件夹管理员目录'
   }
 
   view (row: any) {
