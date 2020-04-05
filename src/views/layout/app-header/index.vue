@@ -13,7 +13,7 @@
 
     <span :class="[$style.opt]">
         <global-search></global-search>
-        <global-message></global-message>
+        <!-- <global-message></global-message> -->
         <global-action></global-action>
         <theme-chooser></theme-chooser>
     </span>
