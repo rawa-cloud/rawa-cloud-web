@@ -46,7 +46,7 @@ export default class FileRecord extends Vue {
 
   }
 
-  @Watch('id', { immediate: true }) idChange () {
+  mounted () {
     this.loadData()
   }
 }

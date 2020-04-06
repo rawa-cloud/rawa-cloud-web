@@ -36,7 +36,7 @@ export default class FileLog extends Vue {
     $e.refresh()
   }
 
-  @Watch('id', { immediate: true }) idChange () {
+  mounted () {
     this.onQuery()
   }
 }

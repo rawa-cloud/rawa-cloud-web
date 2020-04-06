@@ -32,7 +32,7 @@ export default class FileAuthority extends Vue {
     })
   }
 
-  @Watch('id', { immediate: true }) idChange () {
+  mounted () {
     this.loadData()
   }
 }
