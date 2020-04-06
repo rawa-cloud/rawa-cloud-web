@@ -3,7 +3,14 @@
   <div class="my-2" v-if="visible">
       <div>
         <div v-if="authority && authority.implicit" class="my-2">
-          继承于 <span>部门/用户</span> <span class="text-info"> {{authority.principleName}} </span>, <span>文件(夹) </span> <span class="text-info"> {{authority.fileName}} </span> <a @click="onUp(authority)"> &gt;&gt; 前往</a>
+          <div>
+            <span><span>文件(夹) : </span> <span>{{file && file.name}}</span></span>
+            <span v-if="dept" class="ml-2"><span>部门 : </span> <span>{{dept && dept.name}}</span></span>
+            <span v-if="user" class="ml-2"><span>用户 : </span> <span>{{user && user.username}}</span></span>
+          </div>
+          <div>
+            继承于 <span>部门/用户</span> <span class="text-info"> {{authority.principleName}} </span>, <span>文件(夹) </span> <span class="text-info"> {{authority.fileName}} </span> <a @click="onUp(authority)"> &gt;&gt; 前往</a>
+          </div>
         </div>
         <v-checkbox v-model="allChecked" :disabled="!editable">全部</v-checkbox>
         <v-checkbox v-model="noneChecked" :disabled="!editable">禁用</v-checkbox>
