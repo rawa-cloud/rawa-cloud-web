@@ -1,15 +1,31 @@
 const path = require('path')
 function resolve (dir) {
-  return path.join(__dirname, '..', dir)
+  return path.join(__dirname, '.', dir)
 }
 module.exports = {
+  devServer: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:9002',
+        // target: 'http://localhost:3000',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': ''
+        }
+      }
+    }
+  },
   chainWebpack: config => {
-    // note: it means to take care of the svgs of /icons,
-    // these code handle all svgs, should optimize this if you need
-    const svgRule = config.module.rule('svg')
-    svgRule.uses.clear()
-    // add replacement loader(s)
-    svgRule
+    config.module
+      .rule('svg')
+      .exclude.add(resolve('src/plugins/svg/icons'))
+      .end()
+
+    config.module
+      .rule('icons')
+      .test(/\.svg$/)
+      .include.add(resolve('src/plugins/svg/icons'))
+      .end()
       .use('svg-sprite-loader')
       .loader('svg-sprite-loader')
       .tap(options => {
