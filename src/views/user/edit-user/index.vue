@@ -150,7 +150,7 @@ export default class EditUser extends Vue {
       deptIds: (this.user && this.user.deptId) ? [this.user.deptId] : [],
       role: (this.user && this.user.roles && this.user.roles[0]) || 'USER',
       ip: (this.user && this.user.ip) || '',
-      status: (this.user && this.user.status) || true
+      status: (this.user && this.user.status)
     }
     Object.assign(this.form, origin)
     this.visible = true

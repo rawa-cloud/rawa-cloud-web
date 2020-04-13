@@ -6,7 +6,8 @@ export const adminUrls = [
   '/user',
   '/dept',
   '/log',
-  '/library-config'
+  '/library-config',
+  '/system'
 ]
 
 export function isAdminUrl (route: Route) {

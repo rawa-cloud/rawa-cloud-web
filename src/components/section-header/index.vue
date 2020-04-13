@@ -23,10 +23,10 @@ export default class SectionHeader extends Vue {
   margin: 8px 0;
 }
 .indicator {
-  height: 20px;
+  height: 100%;
   width: 4px;
   background: var(--primary-base);
-  margin: 6px 8px 6px 0;
+  margin: 0 12px 0 0;
 
 }
 

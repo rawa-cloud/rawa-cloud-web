@@ -21,7 +21,16 @@ export default class NavMenu extends Vue {
 
   get menus () {
     const ret = [...fixedMenus, ...this.libraryMenus]
-    return ret.filter(v => this.isAdmin ? adminUrls.includes(v.link) : !adminUrls.includes(v.link))
+    return ret.filter(v => this.isAdmin ? has(adminUrls, v) : !has(adminUrls, v))
+
+    function has (list: string[], menu: MenuOption): boolean {
+      if (!menu.link) {
+        return (menu.children || []).some(v => {
+          return has(list, v)
+        })
+      }
+      return list.some(v => (menu.link as string).startsWith(v))
+    }
   }
 
   get current (): MenuOption | null {

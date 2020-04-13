@@ -89,6 +89,12 @@ const routes: Array<RouteConfig> = [
         component: () => import('@/views/system/user/index.vue'),
         meta: { pid: `${HOME}.system.user`, cname: '用户管理' }
       },
+      {
+        path: 'system/auth',
+        name: 'system/auth',
+        component: () => import('@/views/system/auth/index.vue'),
+        meta: { pid: `${HOME}.system.auth`, cname: '系统授权' }
+      },
       // 用户设置
       {
         path: '/user-setting',

@@ -97,6 +97,14 @@ const root = [
       },
       {
         pid: 'library-config'
+      },
+      {
+        pid: 'system',
+        children: [
+          {
+            pid: 'auth'
+          }
+        ]
       }
     ]
   }

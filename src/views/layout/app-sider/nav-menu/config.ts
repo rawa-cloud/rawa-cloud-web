@@ -83,14 +83,14 @@ export const menus: Array<MenuOption> = [
   //   link: '/library'
   // },
   {
-    name: '系统管理',
+    name: '系统配置',
     icon: 'setting',
     pid: `${HOME}.system`,
     children: [
       {
-        name: '用户管理',
-        pid: `${HOME}.system.user`,
-        link: '/system/user'
+        name: '系统授权',
+        pid: `${HOME}.system.auth`,
+        link: '/system/auth'
       }
     ]
   }
