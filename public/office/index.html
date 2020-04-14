@@ -37,16 +37,27 @@
           key, //: "454353543",
           title, //: "Example Document Title.pptx",
           url, //: "http://host.docker.internal:63343/onlyoffice-demo/2.pptx"
+          permissions: {
+            "comment": false,
+            "download": false,
+            "edit": true,
+            "fillForms": true,
+            "modifyContentControl": true,
+            "modifyFilter": true,
+            "print": true,
+            "review": true
+          },
         },
         editorConfig: {
           mode, //: 'edit',
         },
         documentType, //: "presentation",
         "height": "100%",
-        "width": "100%"
+        "width": "100%",
         // "editorConfig": {
         //     "callbackUrl": "https://example.com/url-to-callback.ashx"
         // }
+        
       }
       var docEditor = new DocsAPI.DocEditor("placeholder", config);
     })

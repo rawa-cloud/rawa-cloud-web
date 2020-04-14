@@ -17,7 +17,7 @@ export default class OfficePreview extends mixins(BasePreview) {
   get params () {
     const ret = {
       fileType: this.row.contentType,
-      key: this.row.id,
+      key: this.row.uuid,
       title: this.row.name,
       url: 'http://host.docker.internal:8080/nas/download/' + this.row.uuid,
       documentType: '',
