@@ -14,7 +14,7 @@
     }
   </style>
   <div id="placeholder" style="height: 100vh;"></div>
-  <script type="text/javascript" src="http://localhost:8003/web-apps/apps/api/documents/api.js"></script>
+  <!-- <script type="text/javascript" src="http://localhost:8003/web-apps/apps/api/documents/api.js"></script> -->
   <script>
     const path = new URL(location.href)
     const params = new Map(Array.from(path.searchParams.entries()))
@@ -27,26 +27,51 @@
     const mode = params.get("mode")
     const hostname = params.get("hostname")
 
-    config = {
-      // type: 'embedded',
-      "document": {
-        fileType, //: "pptx",
-        key, //: "454353543",
-        title, //: "Example Document Title.pptx",
-        url, //: "http://host.docker.internal:63343/onlyoffice-demo/2.pptx"
-      },
-      editorConfig: {
-        mode, //: 'edit',
-      },
-      documentType, //: "presentation",
-      "height": "100%",
-      "width": "100%"
-      // "editorConfig": {
-      //     "callbackUrl": "https://example.com/url-to-callback.ashx"
-      // }
-    }
+    const scriptUrl = 'http://' + hostname + ':8003' + '/web-apps/apps/api/documents/api.js'
 
-    var docEditor = new DocsAPI.DocEditor("placeholder", config);
+    loadScript(scriptUrl, function () {
+      config = {
+        // type: 'embedded',
+        "document": {
+          fileType, //: "pptx",
+          key, //: "454353543",
+          title, //: "Example Document Title.pptx",
+          url, //: "http://host.docker.internal:63343/onlyoffice-demo/2.pptx"
+        },
+        editorConfig: {
+          mode, //: 'edit',
+        },
+        documentType, //: "presentation",
+        "height": "100%",
+        "width": "100%"
+        // "editorConfig": {
+        //     "callbackUrl": "https://example.com/url-to-callback.ashx"
+        // }
+      }
+      var docEditor = new DocsAPI.DocEditor("placeholder", config);
+    })
+
+    function loadScript(url, callback) {
+        var script = document.createElement('script');
+        script.type = "text/javaScript";
+        // IE和opera支持onreadystatechange
+        // safari、chrome、opera支持onload
+        if (script.readyState) {//IE
+          script.onreadystatechange = function () {
+            if (script.readyState == "loaded"
+              || script.readyState == "complete") {
+              script.onreadystatechange = null;
+              callback();
+            }
+          };
+        } else {//其他浏览器
+          script.onload = function () {
+            callback();
+          };
+        }
+        script.src = url;
+        document.getElementsByTagName('head')[0].appendChild(script);
+      }
   </script>
 </body>
 </html>
