@@ -15,4 +15,6 @@ export default class BasePreview extends Vue {
   @Prop(Boolean) library!: boolean
 
   @Emit() close () {}
+
+  baseUrl = '/api/nas/download/'
 }

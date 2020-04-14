@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Office 文档</title>
+</head>
+<body>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+    }
+  </style>
+  <div id="placeholder" style="height: 100vh;"></div>
+  <script type="text/javascript" src="http://localhost:8003/web-apps/apps/api/documents/api.js"></script>
+  <script>
+    const path = new URL(location.href)
+    const params = new Map(Array.from(path.searchParams.entries()))
+
+    const fileType = params.get("fileType")
+    const key = params.get("key")
+    const title = params.get("title")
+    const url = params.get("url")
+    const documentType = params.get("documentType")
+    const mode = params.get("mode")
+    const hostname = params.get("hostname")
+
+    config = {
+      // type: 'embedded',
+      "document": {
+        fileType, //: "pptx",
+        key, //: "454353543",
+        title, //: "Example Document Title.pptx",
+        url, //: "http://host.docker.internal:63343/onlyoffice-demo/2.pptx"
+      },
+      editorConfig: {
+        mode, //: 'edit',
+      },
+      documentType, //: "presentation",
+      "height": "100%",
+      "width": "100%"
+      // "editorConfig": {
+      //     "callbackUrl": "https://example.com/url-to-callback.ashx"
+      // }
+    }
+
+    var docEditor = new DocsAPI.DocEditor("placeholder", config);
+  </script>
+</body>
+</html>
