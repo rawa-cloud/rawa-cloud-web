@@ -1,13 +1,18 @@
 <template>
-<div></div>
+<office-editor :row="row" editable v-if="row"></office-editor>
 </template>
-
 <script lang="ts">
-
-import { Vue, Component, Prop, Emit, Watch, Inject } from 'vue-property-decorator'
+import { Component, Prop, Vue } from 'vue-property-decorator'
 
 @Component
 export default class FileEdit extends Vue {
-    @Prop() row!: any[]
+  row: any = null
+
+  edit (row: any) {
+    this.row = row
+    this.$nextTick(() => {
+      this.row = null
+    })
+  }
 }
 </script>

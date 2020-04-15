@@ -1,5 +1,5 @@
 <template>
-<div></div>
+<office-editor :row="row"></office-editor>
 </template>
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator'
@@ -10,37 +10,9 @@ import { preview as previewFileForShare } from '@/api/share'
 import { previewFileForLibrary } from '@/api/library'
 import { preview } from '@/helpers/download'
 
-const appUrl = process.env.VUE_APP_OFFICE_APP_URL
-const officePort = process.env.VUE_APP_OFFICE_HOST_PORT
-
 @Component
 export default class OfficePreview extends mixins(BasePreview) {
-  officeBaseUrl = '/office/index.html?'
-
-  get params () {
-    const ret = {
-      fileType: this.row.contentType,
-      key: this.row.uuid,
-      id: this.row.id,
-      title: this.row.name,
-      appUrl: appUrl,
-      documentType: '',
-      mode: 'view',
-      hostname: location.hostname,
-      userId: this.$auth.username,
-      userName: this.$auth.principle && this.$auth.principle.cname,
-      officePort: officePort
-    }
-    return ret
-  }
-
-  get officeUrl () {
-    const query = Object.entries(this.params).map(([k, v]) => `${k}=${v}`).join('&')
-    return this.officeBaseUrl + query
-  }
-
   mounted () {
-    window.open(this.officeUrl, '_blank')
     this.close()
   }
 }

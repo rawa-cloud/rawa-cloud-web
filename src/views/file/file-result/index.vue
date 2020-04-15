@@ -71,6 +71,7 @@
         <file-chooser ref="fileChooser"></file-chooser>
         <file-collect ref="fileCollect"></file-collect>
         <file-detail ref="fileDetail"></file-detail>
+        <file-edit ref="fileEdit"></file-edit>
     </div>
 </template>
 
@@ -89,10 +90,23 @@ import FileRename from './file-rename/index.vue'
 import FileRecord from './file-record/index.vue'
 import FileCollect from './file-collect/index.vue'
 import FileDetail from './file-detail/index.vue'
+import FileEdit from './file-edit/index.vue'
 import { UMASK, hasAllAuthority, hasAnyAuthority } from '@/common/umask'
+import { getType } from '@/common/content-type'
 
 @Component({
-  components: { FileList, FileThumbnail, FileNavigator, EditDir, FileUpload, FileLink, FileRename, FileRecord, FileCollect, FileDetail }
+  components: { FileList,
+    FileThumbnail,
+    FileNavigator,
+    EditDir,
+    FileUpload,
+    FileLink,
+    FileRename,
+    FileRecord,
+    FileCollect,
+    FileDetail,
+    FileEdit
+  }
 })
 export default class FileResult extends Vue {
     @Prop(Number) parentId!: number
@@ -118,7 +132,7 @@ export default class FileResult extends Vue {
       { title: '预览', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
       { title: '下载', batch: false, umask: UMASK.DOWNLOAD.value, action: this.onDownload },
       { title: '更新', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, action: this.onRenew },
-      { title: '编辑', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, action: this.onOnlineEdit },
+      { title: '编辑', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, onlyOffice: true, action: this.onOnlineEdit },
       // { title: '版本', batch: false, onlyFile: true, umask: UMASK.ACCESS.value, action: this.onFileRecord },
       { title: '分享', batch: true, umask: UMASK.LINK.value, action: this.onShare },
       { title: '重命名', batch: false, umask: UMASK.RENAME.value, action: this.onRename },
@@ -156,6 +170,7 @@ export default class FileResult extends Vue {
       return this.actions.filter((v: any) => {
         if (!v.batch && rows.length > 1) return false
         if (v.onlyFile && rows.some((w: any) => w.dir)) return false
+        if (v.onlyOffice) return rows.every((w: any) => getType(w.contentType) === 'office')
         return true
       }).filter((v: any) => {
         if (v.admin) {
@@ -290,11 +305,8 @@ export default class FileResult extends Vue {
         return
       }
       let f = file || this.checkedRows[0]
-      const $e = this.$refs.fileUpload as FileUpload
-      $e.update(f.id).then(() => {
-        this.$message.success('更新成功')
-        this.refresh()
-      })
+      const $e = this.$refs.fileEdit as FileEdit
+      $e.edit(f)
     }
 
     @Provide() onFileRecord (file?: any) {
