@@ -118,6 +118,7 @@ export default class FileResult extends Vue {
       { title: '预览', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
       { title: '下载', batch: false, umask: UMASK.DOWNLOAD.value, action: this.onDownload },
       { title: '更新', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, action: this.onRenew },
+      { title: '编辑', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, action: this.onOnlineEdit },
       // { title: '版本', batch: false, onlyFile: true, umask: UMASK.ACCESS.value, action: this.onFileRecord },
       { title: '分享', batch: true, umask: UMASK.LINK.value, action: this.onShare },
       { title: '重命名', batch: false, umask: UMASK.RENAME.value, action: this.onRename },
@@ -269,6 +270,20 @@ export default class FileResult extends Vue {
     }
 
     @Provide() onRenew (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('不能选择多条记录')
+        return
+      }
+      let f = file || this.checkedRows[0]
+      const $e = this.$refs.fileUpload as FileUpload
+      $e.update(f.id).then(() => {
+        this.$message.success('更新成功')
+        this.refresh()
+      })
+    }
+
+    @Provide() onOnlineEdit (file?: any) {
       if (!this.validate(file)) return
       if (!file && this.checkedRows.length > 1) {
         this.$message.info('不能选择多条记录')

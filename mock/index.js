@@ -14,7 +14,7 @@ const config = {
     token: {
       enabled: false
     },
-    whiteList: ['/login', '/logout', '/share/**']
+    whiteList: ['/login', '/logout', '/share/**', '/nas/autoSave']
   }
 }
 

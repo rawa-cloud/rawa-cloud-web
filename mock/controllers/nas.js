@@ -42,4 +42,13 @@ export default class nas extends Controller {
     fs.unlinkSync(p)
     this.collection.remove(file)
   }
+
+  @RequestMapping({ url: '/nas/autoSave', method: 'post' })
+  autoSave (req, res, context) {
+    console.log(req.body)
+    const { key, status } = req.body || {}
+    // if (status === 1) {
+    // }
+    res.send(JSON.stringify({ error: 0 })).end()
+  }
 }

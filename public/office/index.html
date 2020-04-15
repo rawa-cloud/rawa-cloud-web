@@ -22,12 +22,16 @@
     const fileType = params.get("fileType")
     const key = params.get("key")
     const title = params.get("title")
-    const url = params.get("url")
+    const appUrl = params.get("appUrl")
     const documentType = params.get("documentType")
     const mode = params.get("mode")
     const hostname = params.get("hostname")
+    const userId = params.get("userId")
+    const userName = params.get("userName")
+    const id = params.get("id")
+    const officePort = params.get("officePort")
 
-    const scriptUrl = 'http://' + hostname + ':8003' + '/web-apps/apps/api/documents/api.js'
+    const scriptUrl = 'http://' + hostname + ':' + officePort + '/web-apps/apps/api/documents/api.js'
 
     loadScript(scriptUrl, function () {
       config = {
@@ -36,7 +40,7 @@
           fileType, //: "pptx",
           key, //: "454353543",
           title, //: "Example Document Title.pptx",
-          url, //: "http://host.docker.internal:63343/onlyoffice-demo/2.pptx"
+          url: appUrl + '/file-assist/download/' + id, //: "http://host.docker.internal:63343/onlyoffice-demo/2.pptx"
           permissions: {
             "comment": false,
             "download": false,
@@ -49,16 +53,24 @@
           },
         },
         editorConfig: {
-          mode, //: 'edit',
+          callbackUrl: appUrl + "/file-assist/autoSave/" + id,
+          mode: mode,
+          user: {
+            id: userId || 'Anonymous',
+            name: userName
+             || 'Anonymous',
+          }
+          /* 
+          customization: {
+            autosave: false
+          } */
         },
         documentType, //: "presentation",
         "height": "100%",
         "width": "100%",
-        // "editorConfig": {
-        //     "callbackUrl": "https://example.com/url-to-callback.ashx"
-        // }
         
       }
+      console.log(config)
       var docEditor = new DocsAPI.DocEditor("placeholder", config);
     })
 
