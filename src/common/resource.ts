@@ -103,6 +103,12 @@ const root = [
         children: [
           {
             pid: 'auth'
+          },
+          {
+            pid: 'import-plan'
+          },
+          {
+            pid: 'export-plan'
           }
         ]
       }

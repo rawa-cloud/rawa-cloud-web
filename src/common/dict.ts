@@ -29,5 +29,14 @@ export default {
     ADD: '新增',
     UPDATE: '更新',
     DELETE: '删除'
+  },
+  success: {
+    true: '是',
+    false: '否'
+  },
+  execStatus: {
+    not_started: '未开始',
+    ongoing: '执行中',
+    completed: '已完成'
   }
 }

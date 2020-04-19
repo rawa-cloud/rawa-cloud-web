@@ -95,6 +95,18 @@ const routes: Array<RouteConfig> = [
         component: () => import('@/views/system/auth/index.vue'),
         meta: { pid: `${HOME}.system.auth`, cname: '系统授权' }
       },
+      {
+        path: 'system/import-plan',
+        name: 'system/import-plan',
+        component: () => import('@/views/system/import-plan/index.vue'),
+        meta: { pid: `${HOME}.system.import-plan`, cname: '导入计划' }
+      },
+      {
+        path: 'system/export-plan',
+        name: 'system/export-plan',
+        component: () => import('@/views/system/export-plan/index.vue'),
+        meta: { pid: `${HOME}.system.export-plan`, cname: '导出计划' }
+      },
       // 用户设置
       {
         path: '/user-setting',

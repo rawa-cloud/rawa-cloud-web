@@ -91,6 +91,16 @@ export const menus: Array<MenuOption> = [
         name: '系统授权',
         pid: `${HOME}.system.auth`,
         link: '/system/auth'
+      },
+      {
+        name: '导入计划',
+        pid: `${HOME}.system.import-plan`,
+        link: '/system/import-plan'
+      },
+      {
+        name: '导出计划',
+        pid: `${HOME}.system.export-plan`,
+        link: '/system/export-plan'
       }
     ]
   }
