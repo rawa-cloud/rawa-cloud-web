@@ -24,22 +24,24 @@ export interface ImportPlanRes {
   parentFilePath: string
 }
 
-export interface ExportPlanAddReq {
+export interface ImportPlanAddReq {
   cron: string
 
   filePath: string
+
+  parentId: number
 }
 
 export function queryPlan () {
-  return http().get<ImportPlanRes[]>(`/export-plans/active`).then(data => {
+  return http().get<ImportPlanRes[]>(`/import-plans/active`).then(data => {
     return data ? [data] : []
   })
 }
 
-export function addPlan (req: ExportPlanAddReq) {
-  return http().post<any>(`/export-plans`, req)
+export function addPlan (req: ImportPlanAddReq) {
+  return http().post<any>(`/import-plans`, req)
 }
 
 export function deletePlan () {
-  return http().delete<any>(`/export-plans/active`)
+  return http().delete<any>(`/import-plans/active`)
 }
