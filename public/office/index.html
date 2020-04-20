@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Office 文档</title>
+  <title></title>
 </head>
 <body>
   <style>
@@ -33,6 +33,8 @@
 
     const scriptUrl = 'http://' + hostname + ':' + officePort + '/web-apps/apps/api/documents/api.js'
 
+    createTitle(mode)
+
     loadScript(scriptUrl, function () {
       config = {
         // type: 'embedded',
@@ -60,11 +62,7 @@
             name: userName
              || 'Anonymous',
           },
-          "lang": "zh",
-          /* 
-          customization: {
-            autosave: false
-          } */
+          lang: "zh"
         },
         documentType, //: "presentation",
         "height": "100%",
@@ -95,6 +93,11 @@
         }
         script.src = url;
         document.getElementsByTagName('head')[0].appendChild(script);
+      }
+
+      function createTitle (mode) {
+        const title = mode === 'view' ? '预览Office文档' : '编辑Office文档'
+        document.querySelector('title').textContent = title
       }
   </script>
 </body>
