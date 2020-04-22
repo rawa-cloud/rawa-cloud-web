@@ -60,7 +60,7 @@ export default class CatalogMenu extends Vue {
   vertical-align: bottom;
   font-size: 16px;
   padding: 0 12px ;
-  color: var(--text-color);
+  color: var(--text-color-secondary);
   border-bottom: 4px solid transparent;
 
   &:hover, &.active {

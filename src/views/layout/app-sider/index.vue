@@ -1,8 +1,8 @@
 <template>
 <div :class="[$style.container]">
-    <nav-menu style="width: 9rem;"></nav-menu>
+    <nav-menu :class="[$style.menu]"></nav-menu>
 
-    <div :class="[$style.hoverTrigger]" @click="onTrigger">
+    <div :class="[$style.hoverTrigger]" class="text-secondary" @click="onTrigger">
         <v-icon :type="iconType"></v-icon>
     </div>
 </div>
@@ -23,7 +23,7 @@ export default class AppSider extends Vue {
     @AppModule.Mutation setExpand!: (expand: boolean) => void
 
     get iconType () {
-      return this.expand ? 'left-circle-o' : 'right-circle-o'
+      return this.expand ? 'left-circle' : 'right-circle'
     }
 
     onTrigger () {
@@ -41,14 +41,24 @@ export default class AppSider extends Vue {
     overflow: auto;
 }
 
+.menu {
+  width: 194px;
+  height: calc(100vh - 4rem - 80px);
+  overflow: auto;
+  border-right-color: transparent;
+
+  :global {
+    .v-menu-item {
+      color: var(--text-color-secondary) !important;
+    }
+  }
+}
+
 .hoverTrigger {
-    position: absolute;
-    bottom: 2rem;
-    left: 50%;
-    font-size: 1.5rem;
+    text-align: center;
+    font-size: 20px;
     // color: #999;
     transition: all .3s;
-    transform: translateX(-50%);
     &:hover {
       color: var(--primary-base);
       cursor: pointer;

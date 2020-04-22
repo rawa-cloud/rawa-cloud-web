@@ -75,6 +75,7 @@ export default class ThemeChooser extends Vue {
     display: flex;
     align-items: center;
     transition: background-color .35s ease;
+    color: var(--text-color-secondary);
     &:hover {
         background: var(--primary-lighten-5);
         cursor: pointer;

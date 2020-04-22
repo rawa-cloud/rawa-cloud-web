@@ -6,7 +6,7 @@
         <span class="ml-2"> 锐柚文档管理</span>
       </div>
 
-      <catalog-menu :class="[$style.menu]" class="ml-3"></catalog-menu>
+      <catalog-menu :class="[$style.menu]" style="margin-left: 48px;"></catalog-menu>
     </div>
 
     <span :class="[$style.opt]">
@@ -58,7 +58,6 @@ export default class AppHeader extends Vue {
   align-items: center;
   margin-left: 12px;
   font-size: 18px;
-  color: var(--heading-color);
   &:hover {
       cursor: pointer;
   }
