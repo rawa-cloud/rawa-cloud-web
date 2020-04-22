@@ -1,6 +1,6 @@
 <template>
     <div :class="[$style.container]" class="border-right mt-2">
-        <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" ref="tree" :class="[$style.tree]">
+        <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" ref="tree" :class="[$style.tree]" class="primary-tree">
             <span slot="content"  slot-scope="{node}" @click="onSelect(node)">
                 <file-icon v-bind="iconProps(node)"></file-icon>
                 <span class="ml-2">{{node.data.name}}</span>
@@ -151,13 +151,7 @@ export default class FileTree extends Vue {
 
 .tree {
     width: 100%;
-    height: calc(100% - 48px);
+    height: calc(100vh - 64px);
     overflow: auto;
-
-    :global{
-        .v-tree-node {
-            white-space: nowrap;
-        }
-    }
 }
 </style>

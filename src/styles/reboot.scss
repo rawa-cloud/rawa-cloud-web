@@ -1,3 +1,13 @@
 .v-message {
   z-index: 2400;
 }
+
+.v-tree.primary-tree {
+  .v-tree-node__indicator {
+    font-size: 16px;
+    color: var(--text-color-secondary);
+  }
+  .v-tree-node {
+    white-space: nowrap;
+  }
+}

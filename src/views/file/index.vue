@@ -36,7 +36,7 @@ export default class Dept extends Vue {
 
 <style lang="scss" module>
 .container{
-    display: flex;
+  display: flex;
 }
 
 .tree {
