@@ -18,7 +18,7 @@ export const menus: Array<MenuOption> = [
   // },
   {
     name: '全部文件',
-    icon: 'folder-open',
+    icon: 'appstore',
     pid: `${HOME}.file`,
     link: '/file'
   },
@@ -60,7 +60,7 @@ export const menus: Array<MenuOption> = [
   },
   {
     name: '我的收藏',
-    icon: 'heart-o',
+    icon: 'heart',
     pid: `${HOME}.favorite`,
     link: '/favorite'
   },

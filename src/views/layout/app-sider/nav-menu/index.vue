@@ -80,12 +80,12 @@ export default class NavMenu extends Vue {
       let children = this.filterByAcl(v.children || [])
       if (v.children) {
         if (children.length > 0) {
-          childNodes = h('v-sub-menu', {}, [h('span', { slot: 'title' }, v.name), this.icon(h, v.icon), this.generateList(h, children)])
+          childNodes = h('v-sub-menu', {}, [h('span', { slot: 'title' }, v.name), this.icon(h, v), this.generateList(h, children)])
         } else {
           return null
         }
       } else {
-        childNodes = h('v-menu-item', { props: { index: v.link }, 'nativeOn': { click: () => this.link(v.link) } }, [this.icon(h, v.icon), v.name])
+        childNodes = h('v-menu-item', { props: { index: v.link }, 'nativeOn': { click: () => this.link(v.link) } }, [this.icon(h, v), v.name])
       }
       return childNodes
     }).filter(v => !!v) as VNode[]
@@ -97,9 +97,24 @@ export default class NavMenu extends Vue {
     this.$router.push(path)
   }
 
-  icon (h: CreateElement, name?: string) {
-    if (!name) return null
-    return h('i', { 'class': ['anticon', `anticon-${name}`], slot: 'icon' })
+  icon (h: CreateElement, v: any) {
+    const icon = v.icon
+    const name = v.name
+    if (!icon) {
+      const char = name.charAt(0)
+      const data = {
+        props: {
+          size: '18px',
+          type: 'char',
+          shape: 'circle'
+        },
+        // class: [(this as any).$style.avatar],
+        slot: 'icon'
+      }
+      return h('v-avatar', data, char)
+    } else {
+      return h('i', { 'class': ['anticon', `anticon-${icon}`], slot: 'icon' })
+    }
   }
 
   filterByAcl (items: Array<MenuOption>): Array<MenuOption> {
@@ -122,7 +137,7 @@ export default class NavMenu extends Vue {
       this.libraryMenus = (data || []).map((v: any) => {
         return {
           name: v.name,
-          icon: 'book',
+          icon: '',
           pid: `${HOME}.library`,
           link: `/library/${v.id}`
         }
