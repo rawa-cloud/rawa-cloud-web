@@ -4,7 +4,7 @@
             <div :class="[$style.logo]">
                 <img src="@/assets/logo.png" alt="&times;" class="w-4 circle">
             </div>
-            <div :class="[$style.title]">瑞柚文档管理</div>
+            <div :class="[$style.title]">锐柚文档管理</div>
 
             <form @submit.prevent>
                 <div class="mb-3">

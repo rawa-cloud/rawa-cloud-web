@@ -4,7 +4,7 @@
         <div :class="[$style.reference]">
             <div style="height: auto;" class="px-2">
                 <v-avatar type="image"><img src="@/assets/avatar.png" /></v-avatar>
-                <span class="ml-2" style="color: #fff;">{{username}}</span>
+                <span class="ml-2">{{username}}</span>
             </div>
         </div>
         <v-dropdown-menu slot="dropdown">
@@ -45,9 +45,10 @@ export default class GlobalAction extends Vue {
     height: 100%;
     display: flex;
     align-items: center;
+    padding-right: 8px;
     transition: background-color .35s ease;
     &:hover {
-        background: var(--primary-darken-1);
+        background: var(--primary-lighten-5);
         cursor: pointer;
     }
 }

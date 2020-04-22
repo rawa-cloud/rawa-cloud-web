@@ -1,11 +1,9 @@
 <template>
 <div :class="[$style.container]">
-    <div class="d-flex align-items-center">
+    <div class="d-flex align-items-center" style="height: 100%;">
       <div :class="[$style.logo]" @click="onIndex">
-        <!-- <span class="text-center">
-            <img src="@/assets/logo.png" alt="&times;" class="w-2 circle"/>
-        </span> -->
-        <span class="ml-3">瑞柚文档管理</span>
+        <img src="@/assets/logo.png" alt="&times;" :class="[$style.img]"/>
+        <span class="ml-2"> 锐柚文档管理</span>
       </div>
 
       <catalog-menu :class="[$style.menu]" class="ml-3"></catalog-menu>
@@ -13,9 +11,10 @@
 
     <span :class="[$style.opt]">
         <global-search></global-search>
+        <v-divider type="vertical" class="mx-4" style="height: 22px;"></v-divider>
+        <theme-chooser></theme-chooser>
         <!-- <global-message></global-message> -->
         <global-action></global-action>
-        <theme-chooser></theme-chooser>
     </span>
 </div>
 </template>
@@ -42,8 +41,7 @@ export default class AppHeader extends Vue {
 <style lang="scss" module>
 .container {
     height: 100%;
-    background-color: var(--primary-base);
-    color: #fff;
+    background-color: #fff;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -56,11 +54,20 @@ export default class AppHeader extends Vue {
 }
 
 .logo {
-    margin-left: 12px;
-    font-size: 20px;
-    &:hover {
-        cursor: pointer;
-    }
+  display: flex;
+  align-items: center;
+  margin-left: 12px;
+  font-size: 18px;
+  color: var(--heading-color);
+  &:hover {
+      cursor: pointer;
+  }
+}
+
+.img {
+  height: 21px;
+  width: 21px;
+  margin-left: 8px;
 }
 
 .menu {

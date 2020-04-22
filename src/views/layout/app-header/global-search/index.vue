@@ -1,6 +1,6 @@
 <template>
 <div>
-    <v-input v-model.trim="value" placeholder="搜索" suffix="search" @keyup.enter.native="onSearch"></v-input>
+    <v-input v-model.trim="value" placeholder="搜索" prefix="search" @keyup.enter.native="onSearch" style="width: 440px;"></v-input>
 </div>
 </template>
 

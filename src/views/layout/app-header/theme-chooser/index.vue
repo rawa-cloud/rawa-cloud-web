@@ -1,6 +1,6 @@
 <template>
 <div :class="[$style.container]">
-    <v-dropdown placement="bottom-end" :class="[$style.dropdown]" trigger="click">
+    <!-- <v-dropdown placement="bottom-end" :class="[$style.dropdown]" trigger="click">
         <div :class="[$style.reference]">
             <div style="height: auto;" class="px-2">
                 <v-icon type="global" class="ft-lg" style="color: #fff;"></v-icon>
@@ -18,10 +18,14 @@
             </v-dropdown-item>
             <v-dropdown-item divider></v-dropdown-item>
             <v-dropdown-item class="w-8">
-                <input type="color" @click.stop="" v-model="primary"> <span class="text-primary ml-2"> 主题色 </span>
+                "<input type="color" @click.stop="" v-model="primary"> <span class="text-primary ml-2> 主题色 </span>
             </v-dropdown-item>
         </v-dropdown-menu>
-    </v-dropdown>
+    </v-dropdown> -->
+  <div :class="[$style.box]">
+    <input type="color" @click.stop="" v-model="primary">
+  </div>
+  <span>主题</span>
 </div>
 </template>
 
@@ -72,7 +76,7 @@ export default class ThemeChooser extends Vue {
     align-items: center;
     transition: background-color .35s ease;
     &:hover {
-        background: var(--bg-color-1);
+        background: var(--primary-lighten-5);
         cursor: pointer;
     }
 }
@@ -90,5 +94,25 @@ export default class ThemeChooser extends Vue {
     height: 100%;
     display: flex;
     align-items: center;
+}
+
+.box {
+  width: 30px;
+  height: 30px;
+  padding: 2px;
+  border: 1px solid #E7E9EB;
+  border-radius: 4px;
+  margin-right: 8px;
+  &>* {
+    width: 24px;
+    height: 24px;
+    background-color: var(--primary-base);
+    border-radius: 4px;
+    &:active, &:focus {
+      outline: 0;
+      border-color: none;
+      box-shadow: none;
+    }
+  }
 }
 </style>
