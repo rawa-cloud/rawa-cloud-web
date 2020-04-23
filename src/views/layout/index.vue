@@ -41,17 +41,20 @@ export default class Layout extends Vue {
 
 <style lang="scss" module>
 .container {
-  background-color: var(--bg-color-1);
+  background-color: #fff;
 }
 
 .header {
     height: 4rem;
     padding: 0;
     background-color: var(--bg-color);
+    box-shadow: 0 1px 4px rgba(0, 21, 41, .08);
 }
 
 .main {
+  background-color: #fff;
   height: calc(100vh - 64px);
+  background: transparent;
   padding-top: 8px;
 }
 

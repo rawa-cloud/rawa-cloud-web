@@ -151,6 +151,7 @@ export default class FileTree extends Vue {
     .v-tree-node__text {
       height: 32px;
       line-height: 32px;
+      width: 100%;
     }
   }
 }
