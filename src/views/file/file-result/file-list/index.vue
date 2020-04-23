@@ -1,15 +1,15 @@
 <template>
     <div>
-        <v-table :data-source="dataSource"  :class="[$style.table]" highlight-current-row
-            @selection-change="onSelectionChange" height="calc(100vh - 260px)" @row-menu="onRowMenu" ref="table"
+        <v-table :data-source="dataSource"  :class="[$style.table]" highlight-current-row size="sm"
+            @selection-change="onSelectionChange" height="calc(100vh - 64px - 40px - 36px - 8px)" @row-menu="onRowMenu" ref="table"
             @row-click="onRowClick" @row-dbclick="onRowDbclick">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
             <v-table-column prop="name" label="文件名" width="480px" sortable>
-                <template slot-scope="{row}">
-                   <file-icon v-bind="iconProps(row)"></file-icon>
+                <div slot-scope="{row}" :class="[$style.label]">
+                   <file-icon v-bind="iconProps(row)" :class="[$style.icon]"></file-icon>
                    <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
                   <!-- <span class="ml-2 text-error" v-if="row.admin && !row.userId"><svg-icon icon="dot"></svg-icon></span> -->
-                </template>
+                </div>
             </v-table-column>
             <v-table-column prop="size" label="大小" sortable>
               <template slot-scope="{row}">
@@ -101,7 +101,10 @@ export default class FileList extends Vue {
       $e.selectRow(row, true)
     }
 
-    onRowClick (row: any) {
+    onRowClick (row: any, event: any) {
+      const target = event.target
+      const isCheckbox = !target || target.classList.contains('v-checkbox__checkbox')
+      if (isCheckbox) return
       const timestamp = Date.now()
       this.timestamp = timestamp
       setTimeout(() => { // 排除双击操作
@@ -152,6 +155,16 @@ export default class FileList extends Vue {
 <style lang="scss" module>
 .table {
     // font-size: 12px;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 32px;
+  margin: -4px 4px -4px 0;
 }
 
 .menu {

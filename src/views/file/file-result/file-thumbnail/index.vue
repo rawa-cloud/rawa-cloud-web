@@ -2,12 +2,27 @@
     <div>
         <ul :class="[$style.list]">
             <li :class="[$style.item, activeCls(row)]" v-for="(row, i) in dataSource" :key="i" @click="onPreview(row)">
-                <div class="text-center">
+              <!-- <div class="text-center">
+                  <img :src="imageUrl(row)" :class="[$style.thumbnail]" v-if="imageUrl(row)">
+                  <file-icon v-bind="iconProps(row)" class="ft-64" v-else></file-icon>
+              </div>
+              <div class="text-truncate text-center px-3">{{row.name}}</div>
+              <div :class="[$style.checkbox]" @click.stop="onCheck(row)"><v-icon type="check-circle"></v-icon></div> -->
+              <v-dropdown trigger="contextMenu" :class="[$style.dropdown]">
+                <div :class="[$style.box]" @contextmenu="onRowMenu(row)">
+                  <div :class="[$style.icon]">
                     <img :src="imageUrl(row)" :class="[$style.thumbnail]" v-if="imageUrl(row)">
                     <file-icon v-bind="iconProps(row)" class="ft-64" v-else></file-icon>
+                  </div>
+                  <div class="text-truncate text-center px-3" :title="row.name">{{row.name}}</div>
+                  <div :class="[$style.checkbox]" @click.stop="onCheck(row)"><v-icon type="check-circle"></v-icon></div>
                 </div>
-                <div class="text-truncate text-center px-3">{{row.name}}</div>
-                <div :class="[$style.checkbox]" @click.stop="onCheck(row)"><v-icon type="check-circle"></v-icon></div>
+                <v-dropdown-menu slot="dropdown">
+                  <v-dropdown-item @click.native="row.action()" v-for="(row, i) in menus" :key="i" :class="[$style.menu]">
+                    <span> {{row.title}} </span>
+                  </v-dropdown-item>
+                </v-dropdown-menu>
+              </v-dropdown>
             </li>
         </ul>
     </div>
@@ -29,6 +44,12 @@ export default class FileThumbnail extends Vue {
     @Emit('update:checked-rows') updateCheckedRows (files: any) {}
 
     @Inject() onPreview!: (row: any) => void
+
+    @Inject() filterActions!: (row?: any) => any[]
+
+    get menus () {
+      return this.filterActions()
+    }
 
     iconProps (row: any) {
       let dir = row.dir
@@ -57,16 +78,25 @@ export default class FileThumbnail extends Vue {
       }
       this.updateCheckedRows(copy)
     }
+
+    onRowMenu (row: any) {
+      if (this.checkedRows.some(v => v === row)) return
+      this.updateCheckedRows([row])
+    }
 }
 </script>
 
 <style lang="scss" module>
 .list{
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  width: 0;
+  min-width: 100%;
+  flex-wrap: wrap;
+  max-height: calc(100vh - 64px - 40px - 36px - 8px);
+  overflow: auto;
 }
 
 .item {
@@ -75,35 +105,57 @@ export default class FileThumbnail extends Vue {
     margin: 4px 0 0 6px;
     border-radius: 4px;
     position: relative;
-
+    border: 1px solid transparent;
     &:hover {
-        background-color: var(--primary-lighten-5);
-        transition: background-color .35s ease;
-        &>.checkbox {
-            visibility: visible;
-        }
+      background-color: var(--primary-lighten-5);
+      transition: background-color .35s ease;
+      & .checkbox {
+        visibility: visible;
+      }
     }
     &.active {
         background-color: var(--primary-lighten-5);
-        border: 1px solid var(--primary-base);
-        &>.checkbox {
-            visibility: visible;
-            color: var(--primary-base);
+        border-color: var(--primary-base);
+        & .checkbox {
+          visibility: visible;
+          color: var(--primary-base);
         }
     }
+}
+
+.dropdown {
+  :global {
+    .v-dropdown__popper {
+      display: block;
+    }
+  }
+}
+
+.box {
+  width: 100%;
+}
+
+.icon {
+  text-align: center;
+  height: 96px;
 }
 
 .checkbox {
     position: absolute;
     left: 4px;
     top: 4px;
-    color: var(--primary-lighten-4);
+    color: var(--primary-lighten-3);
     visibility: hidden;
 
     &:hover {
-        color: var(--primary-lighten-3);
-        cursor: pointer;
+      color: var(--primary-lighten-2);
+      cursor: pointer;
     }
+}
+
+.menu {
+  width: 120px;
+  padding-left: 32px;
 }
 
 .thumbnail {

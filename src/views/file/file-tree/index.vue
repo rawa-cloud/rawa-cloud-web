@@ -1,11 +1,11 @@
 <template>
     <div :class="[$style.container]">
         <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" ref="tree" :class="[$style.tree]" class="primary-tree">
-            <span slot="content"  slot-scope="{node}" @click="onSelect(node)">
+            <div slot="content"  slot-scope="{node}" @click="onSelect(node)">
                 <file-icon v-bind="iconProps(node)"></file-icon>
                 <span class="ml-2">{{node.data.name}}</span>
                 <span class="ml-2 text-secondary" v-if="node.data.admin && !node.data.userId && !$auth.hasRole('SUPER')"><v-icon type="pushpin"></v-icon></span>
-            </span>
+            </div>
         </v-tree>
     </div>
 </template>
@@ -141,6 +141,7 @@ export default class FileTree extends Vue {
 .container {
   background-color: #fff;
   padding: 0 12px 16px 12px;
+  box-shadow: 2px 0 4px var(--bg-color-1);
 }
 
 .tree {
