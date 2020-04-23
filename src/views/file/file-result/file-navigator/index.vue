@@ -1,11 +1,11 @@
 <template>
-    <div :class="[$style.container]">
-        <v-breadcrumb>
-            <span v-show="ellipsis"><v-icon type="ellipsis"></v-icon></span>
-            <v-breadcrumb-item :to="to(item, i)" v-for="(item, i) in dataSource" :key="item.id">{{item.name}}</v-breadcrumb-item>
-            <span slot="separator"><v-icon type="right"></v-icon></span>
-        </v-breadcrumb>
-    </div>
+  <div :class="[$style.container]">
+    <v-breadcrumb>
+        <span v-if="ellipsis"><v-icon type="ellipsis"></v-icon></span>
+        <v-breadcrumb-item :to="to(item, i)" v-for="(item, i) in dataSource" :key="item.id">{{item.name}}</v-breadcrumb-item>
+        <span slot="separator"><v-icon type="right"></v-icon></span>
+    </v-breadcrumb>
+  </div>
 </template>
 
 <script lang="ts">
@@ -19,7 +19,7 @@ export default class FileNavigator extends Vue {
 
     dataSource: any[] = []
 
-    max: number = 4
+    max: number = 7
 
     get renderDataSource () {
       let len = this.dataSource.length

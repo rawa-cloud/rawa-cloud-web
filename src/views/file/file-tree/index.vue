@@ -1,5 +1,5 @@
 <template>
-    <div :class="[$style.container]" class="border-right mt-2">
+    <div :class="[$style.container]">
         <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" ref="tree" :class="[$style.tree]" class="primary-tree">
             <span slot="content"  slot-scope="{node}" @click="onSelect(node)">
                 <file-icon v-bind="iconProps(node)"></file-icon>
@@ -139,19 +139,18 @@ export default class FileTree extends Vue {
 
 <style lang="scss" module>
 .container {
-    height: calc(100vh - 120px);
-    overflow: auto;
-}
-
-.toolbar {
-    background-color: var(--primary-lighten-4);
-    line-height: 2rem;
-    height: 2rem;
+  background-color: #fff;
+  padding: 0 12px 16px 12px;
 }
 
 .tree {
-    width: 100%;
-    height: calc(100vh - 64px);
-    overflow: auto;
+  width: 100%;
+
+  :global {
+    .v-tree-node__text {
+      height: 32px;
+      line-height: 32px;
+    }
+  }
 }
 </style>

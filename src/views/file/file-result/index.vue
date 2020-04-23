@@ -1,37 +1,26 @@
 <template>
-    <div>
-        <div :class="[$style.toolbar]" class="m-2">
+    <div :class="[$style.container]">
+        <div :class="[$style.toolbar]">
             <span class="d-flex">
-                <!-- <v-dropdown class="d-inline-block" trigger="hover">
-                  <v-button color="primary" class="mr-2" icon="upload" @click="onUpload(true, false)">上传</v-button>
-                  <v-dropdown-menu slot="dropdown">
-                    <v-dropdown-item @click.native="onUpload(true, false)">上传文件</v-dropdown-item>
-                    <v-dropdown-item @click.native="onUpload(true, true)">上传文件夹</v-dropdown-item>
-                  </v-dropdown-menu>
-                </v-dropdown> -->
                 <v-dropdown trigger="click" class="d-inline-block mr-2">
-                  <v-button-group>
-                      <v-button color="primary" :size="size"  @click="onUpload(true, false)" :disabled="!canUpload"> 上 传 </v-button>
-                      <v-button color="primary" :size="size"  x-reference slim :disabled="!canUpload"><i class="anticon anticon-down"></i></v-button>
-                  </v-button-group>
+                  <v-button type="primary" :size="size" :disabled="!canUpload" icon="upload"> 上 传 </v-button>
                   <v-dropdown-menu slot="dropdown">
                     <v-dropdown-item @click.native="onUpload(true, false)">上传文件</v-dropdown-item>
                     <v-dropdown-item @click.native="onUpload(true, true)">上传文件夹</v-dropdown-item>
                   </v-dropdown-menu>
                 </v-dropdown>
-                <v-button :size="size" color="primary" class="mr-2" @click="onNew" :disabled="!canMkDir">新建文件夹</v-button>
+                <v-button :size="size" color="primary" class="mr-2" icon="plus" @click="onNew" :disabled="!canMkDir">新建文件夹</v-button>
 
                 <v-button-group class="mr-2">
-                    <v-button :size="size" color="primary" @click="row.action()" v-for="(row, i) in renderedActions" :key="i">{{row.title}}</v-button>
-                    <!-- <v-button color="primary" @click="onRenew()">更新</v-button>
-                    <v-button color="primary" @click="onFileRecord()">版本</v-button>
-                    <v-button color="primary" @click="onShare()">分享</v-button>
-                    <v-button color="primary" @click="onDownload()">下载</v-button>
-                    <v-button color="primary" @click="onDelete()">删除</v-button>
-                    <v-button color="primary" @click="onRename()">重命名</v-button>
-                    <v-button color="primary" @click="onCopyTo()">复制到</v-button>
-                    <v-button color="primary" @click="onMoveTo()">移动到</v-button>
-                    <v-button color="primary" @click="onCollect()">收藏</v-button> -->
+                  <v-button :size="size" color="primary" @click="row.action()" v-for="(row, i) in renderedFirstActions" :key="i">{{row.title}}</v-button>
+                  <v-dropdown trigger="click" v-if="renderedSecondActions.length > 0">
+                    <v-button :size="size" color="primary" :class="[$style.more]" icon="ellipsis">更多</v-button>
+                    <v-dropdown-menu slot="dropdown">
+                      <v-dropdown-item @click.native="row.action()" v-for="(row, i) in renderedSecondActions" :key="i">
+                        <span class="mx-3">{{row.title}}</span>
+                      </v-dropdown-item>
+                    </v-dropdown-menu>
+                  </v-dropdown>
                 </v-button-group>
             </span>
 
@@ -42,19 +31,14 @@
                     <v-dropdown-item @click.native="onSort('dir')">文件类型</v-dropdown-item>
                   </v-dropdown-menu>
                 </v-dropdown>
-                <span v-if="view === 'list'" class="icon-btn" @click="onSelectView('thumbnail')"><v-icon type="appstore"></v-icon></span>
-                <span v-if="view === 'thumbnail'" class="icon-btn" @click="onSelectView('list')"><v-icon type="bars"></v-icon></span>
+                <span v-if="view === 'list'" class="icon-btn" @click="onSelectView('thumbnail')"><svg-icon icon="flat"></svg-icon></span>
+                <span v-if="view === 'thumbnail'" class="icon-btn" @click="onSelectView('list')"><svg-icon icon="list"></svg-icon></span>
             </span>
         </div>
 
-        <div class="d-flex justify-content-between align-content-center m-2">
+        <div :class="[$style.navbar]">
             <file-navigator :id="parentId"></file-navigator>
-            <v-alert type="info" style="flex: 0 0 auto;" class="ml-5 w-15 alert-selection">
-                <template slot="description">
-                    已选择 <span>{{checkedRows.length}}</span> 项
-                    <a class="ml-2" @click="onClearSelection">清空选择</a>
-                </template>
-            </v-alert>
+            <span> 已选择 <span>{{checkedRows.length}}</span> 项 <a class="ml-2" @click="onClearSelection">清空选择</a></span>
         </div>
 
         <div>
@@ -111,7 +95,7 @@ import { getType } from '@/common/content-type'
 export default class FileResult extends Vue {
     @Prop(Number) parentId!: number
 
-    size: string = 'sm'
+    size: string = 'md'
 
     view: 'list' | 'thumbnail' = 'list'
 
@@ -152,6 +136,14 @@ export default class FileResult extends Vue {
 
     get renderedActions () {
       return this.filterActions()
+    }
+
+    get renderedFirstActions () {
+      return this.renderedActions.slice(0, 5)
+    }
+
+    get renderedSecondActions () {
+      return this.renderedActions.slice(5)
     }
 
     get canUpload () {
@@ -449,9 +441,26 @@ export default class FileResult extends Vue {
 </script>
 
 <style lang="scss" module>
+.container {
+  padding: 0 12px;
+}
+
 .toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+  font-size: 12px;
+}
+
+.more {
+  margin-left: -1px;
+  border-radius: 0 4px 4px 0;
 }
 </style>

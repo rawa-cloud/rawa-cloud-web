@@ -37,14 +37,19 @@ export default class Dept extends Vue {
 <style lang="scss" module>
 .container{
   display: flex;
+  height: 100%;
+  background-color: #fff;
 }
 
 .tree {
-    width: 240px;
-    overflow: auto;
+  width: 240px;
+  height: 100%;
+  overflow: auto;
 }
 
 .result {
-    width: calc(100% - 240px);
+  flex: 1 1 auto;
+  height: 100%;
+  overflow: auto;
 }
 </style>

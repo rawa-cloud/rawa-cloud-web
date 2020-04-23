@@ -1,12 +1,12 @@
 .icon-btn {
     cursor: pointer;
-    color: var(--primary-base);
+    color: var(--text-color-secondary);
     transition: color .35s linear;
     &:hover {
-        color: var(--text-color-secondary);
+      color: var(--text-color--base);
     }
     &:active {
-        color:  var(--primary-base);
+      color: var(--text-color--base);
     }
     &[disabled] {
         color: var(--disabled-color);
