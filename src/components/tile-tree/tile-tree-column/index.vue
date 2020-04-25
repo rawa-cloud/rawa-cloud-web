@@ -107,7 +107,7 @@ export default class TileTreeColumn extends Vue {
   border-radius: 4px;
   border: 1px solid var(--border-color-base);
   margin: 0 10px;
-  height: calc(100vh - 160px);
+  height: 100%;
   overflow: auto;
 }
 

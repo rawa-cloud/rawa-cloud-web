@@ -1,8 +1,8 @@
 <template>
-<div>
+<div class="mx-3">
   <div>
         <div>
-            <v-form layout="horizontal" class="mx-3 mt-3" :model="form" ref="form">
+            <v-form layout="horizontal" :model="form" ref="form">
                 <v-form-item prop="module" label="模块">
                     <v-select v-model="form.module" clearable class="w-10">
                       <dict-option name="logModule"></dict-option>
@@ -25,7 +25,7 @@
         </div>
 
         <div>
-          <config-table row-key="id" :api="api" simple height="calc(100vh - 280px)" ref="configTable">
+          <config-table row-key="id" :class="[$style.table]" :api="api" simple height="calc(100vh - 64px - 8px - 62px - 70px)" ref="configTable">
             <v-table-column prop="module" label="操作模块"><template slot-scope="{row}">{{row.module | transcode('logModule')}}</template></v-table-column>
             <v-table-column prop="type" label="操作类型"><template slot-scope="{row}">{{row.type | transcode('logType')}}</template></v-table-column>
             <v-table-column prop="operateBy" label="操作人"></v-table-column>
@@ -120,5 +120,11 @@ export default class Log extends Vue {
 </script>
 
 <style lang="scss" module>
-
+.table {
+  :global {
+    .v-table__table>tbody>tr>td {
+      padding: 12px;
+    }
+  }
+}
 </style>

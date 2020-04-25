@@ -52,5 +52,6 @@ export default class TileTree extends Vue {
 <style lang="scss" module>
 .container {
   display: flex;
+  height: 100%;
 }
 </style>

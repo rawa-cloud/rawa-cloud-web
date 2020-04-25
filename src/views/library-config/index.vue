@@ -1,5 +1,5 @@
 <template>
-<div>
+<div :class="[$style.container]">
   <tile-tree :data="data" row-key="key">
     <tile-tree-column title="表单名称" :level="1" v-on="handler">
       <template slot="action" slot-scope="{node}">
@@ -114,5 +114,9 @@ export default class LibraryConfig extends Vue {
 <style lang="scss" module>
 .body {
   display: flex;
+}
+
+.container {
+  height: calc(100vh - 64px - 8px - 20px);
 }
 </style>

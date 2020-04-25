@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="mx-3">
         <div>
-            <v-form layout="horizontal" class="mx-3 mt-3" :model="form" ref="form">
+            <v-form layout="horizontal" :model="form" ref="form">
                 <v-form-item prop="username" label="用户名">
                     <v-input v-model.trim="form.username" clearable class="w-10"></v-input>
                 </v-form-item>
@@ -30,15 +30,13 @@
                 <v-form-item >
                    <v-button type="primary" @click="onQuery">查询</v-button>
                    <v-button class="ml-3" @click="onReset">重置</v-button>
+                   <v-button class="ml-3" type="primary" color="info" @click="onAdd">新增用户</v-button>
                 </v-form-item>
             </v-form>
         </div>
 
-        <div style="position: relative;">
-          <div class="mb-2 text-right" style="position: absolute; top: -64px; right: 20px;">
-            <v-button type="primary" color="primary" @click="onAdd">新增用户</v-button>
-          </div>
-          <config-table row-key="id" :api="api" simple height="calc(100vh - 280px)" ref="configTable">
+        <div>
+          <config-table row-key="id" :api="api" :class="[$style.table]" simple height="calc(100vh - 64px - 8px - 62px - 70px)" ref="configTable">
             <v-table-column prop="username" label="用户名"></v-table-column>
             <v-table-column prop="cname" label="姓名"></v-table-column>
             <v-table-column prop="deptName" label="所属部门"></v-table-column>
@@ -166,3 +164,13 @@ export default class User extends Vue {
     }
 }
 </script>
+
+<style lang="scss" module>
+.table {
+  :global {
+    .v-table__table>tbody>tr>td {
+      padding: 12px;
+    }
+  }
+}
+</style>
