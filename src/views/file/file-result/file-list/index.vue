@@ -103,7 +103,11 @@ export default class FileList extends Vue {
 
     onRowClick (row: any, event: any) {
       const target = event.target
-      const isCheckbox = !target || target.classList.contains('v-checkbox__checkbox')
+      console.log(target)
+      const isCheckbox = !target ||
+       target.classList.contains('v-checkbox__checkbox') ||
+       target.classList.contains('v-checkbox__dot') ||
+       target.classList.contains('v-checkbox')
       if (isCheckbox) return
       const timestamp = Date.now()
       this.timestamp = timestamp

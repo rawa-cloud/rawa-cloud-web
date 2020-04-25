@@ -1,17 +1,15 @@
 <template>
     <div>
-        <div class="d-flex justify-content-between align-content-center m-2" v-if="!simple">
-            <div style="flex: 1 1 auto;">
-              <v-alert type="info" v-if="checkable" class="alert-selection">
-                <template slot="description">
-                      已选择 <span>{{checkedRows.length}}</span> 项
-                      <a class="ml-2" @click="onClearSelection">清空选择</a>
-                  </template>
-              </v-alert>
-            </div>
-            <div class="ml-3">
+        <div class="d-flex justify-content-between align-content-center my-1 ft-sm text-secondary" v-if="!simple">
+            <div>
                 <slot name="extra" :rows="checkedRows"></slot>
-                <v-button color="primary" icon="filter" @click="onFilter" v-if="storageKey">筛选列</v-button>
+                <v-button color="primary" icon="filter" size="sm" @click="onFilter" v-if="storageKey">筛选列</v-button>
+            </div>
+            <div>
+              <span>
+                已选择 <span>{{checkedRows.length}}</span> 项
+                      <a class="ml-2" @click="onClearSelection">清空选择</a>
+              </span>
             </div>
         </div>
 

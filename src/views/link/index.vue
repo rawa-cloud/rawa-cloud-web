@@ -1,17 +1,17 @@
 <template>
-    <div>
-        <config-table row-key="id" :api="api" height="calc(100vh - 270px)" ref="configTable">
+    <div class="mx-3">
+        <config-table row-key="id" :api="api" height="calc(100vh - 64px - 8px - 32px - 70px)" ref="configTable" size="sm">
           <template slot="extra" slot-scope="{rows}">
-            <v-button color="primary" :disabled="rows.length < 1" @click="onCancel(rows)">
+            <v-button type="text" size="sm" class="link-btn" :disabled="rows.length < 1" @click="onCancel(rows)">
               <v-icon type="delete"></v-icon>
               取消分享
             </v-button>
           </template>
           <v-table-column prop="name" label="分享文件">
-            <template slot-scope="{row}">
-              <file-icon v-bind="iconProps(row)"></file-icon>
+            <div slot-scope="{row}" :class="[$style.label]">
+              <file-icon v-bind="iconProps(row)" :class="[$style.icon]"></file-icon>
               <span class="ml-2 text-link">{{row.fileName}}</span>
-            </template>
+            </div>
           </v-table-column>
           <v-table-column prop="code" label="链接">
             <template slot-scope="{row}">
@@ -27,7 +27,7 @@
           <v-table-column prop="expiryTime" label="失效时间"></v-table-column>
           <v-table-column prop="opt" label="操作" fixed="right" width="80px">
               <template slot-scope="{row}">
-                  <span class="icon-btn" @click="onCancel(row.id)"><v-icon type="delete"></v-icon></span>
+                  <span class="icon-btn" @click="onCancel(row.id)" title="删除"><v-icon type="delete"></v-icon></span>
               </template>
           </v-table-column>
         </config-table>
@@ -111,5 +111,15 @@ export default class Link extends Vue {
 
 <style lang="scss" module>
 .header {
+}
+
+.icon {
+  font-size: 30px;
+  margin: -4px 4px -4px 0;
+}
+
+.label {
+  display: flex;
+  align-items: center;
 }
 </style>
