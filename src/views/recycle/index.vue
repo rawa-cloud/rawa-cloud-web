@@ -1,19 +1,16 @@
 <template>
-    <div>
-        <!-- <div :class="[$style.header]" class="text-right m-2">
-        </div> -->
-
-        <config-table row-key="id" :api="api" height="calc(100vh - 300px)" ref="configTable">
+    <div class="mx-3">
+        <config-table row-key="id" :api="api" size="sm" height="calc(100vh - 64px - 8px - 32px - 70px)" ref="configTable">
           <template slot="extra" slot-scope="{rows}">
-            <v-button color="primary" icon="delete" :disabled="rows.length < 1" @click="onDelete(rows)">删除</v-button>
-            <v-button color="primary" :disabled="rows.length < 1" class="ml-2" icon="recover" @click="onRecover(rows)">恢复</v-button>
-            <v-button type="primary" class="m-2" icon="delete" @click="onClear">清空回收站</v-button>
+            <v-button type="text" size="sm" class="link-btn" icon="delete" :disabled="rows.length < 1" @click="onDelete(rows)">删除</v-button>
+            <v-button type="text" size="sm" class="link-btn ml-3" :disabled="rows.length < 1" icon="retweet" @click="onRecover(rows)">恢复</v-button>
+            <v-button type="text" size="sm" class="link-btn ml-3" icon="delete" @click="onClear">清空回收站</v-button>
           </template>
           <v-table-column prop="name" label="文件名">
-              <template slot-scope="{row}">
-                  <file-icon v-bind="iconProps(row)"></file-icon>
+              <div slot-scope="{row}" :class="[$style.label]">
+                  <file-icon v-bind="iconProps(row)" :class="[$style.icon]"></file-icon>
                   <span class="ml-2">{{row.name}}</span>
-              </template>
+              </div>
             </v-table-column>
             <v-table-column prop="path" label="路径"></v-table-column>
             <v-table-column prop="size" label="大小">
@@ -104,5 +101,15 @@ export default class Recycle extends Vue {
 
 <style lang="scss" module>
 .header {
+}
+
+.icon {
+  font-size: 30px;
+  margin: -4px 4px -4px 0;
+}
+
+.label {
+  display: flex;
+  align-items: center;
 }
 </style>

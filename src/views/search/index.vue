@@ -1,7 +1,7 @@
 <template>
-    <div>
+    <div class="mx-3">
         <div>
-            <v-form layout="horizontal" class="mx-3 mt-3" :model="form" ref="form">
+            <v-form layout="horizontal" :model="form" ref="form">
                 <v-form-item prop="name" label="名称">
                     <v-input v-model.trim="form.name" clearable class="w-10"></v-input>
                 </v-form-item>
@@ -23,12 +23,12 @@
         </div>
 
         <div>
-            <v-table pageable :data-source="dataSource" height="calc(100vh - 330px)">
+            <v-table pageable :data-source="dataSource" size="sm" height="calc(100vh - 64px - 8px - 62px - 70px)">
               <v-table-column prop="name" label="文件名" width="480px">
-                  <template slot-scope="{row}">
-                    <file-icon v-bind="iconProps(row)"></file-icon>
+                  <div slot-scope="{row}" :class="[$style.label]">
+                    <file-icon v-bind="iconProps(row)" :class="[$style.icon]"></file-icon>
                     <span class="ml-2 text-link">{{row.name}}</span>
-                  </template>
+                  </div>
               </v-table-column>
               <v-table-column prop="size" label="大小">
                 <template slot-scope="{row}">
@@ -37,9 +37,9 @@
                 </template>
               </v-table-column>
               <v-table-column prop="creationTime" label="创建日期"></v-table-column>
-              <v-table-column prop="creationBy" label="日创建人期"></v-table-column>
-              <v-table-column prop="filePath" label="原文件路径">
-                <template slot-scope="{row}"><a @click="onForward(row.id, row.parentId)">{{row.filePath}}</a></template>
+              <v-table-column prop="creationBy" label="创建人"></v-table-column>
+              <v-table-column prop="filePath" label="原文件路径" overflow="ellipsis" width="240px">
+                <template slot-scope="{row}"><a @click="onForward(row.id, row.parentId)" :title="row.filePath">{{row.filePath}}</a></template>
               </v-table-column>
             </v-table>
         </div>
@@ -124,3 +124,14 @@ export default class Search extends Vue {
     }
 }
 </script>
+<style lang="scss" module>
+.label {
+  display: flex;
+  align-items: center;
+}
+
+.icon {
+  font-size: 28px;
+  margin: -4px 4px -4px 0;
+}
+</style>
