@@ -1,5 +1,5 @@
 <template>
-<v-form layout="horizontal" class="mx-3 mt-3" :model="form" ref="form">
+<v-form layout="horizontal" :model="form" ref="form">
    <v-row :gutter="16" style="width: 100%;">
       <v-col :span="8" v-for="row in renderedFields" :key="row.i">
         <form-control :form="form" :prop="row.id + ''" :label="row.name" :type="resolveType(row)" :options="resolveOptions(row)"></form-control>
@@ -8,10 +8,10 @@
         <v-form-item >
           <v-button type="primary" @click="onQuery">查询</v-button>
           <v-button class="ml-3" @click="onReset">重置</v-button>
-          <v-button type="text" @click="collapse = !collapse">
-            <v-icon type="down" v-if="collapse"></v-icon>
-            <v-icon type="up" v-else></v-icon>
-          </v-button>
+          <a @click="collapse = !collapse" class="ml-3">
+            <span v-if="collapse">展开<v-icon type="down"></v-icon></span>
+            <span  v-else>收起<v-icon type="up"></v-icon></span>
+          </a>
         </v-form-item>
       </v-col>
     </v-row>
@@ -39,11 +39,21 @@ const typeMap: any = {
 export default class DynamicForm extends Vue {
   @Prop(Array) fields!: any
 
+  @Prop(Boolean) single!: boolean
+
   @Emit() query (params: any) {}
+
+  @Emit('update:single') updateSingle (single: boolean) {}
 
   form: any = {}
 
-  collapse = true
+  set collapse (val: boolean) {
+    this.updateSingle(val)
+  }
+
+  get collapse () {
+    return this.single
+  }
 
   get renderedFields () {
     return this.collapse ? (this.fields || []).slice(0, 5) : this.fields

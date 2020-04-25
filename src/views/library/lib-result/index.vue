@@ -1,15 +1,15 @@
 <template>
-<div :class="[$style.container]">
+<div :class="[$style.container]" class="mx-3">
   <div v-if="catalogId">
         <div>
-          <dynamic-form :fields="current && current.fieldDefs" @query="onQuery"></dynamic-form>
+          <dynamic-form :fields="current && current.fieldDefs" @query="onQuery" :single.sync="single"></dynamic-form>
         </div>
 
         <div :class="[$style.content]">
-          <config-table :checkable="false" row-key="id" :storage-key="storageKey" :api="api" :columns="columns" height="calc(100vh - 360px)" ref="configTable">
+          <config-table :checkable="false" row-key="id" :storage-key="storageKey" :api="api" :columns="columns" ref="configTable">
             <v-table-column prop="filePath" label="文件路径" :order="2">
               <template slot-scope="{row}">
-                <a @click="onForwardFile(row)" :title="row.file.filePath" v-if="row.file">{{row.file.filePath | ellipsis(10, true)}}</a>
+                <a @click="onForwardFile(row)" :title="row.file.filePath" v-if="row.file">{{row.file.filePath | ellipsis(30, true)}}</a>
                 <template v-if="row.file">
                   <v-button size="sm" class="ml-2" @click="onPreview(row)" :disabled="row.file.dir">预览</v-button>
                   <v-button size="sm" class="ml-2" @click="onDownload(row)">下载</v-button>
@@ -27,7 +27,7 @@
                 </template>
             </v-table-column>
             <template slot="extra">
-              <v-button type="primary" @click="onAdd" class="mr-2">新 增</v-button>
+              <v-button type="text" size="sm" class="link-btn" icon="plus" @click="onAdd">新增</v-button>
             </template>
           </config-table>
         </div>
@@ -63,6 +63,8 @@ export default class LibResult extends Vue {
       name: ''
     }
 
+    single = true
+
     loading: boolean = false
 
     dataSource: any[] = []
@@ -70,6 +72,13 @@ export default class LibResult extends Vue {
     @Inject() getCurrent!: () => any
 
     @Inject() setCurrent!: (row: any) => void
+
+    get height () {
+      let total = ((this.current && this.current.fieldDefs) || []).length + 1
+      if (this.single) total = Math.min(total, 6)
+      const num = Math.ceil(total / 3)
+      return `calc(100vh - 64px - 8px - ${num * 63}px - 32px - 70px)`
+    }
 
     get current () {
       return this.getCurrent()
@@ -229,7 +238,6 @@ export default class LibResult extends Vue {
 
 <style lang="scss" module>
 .container {
-  padding: 0;
 }
 
 .content {

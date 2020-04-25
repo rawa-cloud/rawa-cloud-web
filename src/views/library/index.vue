@@ -40,14 +40,10 @@ export default class Library extends Vue {
 
 <style lang="scss" module>
 .container {
-  display: flex;
-  height: calc(100vh - 150px);
+
 }
 
 .content {
-  width: 100%;
-  height: 100%;
-  overflow: auto;
 }
 
 </style>

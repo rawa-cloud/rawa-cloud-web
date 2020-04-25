@@ -3,7 +3,7 @@
         <div class="d-flex justify-content-between align-content-center my-1 ft-sm text-secondary" v-if="!simple">
             <div>
                 <slot name="extra" :rows="checkedRows"></slot>
-                <v-button color="primary" icon="filter" size="sm" @click="onFilter" v-if="storageKey">筛选列</v-button>
+                <v-button type="text" size="sm" class="link-btn ml-3" icon="filter" @click="onFilter" v-if="storageKey">筛选列</v-button>
             </div>
             <div>
               <span>
