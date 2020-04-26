@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="mx-3">
   <section-header>系统授权</section-header>
 
   <div class="my-3 mx-4">

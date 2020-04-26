@@ -1,5 +1,5 @@
 <template>
-<div class="m-3">
+<div class="mx-3">
   <div class="mb-2">
     <v-button type="primary" @click="onAdd">新增导入计划</v-button>
   </div>

@@ -51,6 +51,9 @@ export default class AppSider extends Vue {
     .v-menu-item {
       color: var(--text-color-secondary) !important;
     }
+    .v-sub-menu__title {
+      color: var(--text-color-secondary) !important;
+    }
   }
 }
 

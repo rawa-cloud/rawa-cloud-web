@@ -96,7 +96,8 @@ export default class EditUser extends Vue {
       { validator: 'required', message: '用户名必填', trigger: 'blur' }
     ],
     password: [
-      { validator: 'required', message: '密码必填', trigger: 'blur' }
+      { validator: 'required', message: '密码必填', trigger: 'blur' },
+      { validator: 'length', min: 6, message: '密码长度不小于6位', trigger: 'blur' }
     ],
     cname: [
       { validator: 'required', message: '中文名必填', trigger: 'blur' }
