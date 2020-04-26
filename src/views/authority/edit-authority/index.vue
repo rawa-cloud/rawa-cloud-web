@@ -1,15 +1,21 @@
 <template>
 <div :class="[$style.container]">
-  <div class="my-2" v-if="visible">
+  <div v-if="visible">
       <div>
-        <div v-if="authority && authority.implicit" class="my-2">
-          <div>
-            <span><span>文件(夹) : </span> <span>{{file && file.name}}</span></span>
-            <span v-if="dept" class="ml-2"><span>部门 : </span> <span>{{dept && dept.name}}</span></span>
-            <span v-if="user" class="ml-2"><span>用户 : </span> <span>{{user && user.username}}</span></span>
+        <div class="mb-3" v-if="authority">
+          <div class="d-flex text-secondary">
+            <span style="flex: 1 1 auto; width: 50%;" class="text-truncate" :title="file && file.name"><span>文件(夹) : </span> <span class="text-primary">{{file && file.name}}</span></span>
+            <span style="flex: 1 1 auto; width: 50%;" class="text-truncate">
+              <span v-if="dept" class="ml-2" :title="dept && dept.name"><span>部门 : </span> <span class="text-info">{{dept && dept.name}}</span></span>
+              <span v-if="user" class="ml-2" :title="user && user.username"><span>用户 : </span> <span class="text-info">{{user && user.username}}</span></span>
+            </span>
           </div>
-          <div>
-            继承于 <span>部门/用户</span> <span class="text-info"> {{authority.principleName}} </span>, <span>文件(夹) </span> <span class="text-info"> {{authority.fileName}} </span> <a @click="onUp(authority)"> &gt;&gt; 前往</a>
+          <div class="text-secondary mt-2" v-if="authority.implicit">
+            <span class="text-error">继承于 </span>
+            <span>文件(夹) </span><span class="text-primary"> {{authority.fileName}} </span>
+            ,
+            <span>部门/用户</span> <span class="text-info"> {{authority.principleName}} </span>
+            <a @click="onUp(authority)" class="text-primary ml-2"> &gt;&gt; 前往</a>
           </div>
         </div>
         <v-checkbox v-model="allChecked" :disabled="!editable">全部</v-checkbox>
@@ -34,7 +40,7 @@
         <div class="d-flex align-items-center">
           <span class="mr-2">有效天数: </span>
           <v-input-number size="sm" v-model="form.validDays" maxlength="4" :max="9999" :min="1" :precision="0" class="w-8" v-if="editable"></v-input-number>
-          <span class="caption" v-else>{{originForm.validDays || '永久有效'}}</span>
+          <span class="text-secondary" v-else>{{originForm.validDays || '永久有效'}}</span>
         </div>
       </div>
   </div>
@@ -193,7 +199,7 @@ export default class EditAuthority extends Vue {
 
 <style lang="scss" module>
 .container {
-  position: relative;
+  overflow: hidden;
 }
 
 .action {

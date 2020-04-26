@@ -68,7 +68,6 @@ export default class DeptTree extends Vue {
 
 <style lang="scss" module>
 .container {
-    min-height: calc(100vh - 160px);
 }
 
 .toolbar {

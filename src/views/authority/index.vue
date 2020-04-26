@@ -1,9 +1,9 @@
 <template>
-    <div :class="$style.container">
+    <div :class="$style.container" class="mx-3">
       <div :class="[$style.header]">
       </div>
       <div :class="[$style.body]">
-        <v-row :gutter="24">
+        <v-row :gutter="16">
           <v-col :span="8">
             <div :class="[$style.title]">选择文件</div>
             <v-card :class="[$style.bodyCard]"><file-tree @select="onSelectFile"></file-tree></v-card>
@@ -32,7 +32,8 @@
         </v-row>
       </div>
       <div :class="[$style.footer]" class="mt-3">
-        <div class="mb-3">
+        <div :class="[$style.title]">
+          <span class="mr-4">查看权限列表</span>
           <template v-for="item in tags">
             <v-tag :key="item.name" v-if="item.visible" :class="[$style.tag]"
               :color="item.type" :type="item.checked ? 'depressed' : 'outline'"
@@ -160,7 +161,7 @@ export default class Authority extends Vue {
 
 <style lang="scss" module>
 .container{
-  padding: 20px;
+
 }
 
 .header{
@@ -183,8 +184,14 @@ export default class Authority extends Vue {
 }
 
 .bodyCard{
-  height: calc(100vh - 120px - 240px);
-  overflow: auto;
+  :global {
+    .v-card__body {
+      margin: 20px;
+      padding: 0;
+      height: calc(100vh - 64px - 8px - 40px - 80px);
+      overflow: auto;
+    }
+  }
 }
 
 .footer {

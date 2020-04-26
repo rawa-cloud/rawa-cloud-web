@@ -1,6 +1,6 @@
 <template>
-<div :class="[$style.container]">
-  <div :class="[$style.sider]">
+<div :class="[$style.container]" class="mx-3">
+  <div :class="[$style.sider]" class="pr-3">
     <div :class="[$style.header]"><span class="text-heading">收藏分类</span><a class="ml-3" @click="editting = true"><v-icon type="plus-circle-o"></v-icon></a></div>
     <div class="d-flex align-items-center mt-2" v-if="editting">
       <v-input v-model.trim="form.name" placeholder="请填写名称" size="sm" class="w-8"></v-input>
@@ -141,8 +141,8 @@ export default class Favorite extends Vue {
 
 .sider{
   width: 320px;
-  border-right: 1px solid var(--border-color-split);
-  height: calc(100vh - 160px);
+  height: calc(100vh - 64px - 8px);
+  box-shadow: 2px 0 4px var(--bg-color-1);
   overflow: auto;
 }
 
@@ -153,7 +153,9 @@ export default class Favorite extends Vue {
 }
 
 .content{
-  width: calc(100% - 320px);
+  height: calc(100vh - 64px - 8px);
+  overflow: auto;
+  flex: 1 1 auto;
 }
 
 .list {
