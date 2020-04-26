@@ -1,5 +1,5 @@
 <template>
-    <div class="p-3">
+    <div>
         <div v-if="dept">
           <div>
             <section-header>基本信息</section-header>
@@ -12,7 +12,7 @@
 
           <div class="mt-4">
             <section-header>用户列表</section-header>
-            <v-table pageable :data-source="dataSource">
+            <v-table pageable :pagination="pagination" @page-size-change="onPageSizeChange" :data-source="dataSource" ref="table">
                 <v-table-column prop="username" label="用户名"></v-table-column>
                 <v-table-column prop="cname" label="姓名"></v-table-column>
                 <v-table-column prop="deptName" label="所属部门"></v-table-column>
@@ -42,6 +42,15 @@ export default class DeptDetail extends Vue {
     dept: any = null
 
     dataSource: any[] = []
+
+    pagination = {
+      pageSize: 5
+    }
+
+    onPageSizeChange (pageSize: number) {
+      console.log('pageSize change to : ' + pageSize)
+      this.pagination.pageSize = pageSize
+    }
 
     loadDept () {
       if (!this.id) {

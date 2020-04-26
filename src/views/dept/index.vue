@@ -1,6 +1,6 @@
 <template>
-    <div :class="[$style.container]">
-        <dept-tree :id.sync="id" :class="[$style.tree]"></dept-tree>
+    <div :class="[$style.container]" class="mx-3">
+        <dept-tree :id.sync="id" :class="[$style.tree]" class="mr-3"></dept-tree>
         <dept-detail :id="id" :class="[$style.detail]"></dept-detail>
     </div>
 </template>
@@ -15,7 +15,7 @@ import DeptDetail from './dept-detail/index.vue'
   components: { DeptTree, DeptDetail }
 })
 export default class Dept extends Vue {
-    id: number | null = null
+  id: number | null = null
 }
 </script>
 
@@ -25,10 +25,15 @@ export default class Dept extends Vue {
 }
 
 .tree {
-    width: 320px;
+  width: 320px;
+  box-shadow: 2px 0 4px var(--bg-color-1);
+  height: calc(100vh - 64px - 8px);
+  overflow: auto;
 }
 
 .detail {
-    width: calc(100% - 320px);
+  height: calc(100vh - 64px - 8px);
+  overflow: auto;
+  flex: 1 1 auto;
 }
 </style>
