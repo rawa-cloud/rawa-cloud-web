@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-modal :visible.sync="actualVisible" width="40vw" :title="title">
+      <v-modal :visible.sync="actualVisible" width="40vw" :title="title" :maskClosable="false" :keyboard="false">
         <div :class="[$style.body]">
           <div :class="[$style.upload]">
             <v-upload :custom-request="customRequest" :before-upload="beforeUpload"
