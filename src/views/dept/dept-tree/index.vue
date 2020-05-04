@@ -9,9 +9,9 @@
             <div slot="content"  slot-scope="{node}" @click="onSelect(node)" :class="[$style.content]" class="d-flex justify-content-between">
                 <span class="mr-4">{{node.data.label}}</span>
                 <div @click.stop="" class="_flag_actions">
-                    <span class="icon-btn" @click="onAdd(node.data)"><v-icon type="plus"></v-icon></span>
-                    <span class="ml-2 icon-btn" @click="onEdit(node)" v-if="node.data.parentId"><v-icon type="edit"></v-icon></span>
-                    <span class="ml-2 icon-btn" @click="onDelete(node.data)" v-if="node.data.parentId"><v-icon type="delete"></v-icon></span>
+                    <span class="icon-btn" @click="onAdd(node.data)" title="新增部门"><v-icon type="plus"></v-icon></span>
+                    <span class="ml-2 icon-btn" @click="onEdit(node)" title="编辑部门" v-if="node.data.parentId"><v-icon type="edit"></v-icon></span>
+                    <span class="ml-2 icon-btn" @click="onDelete(node.data)" title="删除部门" v-if="node.data.parentId"><v-icon type="delete"></v-icon></span>
                 </div>
             </div>
         </v-tree>
@@ -132,6 +132,7 @@ export default class DeptTree extends Vue {
 }
 
 .tree {
+    width: 300px;
     :global {
         .v-tree-node__text:hover {
             ._flag_actions {
@@ -142,6 +143,7 @@ export default class DeptTree extends Vue {
             height: 32px;
             line-height: 32px;
             width: 100%;
+            padding-right: 12px;
 
             ._flag_actions {
                 visibility: hidden;

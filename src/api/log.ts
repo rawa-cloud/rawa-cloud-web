@@ -4,6 +4,7 @@ export interface LogQueryReq extends Pageable{
   module?: string
   type?: string
   operateBy?: string
+  operateTime: string[]
 }
 
 export interface LogQueryRes {

@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-modal :visible.sync="actualVisible" width="30vw" :title="title">
+      <v-modal :visible.sync="actualVisible" width="30vw" :title="title" :maskClosable="false" :keyboard="false">
         <v-form ref="form">
           <v-form-item label="父级部门" prop="parentId">
             <v-select clearable searchable v-model="form.parentId" :disabled="!isEdit">

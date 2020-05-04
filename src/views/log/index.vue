@@ -17,6 +17,9 @@
                 <v-form-item prop="operateBy" label="操作人">
                     <v-select clearable v-model="form.operateBy" searchable :search-fn="searchFn" class="w-10"></v-select>
                 </v-form-item>
+                <v-form-item prop="operateTime" label="操作时间">
+                    <v-range-picker v-model="form.operateTime" class="w-10"></v-range-picker>
+                </v-form-item>
                 <v-form-item >
                    <v-button type="primary" @click="onQuery">查询</v-button>
                    <v-button class="ml-3" @click="onReset">重置</v-button>
@@ -56,7 +59,8 @@ export default class Log extends Vue {
     form = {
       module: '',
       type: '',
-      operateBy: ''
+      operateBy: '',
+      operateTime: ['2020/05/03', '2020/05/04']
     }
 
     value: string = ''
