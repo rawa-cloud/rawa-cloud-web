@@ -34,3 +34,18 @@
     background-color: inherit;
   }
 }
+
+.primary-link-btn {
+  padding-left: 0;
+  padding-right: 0;
+  color: var(--primary-base);
+  &:disabled {
+    background-color: inherit;
+  }
+  &:hover {
+    color: var(--primary-lighten-1);
+  }
+  &:active, &:focus {
+    color: var(--primary-darken-1);
+  }
+}

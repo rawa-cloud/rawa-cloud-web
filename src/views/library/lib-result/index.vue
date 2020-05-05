@@ -27,7 +27,7 @@
                 </template>
             </v-table-column>
             <template slot="extra">
-              <v-button type="text" size="sm" class="link-btn" icon="plus" @click="onAdd">新增</v-button>
+              <v-button type="text" size="sm" class="primary-link-btn" icon="plus" @click="onAdd">新增</v-button>
             </template>
           </config-table>
         </div>

@@ -38,5 +38,10 @@ export default {
     not_started: '未开始',
     ongoing: '执行中',
     completed: '已完成'
+  },
+  role: {
+    'USER': '普通用户',
+    'ADMIN': '文件夹管理员',
+    'SUPER': '超级管理员'
   }
 }

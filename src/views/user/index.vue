@@ -40,6 +40,9 @@
             <v-table-column prop="username" label="用户名"></v-table-column>
             <v-table-column prop="cname" label="姓名"></v-table-column>
             <v-table-column prop="deptName" label="所属部门"></v-table-column>
+            <v-table-column prop="role" label="角色">
+              <template slot-scope="{row}">{{row.roles[0] | transcode('role')}}</template>
+            </v-table-column>
             <v-table-column prop="ip" label="ip"></v-table-column>
             <v-table-column prop="status" label="状态">
               <template slot-scope="{row}">{{row.status | transcode('status')}}</template>
