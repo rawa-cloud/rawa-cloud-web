@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-modal :visible.sync="actualVisible" width="480px" :title="title">
+      <v-modal :visible.sync="actualVisible" width="480px" :title="title" :maskClosable="false" :keyboard="false">
         <v-form ref="form" :rules="rules" :model="form" label-width="80px" label-position="left" class="ml-3" v-if="visible">
           <v-form-item label="用户名" prop="username" required>
             <v-input clearable v-model="form.username" maxlength="16" :disabled="isEdit"></v-input>
@@ -144,6 +144,7 @@ export default class EditUser extends Vue {
   }
 
   init (): Promise<any> {
+    const status = this.user && this.user.status
     const origin = {
       username: (this.user && this.user.username) || '',
       password: '',
@@ -151,7 +152,7 @@ export default class EditUser extends Vue {
       deptIds: (this.user && this.user.deptId) ? [this.user.deptId] : [],
       role: (this.user && this.user.roles && this.user.roles[0]) || 'USER',
       ip: (this.user && this.user.ip) || '',
-      status: (this.user && this.user.status)
+      status: (status === undefined || status === null) ? true : status
     }
     Object.assign(this.form, origin)
     this.visible = true

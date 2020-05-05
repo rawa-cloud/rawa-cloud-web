@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-modal :visible.sync="actualVisible" width="560px" title="新增导出计划">
+  <v-modal :visible.sync="actualVisible" width="560px" title="新增导入计划">
     <v-form ref="form" :model="form" :rules="rules" label-width="120px" label-position="left">
       <v-form-item label="Cron表达式" prop="cron" required>
         <v-input clearable v-model.trim="form.cron" maxlength="32"
