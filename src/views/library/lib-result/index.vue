@@ -16,13 +16,13 @@
                 </template>
               </template>
             </v-table-column>
-            <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="160px">
+            <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="180px">
                 <template slot-scope="{row}" v-if="hasAdmin(row)">
                     <!-- <span class="icon-btn" @click="onEdit(row)" title="编辑"><v-icon type="edit"></v-icon></span> -->
-                    <span class="icon-btn ml-2" @click="onEditFields(row)" title="编辑">编辑</span>
-                    <span class="icon-btn ml-2" @click="onInvite(row)" title="邀请成员" v-if="row.visibility === 'assign'">邀请成员</span>
+                    <a class="ml-2" @click="onEditFields(row)" title="编辑">编辑</a>
+                    <a class="ml-2" @click="onInvite(row)" title="邀请成员" v-if="row.visibility === 'assign'">邀请成员</a>
                     <!-- <span class="icon-btn ml-2" @click="onAddFile(row)" title="关联文件"><v-icon type="file-add"></v-icon></span> -->
-                    <span class="icon-btn ml-2" @click="onDelete(row.id)" title="删除">删除</span>
+                    <a class="ml-2" @click="onDelete(row.id)" title="删除">删除</a>
                     <!-- <span class="ml-3 icon-btn" @click="onRecover(row.id)"><svg-icon icon="recover"></svg-icon></span> -->
                 </template>
             </v-table-column>
