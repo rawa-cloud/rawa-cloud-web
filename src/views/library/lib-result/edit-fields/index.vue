@@ -1,12 +1,32 @@
 <template>
     <div>
       <v-modal :visible.sync="actualVisible" width="720px" :title="title">
-        <v-form ref="form" :class="[$style.form]" :rules="rules" :model="form" label-width="160px" label-position="left" class="ml-3" v-if="visible">
-          <v-form-item :label="row.name" :prop="row.fieldDefId + ''" v-for="(row, i) in fields" :key="i">
-            <!-- <v-input clearable v-model="form.name" maxlength="16"></v-input> -->
-            <form-control :form="form" :name="row.fieldDefId + ''" :type="row.type" :options="row.options || []"></form-control>
-          </v-form-item>
-        </v-form>
+        <div style="height: calc(80vh - 120px); overflow: auto;">
+          <section-header>权限设置</section-header>
+          <v-form ref="fm1" label-width="160px" label-position="left" class="ml-3" v-if="visible">
+            <v-form-item label="可见性">
+              <v-radio-group v-model="visibility">
+                <v-radio label="all">所有人</v-radio>
+                <v-radio label="assign">指定分配</v-radio>
+              </v-radio-group>
+            </v-form-item>
+          </v-form>
+
+          <section-header>关联文件</section-header>
+          <div class="py-2">
+            <v-button type="primary" size="sm" @click="onChooseFile">选择文件</v-button>
+            <span class="ml-3">{{(file && file.name) || (lib.file && lib.file.filePath) }}</span>
+            <file-chooser ref="fileChooser"></file-chooser>
+          </div>
+
+          <section-header>编辑字段</section-header>
+          <v-form ref="form" :class="[$style.form]" :rules="rules" :model="form" label-width="160px" label-position="left" class="ml-3" v-if="visible">
+            <v-form-item :label="row.name" :prop="row.fieldDefId + ''" v-for="(row, i) in fields" :key="i">
+              <!-- <v-input clearable v-model="form.name" maxlength="16"></v-input> -->
+              <form-control :form="form" :name="row.fieldDefId + ''" :type="row.type" :options="row.options || []"></form-control>
+            </v-form-item>
+          </v-form>
+        </div>
 
         <div slot="footer" class="text-right">
           <v-button @click="onCancel">取消</v-button>
@@ -19,8 +39,9 @@
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator'
-import { updateLibraryFields } from '@/api/library'
+import { updateLibraryFields, addLibraryFile, updateLibrary } from '@/api/library'
 import FormControl from './form-control/index.vue'
+import { getFile } from '../../../../api/file'
 
 @Component({
   components: { FormControl }
@@ -37,6 +58,10 @@ export default class EditFields extends Vue {
     // ]
   }
 
+  file: any = null
+
+  visibility: string = 'all'
+
   resolve: Function | null = null
 
   reject: Function | null = null
@@ -52,7 +77,7 @@ export default class EditFields extends Vue {
   }
 
   get title () {
-    return '编辑字段'
+    return '编辑'
   }
 
   get fields () {
@@ -70,6 +95,9 @@ export default class EditFields extends Vue {
       form[v.fieldDefId + ''] = getValue(v)
     })
     this.form = form
+    // this.file
+    this.visibility = (this.lib && this.lib.visibility) || 'all'
+    this.file = (this.lib && this.lib.fileId) ? { id: this.lib.fileId, path: this.lib.filePath } : null
     this.visible = true
     return new Promise((resolve, reject) => {
       this.resolve = resolve
@@ -85,6 +113,19 @@ export default class EditFields extends Vue {
     }
   }
 
+  onChooseFile () {
+    const $e = (this as any).$refs.fileChooser as any
+    $e.choose().then((fileId: number) => {
+      return getFile(fileId)
+      // addLibraryFile(row.id, fileId).then(() => {
+      //   this.$message.success('添加文件链接成功')
+      //   this.refresh()
+      // })
+    }).then((data: any) => {
+      this.file = data || null
+    })
+  }
+
   onCancel () {
     this.visible = false
     if (this.reject) this.reject()
@@ -97,15 +138,26 @@ export default class EditFields extends Vue {
     })
   }
 
-  request (): Promise<number | void> {
+  request (): Promise<any> {
     const $form = this.$refs.form as any
-    return $form.validate().then(({ valid }: any) => {
+    const all = []
+    const q1 = $form.validate().then(({ valid }: any) => {
       if (valid) {
         let req: any = this.generateReq()
         return updateLibraryFields(this.lib.id, req)
       }
       return Promise.reject(new Error('valid fail'))
     })
+    all.push(q1)
+    if (this.file && this.file.id !== (this.lib.file && this.lib.file.id)) {
+      const q2 = addLibraryFile(this.lib.id, this.file.id)
+      all.push(q2)
+    }
+    if (this.visibility !== this.lib.visibility) {
+      const q3 = updateLibrary(this.lib.id, { catalogId: this.lib.catalogId, visibility: this.visibility } as any)
+      all.push(q3)
+    }
+    return Promise.all(all)
   }
 
   generateReq () {
