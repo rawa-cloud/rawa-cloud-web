@@ -15,7 +15,7 @@
           <section-header>关联文件</section-header>
           <div class="py-2">
             <v-button type="primary" size="sm" @click="onChooseFile">选择文件</v-button>
-            <span class="ml-3">{{(file && file.name) || (lib.file && lib.file.filePath) }}</span>
+            <span class="ml-3">{{(file && file.name) || (lib && lib.file && lib.file.filePath) }}</span>
             <file-chooser ref="fileChooser"></file-chooser>
           </div>
 
@@ -97,7 +97,7 @@ export default class EditFields extends Vue {
     this.form = form
     // this.file
     this.visibility = (this.lib && this.lib.visibility) || 'all'
-    this.file = (this.lib && this.lib.fileId) ? { id: this.lib.fileId, path: this.lib.filePath } : null
+    this.file = null
     this.visible = true
     return new Promise((resolve, reject) => {
       this.resolve = resolve
