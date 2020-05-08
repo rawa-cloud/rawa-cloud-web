@@ -41,7 +41,7 @@
             <span> 已选择 <span>{{checkedRows.length}}</span> 项 <a class="ml-2" @click="onClearSelection">清空选择</a></span>
         </div>
 
-        <div>
+        <div v-loading="loading">
             <file-list :data-source="dataSource" :checked-rows.sync="checkedRows" v-if="view === 'list'"></file-list>
             <file-thumbnail :data-source="dataSource" :checked-rows.sync="checkedRows" v-else></file-thumbnail>
         </div>
