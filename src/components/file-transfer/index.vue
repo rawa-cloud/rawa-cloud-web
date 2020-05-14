@@ -1,7 +1,7 @@
 <template>
 <div :class="[$style.container]">
 <div :class="[$style.column, $style.left]">
-  <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" :class="[$style.tree]" ref="tree">
+  <v-tree node-key="id" :data-source="dataSource" lazy :load-fn="loadFn" :props="props" :class="[$style.tree]" ref="tree" class="primary-tree">
       <div slot="content"  slot-scope="{node}" @click="onSelect(node)">
         <span><file-icon v-bind="iconProps(node.data)" class="mr-2"></file-icon>{{node.data.label}}</span>
       </div>

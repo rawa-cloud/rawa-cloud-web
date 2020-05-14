@@ -24,8 +24,8 @@ export default class FileTree extends Vue {
 
   props = {
     key: 'id',
-    label: 'name',
-    isLeaf: 'leaf'
+    label: 'name'
+    // isLeaf: 'leaf'
   }
 
   dataSource: any = [
