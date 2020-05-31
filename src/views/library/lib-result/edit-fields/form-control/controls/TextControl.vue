@@ -1,5 +1,5 @@
 <template>
-<v-input clearable v-model.trim="form[name]"></v-input>
+<v-input clearable v-model.trim="form[name]" :disabled="disabled"></v-input>
 </template>
 
 <script lang="ts">

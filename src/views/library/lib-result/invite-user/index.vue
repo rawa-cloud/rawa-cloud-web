@@ -4,9 +4,10 @@
 
         <div>
           <div class="text-center">
+            <span>选择用户： </span>
             <v-input-group>
               <v-select clearable v-model="value" searchable :search-fn="searchFn" style="width: 320px;" Search...></v-select>
-              <v-button color="primary" icon="plus" @click="onAdd" :disabled="!value"></v-button>
+              <v-button color="primary" @click="onAdd" :disabled="!value">添加</v-button>
             </v-input-group>
           </div>
 
@@ -18,8 +19,8 @@
                   <div class="text-center" v-if="!catalog">
                     <div class="mb-2">权限</div>
                     <v-radio-group v-model="item.opt">
-                      <v-radio label="w" :disabled="item.system">管理人员</v-radio>
-                      <v-radio label="r" :disabled="item.system">普通用户</v-radio>
+                      <v-radio label="w" :disabled="item.system">可编辑</v-radio>
+                      <v-radio label="r" :disabled="item.system">仅可见</v-radio>
                     </v-radio-group>
                   </div>
                 </div>
@@ -43,12 +44,14 @@
 <script lang="ts">
 
 import { Vue, Component, Prop } from 'vue-property-decorator'
-import { updateLibraryAuthorities, updateLibraryCatalogAuthorities } from '@/api/library'
+import { updateLibraryAuthorities, updateLibraryCatalogAuthorities, updateLibraryFieldDefAuthorities } from '@/api/library'
 import { queryUsers } from '@/api/user'
 
 @Component
 export default class InviteUser extends Vue {
   @Prop(Boolean) catalog!: boolean
+
+  @Prop(Boolean) fieldDef!: boolean
 
   row: any = null
 
@@ -82,7 +85,7 @@ export default class InviteUser extends Vue {
   }
 
   init (): Promise<any> {
-    let data = this.catalog ? (this.row && this.row.authorityList) || [] : (this.row && this.row.authorities) || []
+    let data = (this.catalog || this.fieldDef) ? (this.row && this.row.authorityList) || [] : (this.row && this.row.authorities) || []
     this.data = []
     data.map((v: any) => {
       this.add(v.username, v.opt, v.system)
@@ -114,7 +117,7 @@ export default class InviteUser extends Vue {
 
   request (): Promise<number | void> {
     return this.catalog ? updateLibraryCatalogAuthorities(this.row.id, this.generateReq())
-      : updateLibraryAuthorities(this.row.id, this.generateReq())
+      : (this.fieldDef ? updateLibraryFieldDefAuthorities(this.row.id, this.generateReq()) : updateLibraryAuthorities(this.row.id, this.generateReq()))
   }
 
   generateReq () {

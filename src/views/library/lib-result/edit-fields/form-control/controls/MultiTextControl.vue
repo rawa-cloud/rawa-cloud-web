@@ -1,5 +1,5 @@
 <template>
-<v-textarea placeholder="请输入内容" v-model.trim="form[name]"></v-textarea>
+<v-textarea placeholder="请输入内容" v-model.trim="form[name]" :disabled="disabled"></v-textarea>
 </template>
 
 <script lang="ts">

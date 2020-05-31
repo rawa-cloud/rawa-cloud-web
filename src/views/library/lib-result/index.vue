@@ -103,7 +103,7 @@ export default class LibResult extends Vue {
         if (Array.isArray(value)) return value.join(',')
         return value
       }
-      const ret = ((current && current.fieldDefs) || []).map((v: any) => {
+      const ret = ((current && current.fieldDefs) || []).filter((v: any) => v.visible).map((v: any) => {
         return {
           label: v.name,
           name: v.name,

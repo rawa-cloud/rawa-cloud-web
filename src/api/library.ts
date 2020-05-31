@@ -119,6 +119,10 @@ export function updateLibraryCatalogAuthorities (id: number, req: { username: st
   return http().post<any>(`/libraries/catalogs/${id}/authorities`, req)
 }
 
+export function updateLibraryFieldDefAuthorities (id: number, req: { username: string, opt: string }[]) {
+  return http().post<any>(`/libraries/catalogs/fields/${id}/authorities`, req)
+}
+
 // Library
 
 export function queryLibraries (params: LibraryQueryReq) {

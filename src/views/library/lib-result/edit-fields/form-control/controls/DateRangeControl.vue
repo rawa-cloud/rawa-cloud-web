@@ -1,5 +1,5 @@
 <template>
-<v-range-picker v-model="form[name]" start-placeholder="开始日期" end-placeholder="结束日期" clearable></v-range-picker>
+<v-range-picker v-model="form[name]" start-placeholder="开始日期" end-placeholder="结束日期" clearable :disabled="disabled"></v-range-picker>
 </template>
 
 <script lang="ts">

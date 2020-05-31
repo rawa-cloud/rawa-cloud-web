@@ -5,16 +5,16 @@
           <v-form-item label="名称" prop="name" required>
             <v-input clearable v-model.trim="form.name" maxlength="16"></v-input>
           </v-form-item>
-          <v-form-item label="可见性" prop="visibility" required v-if="isTop">
-            <v-radio-group v-model="form.visibility">
-              <v-radio label="all">所有人</v-radio>
-              <v-radio label="assign">指定分配</v-radio>
-            </v-radio-group>
-          </v-form-item>
           <v-form-item label="类型" prop="type" v-if="typeVisible">
             <v-select clearable v-model.trim="form.type">
               <dict-option name="libraryFieldType"></dict-option>
             </v-select>
+          </v-form-item>
+          <v-form-item label="可见性" prop="visibility" required v-if="isTop2">
+            <v-radio-group v-model="form.visibility">
+              <v-radio label="all">所有人</v-radio>
+              <v-radio label="assign">指定分配</v-radio>
+            </v-radio-group>
           </v-form-item>
         </v-form>
 
@@ -83,6 +83,10 @@ export default class EditLib extends Vue {
     return this.isEdit ? (this.node && this.node.level === 1) : !this.node
   }
 
+  get isTop2 () {
+    return this.isEdit ? (this.node && this.node.level < 3) : (this.node && this.node.level < 2)
+  }
+
   add (node: Node): Promise<any> {
     this.isEdit = false
     this.node = node
@@ -147,13 +151,13 @@ export default class EditLib extends Vue {
         req.catalogId = this.node.data.id
         req.type = this.form.type
       }
-      if (!this.node) {
+      if (this.isTop2) {
         req.visibility = this.form.visibility
       }
       if (this.node && this.node.level === 2) req.filedDefId = this.node.data.id
     } else {
       if (this.node && this.node.level === 2) req.type = this.form.type
-      if (this.node && this.node.level === 1) {
+      if (this.isTop2) {
         req.visibility = this.form.visibility
       }
     }

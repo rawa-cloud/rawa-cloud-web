@@ -28,6 +28,8 @@ export default class FormControl extends Vue {
 
   @Prop() name!: any
 
+  @Prop(Boolean) disabled!: boolean
+
   @Prop(String) type!: string
 
   @Prop() options!: any[]
@@ -39,6 +41,7 @@ export default class FormControl extends Vue {
       props: {
         form: this.form,
         name: this.name,
+        disabled: this.disabled,
         options: this.options
       }
     })

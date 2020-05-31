@@ -8,11 +8,15 @@
     </tile-tree-column>
     <tile-tree-column title="字段" :level="2" v-on="handler">
       <div slot-scope="{node}"><span>{{node.data.name}}</span> <span class="ml-3 ft-sm text-info">{{node.data.type | transcode('libraryFieldType')}}</span></div>
+      <template slot="action" slot-scope="{node}">
+        <span class="icon-btn mr-2" @click.stop="onInviteUserForField(node)" v-if="node.data.visibility === 'assign'"> <v-icon type="usergroup-add"></v-icon></span>
+      </template>
     </tile-tree-column>
     <tile-tree-column title="字段选项" :level="3" v-on="handler" :add-fn="addFn"></tile-tree-column>
   </tile-tree>
   <edit-lib ref="editLib"></edit-lib>
   <invite-user ref="inviteUser" catalog></invite-user>
+  <invite-user ref="inviteUserForField" field-def></invite-user>
 
 </div>
 </template>
@@ -73,6 +77,14 @@ export default class LibraryConfig extends Vue {
 
   onInviteUser (node: Node) {
     const $e = (this as any).$refs.inviteUser as InviteUser
+    $e.invite(node.data).then(() => {
+      this.$message.success('更新成员成功')
+      this.loadData()
+    })
+  }
+
+  onInviteUserForField (node: Node) {
+    const $e = (this as any).$refs.inviteUserForField as InviteUser
     $e.invite(node.data).then(() => {
       this.$message.success('更新成员成功')
       this.loadData()

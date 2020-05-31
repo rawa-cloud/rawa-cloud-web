@@ -1,8 +1,8 @@
 <template>
 <v-checkbox-group v-model="form[name]" v-if="max <= 5">
-  <v-checkbox :label="opt.name" v-for="(opt, i) in options" :key="i">{{opt.name}}</v-checkbox>
+  <v-checkbox :label="opt.name" v-for="(opt, i) in options" :key="i" :disabled="disabled">{{opt.name}}</v-checkbox>
 </v-checkbox-group>
-<v-select v-model="form[name]" placeholder="请选择" multiple clearable v-else>
+<v-select v-model="form[name]" placeholder="请选择" multiple clearable :disabled="disabled" v-else>
   <v-option :label="opt.name" :value="opt.name" v-for="(opt, i) in options" :key="i"></v-option>
 </v-select>
 </template>

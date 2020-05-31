@@ -23,7 +23,7 @@
           <v-form ref="form" :class="[$style.form]" :rules="rules" :model="form" label-width="160px" label-position="left" class="ml-3" v-if="visible">
             <v-form-item :label="row.name" :prop="row.fieldDefId + ''" v-for="(row, i) in fields" :key="i">
               <!-- <v-input clearable v-model="form.name" maxlength="16"></v-input> -->
-              <form-control :form="form" :name="row.fieldDefId + ''" :type="row.type" :options="row.options || []"></form-control>
+              <form-control :form="form" :name="row.fieldDefId + ''" :type="row.type" :options="row.options || []" :disabled="row.disabled"></form-control>
             </v-form-item>
           </v-form>
         </div>

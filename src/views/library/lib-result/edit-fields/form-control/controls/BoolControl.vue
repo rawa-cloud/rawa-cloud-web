@@ -1,5 +1,5 @@
 <template>
-<v-switch v-model="form[name]"></v-switch>
+<v-switch v-model="form[name]" :disabled="disabled"></v-switch>
 </template>
 
 <script lang="ts">

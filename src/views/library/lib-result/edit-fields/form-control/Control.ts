@@ -6,5 +6,7 @@ export default class Control extends Vue {
 
   @Prop() name!: any
 
+  @Prop(Boolean) disabled!: boolean
+
   @Prop() options!: any[]
 }

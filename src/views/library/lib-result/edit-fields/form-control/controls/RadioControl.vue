@@ -1,8 +1,8 @@
 <template>
 <v-radio-group v-model="form[name]" v-if="max <= 5">
-  <v-radio :label="opt.name" v-for="(opt, i) in options" :key="i">{{opt.name}}</v-radio>
+  <v-radio :label="opt.name" v-for="(opt, i) in options" :key="i" :disabled="disabled">{{opt.name}}</v-radio>
 </v-radio-group>
-<v-select v-model="form[name]" placeholder="请选择" clearable v-else>
+<v-select v-model="form[name]" placeholder="请选择" clearable :disabled="disabled" v-else>
   <v-option :label="opt.name" :value="opt.name" v-for="(opt, i) in options" :key="i"></v-option>
 </v-select>
 </template>

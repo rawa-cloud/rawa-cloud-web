@@ -1,5 +1,5 @@
 <template>
-<v-date-picker v-model="form[name]" placeholder="请选择日期" show-time clearable></v-date-picker>
+<v-date-picker v-model="form[name]" placeholder="请选择日期" show-time clearable :disabled="disabled"></v-date-picker>
 </template>
 
 <script lang="ts">
