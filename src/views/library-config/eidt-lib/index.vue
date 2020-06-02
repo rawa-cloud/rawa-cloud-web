@@ -84,7 +84,7 @@ export default class EditLib extends Vue {
   }
 
   get isTop2 () {
-    return this.isEdit ? (this.node && this.node.level < 3) : (this.node && this.node.level < 2)
+    return this.isEdit ? (this.node && this.node.level < 3) : (!this.node || this.node.level < 2)
   }
 
   add (node: Node): Promise<any> {

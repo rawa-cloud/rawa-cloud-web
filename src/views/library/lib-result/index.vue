@@ -218,6 +218,7 @@ export default class LibResult extends Vue {
 
     hasAdmin (row: any) {
       if (row.visibility === 'all') return true
+      if (this.$auth.hasRole('SUPER')) return true
       let username = this.$auth.username
       let ls = row.authorities || []
       return ls.some((v: any) => v.username === username && v.opt === 'w')

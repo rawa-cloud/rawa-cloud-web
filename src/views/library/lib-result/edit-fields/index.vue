@@ -1,6 +1,6 @@
 <template>
     <div>
-      <v-modal :visible.sync="actualVisible" width="720px" :title="title">
+      <v-modal :visible.sync="actualVisible" width="960px" :title="title">
         <div style="height: calc(80vh - 120px); overflow: auto;">
           <section-header>权限设置</section-header>
           <v-form ref="fm1" label-width="160px" label-position="left" class="ml-3" v-if="visible">
@@ -174,7 +174,5 @@ export default class EditFields extends Vue {
 
 <style lang="scss" module>
 .form {
-  height: calc(70vh - 120px);
-  overflow: auto;
 }
 </style>
