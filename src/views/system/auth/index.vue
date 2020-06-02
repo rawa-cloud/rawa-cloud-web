@@ -9,7 +9,7 @@
           <v-form-item label="版本"><span :class="[$style.text]">{{version}}</span></v-form-item>
         </v-col>
         <v-col :span="12">
-          <v-form-item label="绑定mac地址"><span :class="[$style.text]">{{dataSource.mac}}</span></v-form-item>
+          <v-form-item label="应用标识符"><span :class="[$style.text]">{{dataSource.localMac}}</span></v-form-item>
         </v-col>
         <v-col :span="12">
           <v-form-item label="有效期"><span :class="[$style.text]">{{dataSource.expiredDate || '永久'}}</span></v-form-item>
