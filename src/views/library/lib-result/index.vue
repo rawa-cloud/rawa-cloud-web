@@ -2,7 +2,7 @@
 <div :class="[$style.container]" class="mx-3">
   <div v-if="catalogId">
         <div>
-          <dynamic-form :fields="current && current.fieldDefs" @query="onQuery" :single.sync="single"></dynamic-form>
+          <dynamic-form :fields="formFields" @query="onQuery" :single.sync="single"></dynamic-form>
         </div>
 
         <div :class="[$style.content]">
@@ -111,6 +111,10 @@ export default class LibResult extends Vue {
         }
       })
       return ret
+    }
+
+    get formFields () {
+      return ((this.current && this.current.fieldDefs) || []).filter((v: any) => v.visible)
     }
 
     onQuery (params: any = {}) {
