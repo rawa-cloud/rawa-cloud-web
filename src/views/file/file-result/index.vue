@@ -284,7 +284,7 @@ export default class FileResult extends Vue {
       }
       let f = file || this.checkedRows[0]
       const $e = this.$refs.fileUpload as FileUpload
-      $e.update(f.id).then(() => {
+      $e.update(f.id, f.name).then(() => {
         this.$message.success('更新成功')
         this.refresh()
       })

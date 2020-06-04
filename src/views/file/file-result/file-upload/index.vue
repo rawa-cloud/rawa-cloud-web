@@ -45,6 +45,8 @@ export default class FileUpload extends Vue {
 
   title: string = ''
 
+  name: string = ''
+
   form = {
     remark: ''
   }
@@ -93,16 +95,18 @@ export default class FileUpload extends Vue {
     this.multiple = multiple
     this.directory = directory
     this.id = parentId
+    this.name = ''
     this.title = this.directory ? '上传文件夹' : '上传文件'
     return this.init()
   }
 
-  update (id: number) {
+  update (id: number, name: string) {
     this.isUpdate = true
     this.multiple = false
     this.directory = false
     this.id = id
     this.title = '更新文件'
+    this.name = name
     return this.init()
   }
 
@@ -131,6 +135,7 @@ export default class FileUpload extends Vue {
   }
 
   onConfirm () {
+    const vm = this
     if (this.uploading) {
       this.$message.info('正在上传文件， 请等待上传完毕')
       return
@@ -138,10 +143,22 @@ export default class FileUpload extends Vue {
     if (this.fileList.length < 1) {
       this.$message.info('请先上传文件')
     }
-    this.request(this.generateReq()).then(data => {
-      this.visible = false
-      if (this.resolve) this.resolve(data)
-    })
+    if (this.isUpdate && this.fileList[0].name !== this.name) {
+      this.$modal.confirm({ title: '提示', content: '更新文件名与原文件名不一致，是否继续更新?' }).then(() => {
+        handle()
+      }).catch(() => {
+        // ignore
+      })
+      return
+    }
+    handle()
+
+    function handle () {
+      vm.request(vm.generateReq()).then(data => {
+        vm.visible = false
+        if (vm.resolve) vm.resolve(data)
+      })
+    }
   }
 
   request (req: any): Promise<any> {
