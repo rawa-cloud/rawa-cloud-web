@@ -6,15 +6,15 @@
           <v-form ref="fm1" label-width="160px" label-position="left" class="ml-3" v-if="visible">
             <v-form-item label="可见性">
               <v-radio-group v-model="visibility">
-                <v-radio label="all">所有人</v-radio>
-                <v-radio label="assign">指定分配</v-radio>
+                <v-radio label="all" :disabled="lib.createdUser !== $auth.username">所有人</v-radio>
+                <v-radio label="assign" :disabled="lib.createdUser !== $auth.username">指定分配</v-radio>
               </v-radio-group>
             </v-form-item>
           </v-form>
 
           <section-header>关联文件</section-header>
           <div class="py-2">
-            <v-button type="primary" size="sm" @click="onChooseFile">选择文件</v-button>
+            <v-button type="primary" size="sm" @click="onChooseFile" :disabled="!lib || !lib.editable">选择文件</v-button>
             <span class="ml-3">{{(file && file.name) || (lib && lib.file && lib.file.filePath) }}</span>
             <file-chooser ref="fileChooser"></file-chooser>
           </div>

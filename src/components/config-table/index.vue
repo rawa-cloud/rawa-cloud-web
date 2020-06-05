@@ -14,6 +14,7 @@
         </div>
 
         <v-table pageable remote :row-key="rowKey" v-bind="remoteData" ref="table"
+          :bordered="bordered"
           @current-page-change="onCurrentPageChange"
           @page-size-change="onPageSizeChange"
           @selection-change="onSelectionChange" :height="height" :size="size">
@@ -62,6 +63,8 @@ export default class ConfigTable extends Vue {
     @Prop(Boolean) simple!: string
 
     @Prop(String) size!: string
+
+    @Prop(Boolean) bordered!: boolean
 
     @Prop({ type: Boolean, default: true }) checkable!: boolean
 
