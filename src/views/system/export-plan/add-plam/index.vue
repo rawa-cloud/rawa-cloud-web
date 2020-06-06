@@ -2,13 +2,24 @@
 <div>
   <v-modal :visible.sync="actualVisible" width="560px" title="新增导出计划">
     <v-form ref="form" :model="form" :rules="rules" label-width="120px" label-position="left">
-      <v-form-item label="Cron表达式" prop="cron" required>
+      <!-- <v-form-item label="Cron表达式" prop="cron" required>
         <v-input clearable v-model.trim="form.cron" maxlength="32"
         placeholder="例如(每月1号的凌晨2点):  0 0 2 1 * ?" class="d-block"></v-input>
+      </v-form-item> -->
+      <v-form-item label="计划导出时间点" prop="time" required>
+        <v-time-picker v-model="form.time" clearable></v-time-picker>
       </v-form-item>
-      <v-form-item label="导出文件根目录" prop="filePath" required>
+      <v-form-item label="执行周期" prop="period" required>
+        <!-- <v-input clearable v-model.trim="form.filePath" maxlength="128" class="d-block"></v-input> -->
+        <v-select v-model="form.period" clearable >
+          <v-option label="每天" value="* * ?"></v-option>
+          <v-option label="每周" value="? * 1"></v-option>
+          <v-option label="每月" value="1 * ?"></v-option>
+        </v-select>
+      </v-form-item>
+      <!-- <v-form-item label="导出文件根目录" prop="filePath" required>
         <v-input clearable v-model.trim="form.filePath" maxlength="128" class="d-block"></v-input>
-      </v-form-item>
+      </v-form-item> -->
     </v-form>
 
     <div slot="footer" class="text-right">
@@ -27,17 +38,30 @@ import { addPlan } from '@/api/export-plan'
 @Component
 export default class AddPlan extends Vue {
   form = {
-    cron: '',
-    filePath: ''
+    // filePath: '',
+    time: '',
+    period: '',
+    get cron () {
+      if (!this.time || !this.period) return ''
+      const arr = this.time.split(':')
+      const hour = (+arr[0]) + ''
+      const min = (+arr[1]) + ''
+      const sec = (+arr[2]) + ''
+      return `${sec} ${min} ${hour} ${this.period}`
+    }
   }
 
   rules = {
-    cron: [
-      { validator: 'required', message: 'cron表达式必填' }
+    time: [
+      { validator: 'required', message: '计划导出时间点必填' }
     ],
-    filePath: [
-      { validator: 'required', message: '导出文件根目录必填' }
+    period: [
+      { validator: 'required', message: '执行周期必填' }
     ]
+    // ,
+    // filePath: [
+    //   { validator: 'required', message: '导出文件根目录必填' }
+    // ]
   }
 
   resolve: Function | null = null
@@ -59,10 +83,12 @@ export default class AddPlan extends Vue {
   }
 
   init (): Promise<any> {
-    this.form = {
-      cron: '',
-      filePath: ''
+    const origin = {
+      // filePath: '',
+      time: '',
+      period: ''
     }
+    Object.assign(this.form, origin)
     this.visible = true
     return new Promise((resolve, reject) => {
       this.resolve = resolve

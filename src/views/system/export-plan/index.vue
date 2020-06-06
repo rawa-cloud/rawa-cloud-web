@@ -5,13 +5,19 @@
   </div>
   <v-table :data-source="dataSource" height="360px">
       <v-table-column prop="cron" label="Cron表达式"></v-table-column>
+      <v-table-column prop="time" label="执行时间点">
+        <template slot-scope="{row}">{{resolveTime(row.cron)}}</template>
+      </v-table-column>
+      <v-table-column prop="period" label="执行周期">
+        <template slot-scope="{row}">{{resolvePeriod(row.cron)}}</template>
+      </v-table-column>
       <v-table-column prop="execStatus" label="执行状态">
         <template slot-scope="{row}">{{row.execStatus | transcode('execStatus')}}</template>
       </v-table-column>
       <v-table-column prop="execCount" label="执行次数"></v-table-column>
       <v-table-column prop="startTime" label="上一次开始时间"></v-table-column>
-      <v-table-column prop="endTime" label="上一次开始时间"></v-table-column>
-       <v-table-column prop="filePath" label="导出目录"></v-table-column>
+      <v-table-column prop="endTime" label="上一次完成时间"></v-table-column>
+       <!-- <v-table-column prop="filePath" label="导出目录"></v-table-column> -->
       <v-table-column prop="exportFilePath" label="导出文件地址"></v-table-column>
       <v-table-column prop="success" label="是否成功">
         <template slot-scope="{row}">{{row.success | transcode('success')}}</template>
@@ -58,6 +64,24 @@ export default class ExportPlan extends Vue {
       this.$message.success('删除成功')
       this.loadData()
     })
+  }
+
+  resolvePeriod (cron: string = '') {
+    const map: any = {
+      '* * ?': '每天',
+      '? * 1': '每周',
+      '1 * ?': '每月'
+    }
+    const key = cron.substr(-5)
+    return map[key]
+  }
+
+  resolveTime (cron: string = '') {
+    const arr = cron.split(' ')
+    const sec = arr[0]
+    const min = arr[1]
+    const hour = arr[2]
+    return `${hour}:${min}:${sec}`
   }
 
   mounted () {

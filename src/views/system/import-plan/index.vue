@@ -4,14 +4,19 @@
     <v-button type="primary" @click="onAdd">新增导入计划</v-button>
   </div>
   <v-table :data-source="dataSource" height="360px">
-      <v-table-column prop="cron" label="Cron表达式"></v-table-column>
+      <v-table-column prop="cron" label="计划执行时间(cron)">
+        <template slot-scope="{row}">{{resolveTime(row.cron)}} ({{row.cron}})</template>
+      </v-table-column>
       <v-table-column prop="execStatus" label="执行状态">
         <template slot-scope="{row}">{{row.execStatus | transcode('execStatus')}}</template>
       </v-table-column>
       <v-table-column prop="execCount" label="执行次数"></v-table-column>
       <v-table-column prop="startTime" label="上一次开始时间"></v-table-column>
       <v-table-column prop="endTime" label="上一次开始时间"></v-table-column>
-       <v-table-column prop="parentId" label="导入目录"></v-table-column>
+       <!-- <v-table-column prop="parentId" label="导入目录"></v-table-column> -->
+       <v-table-column prop="parentId" label="导入目录">
+         <template slot-scope="{}">/</template>
+       </v-table-column>
       <v-table-column prop="filePath" label="导入文件地址"></v-table-column>
       <v-table-column prop="success" label="是否成功">
         <template slot-scope="{row}">{{row.success | transcode('success')}}</template>
@@ -44,6 +49,17 @@ export default class ImportPlan extends Vue {
     queryPlan().then(data => {
       this.dataSource = data || []
     })
+  }
+
+  resolveTime (cron: string) {
+    if (!cron) return ''
+    const arr = cron.split(' ')
+    const sec = arr[0]
+    const min = arr[1]
+    const hour = arr[2]
+    const day = arr[3]
+    const month = arr[4]
+    return `${month}/${day} ${hour}:${min}:${sec}`
   }
 
   onAdd () {

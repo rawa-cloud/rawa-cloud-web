@@ -2,12 +2,18 @@
 <div>
   <v-modal :visible.sync="actualVisible" width="560px" title="新增导入计划">
     <v-form ref="form" :model="form" :rules="rules" label-width="120px" label-position="left">
-      <v-form-item label="Cron表达式" prop="cron" required>
+      <!-- <v-form-item label="Cron表达式" prop="cron" required>
         <v-input clearable v-model.trim="form.cron" maxlength="32"
         placeholder="例如(2020年4月20日凌晨2点执行):  0 0 2 20 4 ?" class="d-block"></v-input>
+      </v-form-item> -->
+      <v-form-item label="计划导入时间" prop="time" required>
+        <v-date-picker show-time v-model="form.time" clearable ></v-date-picker>
       </v-form-item>
       <v-form-item label="导入文件地址" prop="filePath" required>
-        <v-input clearable v-model.trim="form.filePath" maxlength="128" class="d-block"></v-input>
+        <!-- <v-input clearable v-model.trim="form.filePath" maxlength="128" class="d-block"></v-input> -->
+        <v-select v-model="form.filePath" clearable >
+          <v-option :label="row" :value="row" v-for="row in importPaths" :key="row"></v-option>
+        </v-select>
       </v-form-item>
       <v-form-item label="导入文件目录" prop="parentId" required>
         <v-select v-model="form.parentId">
@@ -27,20 +33,31 @@
 <script lang="ts">
 
 import { Vue, Component } from 'vue-property-decorator'
-import { addPlan } from '@/api/import-plan'
+import { addPlan, getImportFiles } from '@/api/import-plan'
 import { getRootFile } from '@/api/file'
+import { parseDate } from '@/helpers/date'
 
 @Component
 export default class AddPlan extends Vue {
   form = {
-    cron: '',
+    time: '',
     filePath: '',
-    parentId: null
+    parentId: null,
+    get cron () {
+      if (!this.time) return ''
+      const date = parseDate(this.time)
+      const month = date.getMonth() + 1
+      const day = date.getDate()
+      const hour = date.getHours()
+      const min = date.getMinutes()
+      const sec = date.getSeconds()
+      return `${sec} ${min} ${hour} ${day} ${month} ?`
+    }
   }
 
   rules = {
-    cron: [
-      { validator: 'required', message: 'cron表达式必填' }
+    time: [
+      { validator: 'required', message: '计划执行时间必填' }
     ],
     filePath: [
       { validator: 'required', message: '导入文件地址必填' }
@@ -51,6 +68,8 @@ export default class AddPlan extends Vue {
   }
 
   files: any[] = []
+
+  importPaths: string[] = []
 
   resolve: Function | null = null
 
@@ -71,11 +90,12 @@ export default class AddPlan extends Vue {
   }
 
   init (): Promise<any> {
-    this.form = {
-      cron: '',
+    const extra = {
+      time: '',
       filePath: '',
       parentId: ((this.files[0] && this.files[0].id) || null) as any
     }
+    Object.assign(this.form, extra)
     this.visible = true
     return new Promise((resolve, reject) => {
       this.resolve = resolve
@@ -106,8 +126,15 @@ export default class AddPlan extends Vue {
     })
   }
 
+  loadImporFiles () {
+    getImportFiles().then(data => {
+      this.importPaths = data || []
+    })
+  }
+
   mounted () {
     this.loadFiles()
+    this.loadImporFiles()
   }
 }
 </script>

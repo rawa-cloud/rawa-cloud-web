@@ -35,3 +35,19 @@ export function normalizeDate (date: string) {
   if (date.length <= 10) return date + ' 00:00:00'
   return date
 }
+
+export function parseDate (text: string, format = 'yyyy/MM/dd HH:mm:ss') {
+  const year = +getText('yyyy')
+  const month = +getText('MM')
+  const day = +getText('dd')
+  const hour = +getText('HH')
+  const min = +getText('mm')
+  const sec = +getText('ss')
+  return new Date(year, month - 1, day, hour, min, sec)
+
+  function getText (str: string) {
+    const idx = format.indexOf(str)
+    if (idx < 0) return ''
+    return text.substr(idx, str.length)
+  }
+}

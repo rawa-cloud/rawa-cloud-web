@@ -45,3 +45,7 @@ export function addPlan (req: ImportPlanAddReq) {
 export function deletePlan () {
   return http().delete<any>(`/import-plans/active`)
 }
+
+export function getImportFiles () {
+  return http().get<string[]>(`/import-plans/files`)
+}

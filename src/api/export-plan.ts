@@ -27,7 +27,7 @@ export interface ExportPlanRes {
 export interface ExportPlanAddReq {
   cron: string
 
-  filePath: string
+  // filePath: string
 }
 
 export function queryPlan () {
