@@ -1,7 +1,7 @@
 <template>
     <div>
       <v-modal :visible.sync="actualVisible" width="70vw" :title="title">
-        <div :class="[$style.body]" v-if="file">
+        <div :class="[$style.body]" v-if="file && visible">
           <basic-info :file="file"></basic-info>
           <v-tabs v-model="value" size="sm" v-if="file">
             <v-tab-pane name="1" label="版本列表">
