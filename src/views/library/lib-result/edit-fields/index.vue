@@ -12,8 +12,8 @@
             </v-form-item>
           </v-form>
 
-          <section-header>关联文件</section-header>
-          <div class="py-2">
+          <section-header v-if="fileEnabled">关联文件</section-header>
+          <div class="py-2" v-if="fileEnabled">
             <v-button type="primary" size="sm" @click="onChooseFile" :disabled="!lib || !lib.editable">选择文件</v-button>
             <span class="ml-3">{{(file && file.name) || (lib && lib.file && lib.file.filePath) }}</span>
             <file-chooser ref="fileChooser"></file-chooser>
@@ -42,6 +42,7 @@ import { Vue, Component } from 'vue-property-decorator'
 import { updateLibraryFields, addLibraryFile, updateLibrary } from '@/api/library'
 import FormControl from './form-control/index.vue'
 import { getFile } from '../../../../api/file'
+import { http } from '@/api'
 
 @Component({
   components: { FormControl }
@@ -62,6 +63,8 @@ export default class EditFields extends Vue {
 
   visibility: string = 'all'
 
+  properties: any[] = []
+
   resolve: Function | null = null
 
   reject: Function | null = null
@@ -78,6 +81,10 @@ export default class EditFields extends Vue {
 
   get title () {
     return '编辑'
+  }
+
+  get fileEnabled () {
+    return this.properties.some((v: any) => v.name === 'form.file.enabled' && v.value === 'Y')
   }
 
   get fields () {
@@ -168,6 +175,16 @@ export default class EditFields extends Vue {
       }
     })
     return req
+  }
+
+  loadProperties () {
+    http().get('/properties').then(data => {
+      this.properties = data || []
+    })
+  }
+
+  mounted () {
+    this.loadProperties()
   }
 }
 </script>

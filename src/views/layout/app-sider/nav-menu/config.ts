@@ -101,6 +101,11 @@ export const menus: Array<MenuOption> = [
         name: '导出计划',
         pid: `${HOME}.system.export-plan`,
         link: '/system/export-plan'
+      },
+      {
+        name: '参数配置',
+        pid: `${HOME}.system.property`,
+        link: '/system/property'
       }
     ]
   }

@@ -107,6 +107,12 @@ const routes: Array<RouteConfig> = [
         component: () => import('@/views/system/export-plan/index.vue'),
         meta: { pid: `${HOME}.system.export-plan`, cname: '导出计划' }
       },
+      {
+        path: 'system/property',
+        name: 'system/property',
+        component: () => import('@/views/system/property/index.vue'),
+        meta: { pid: `${HOME}.system.property`, cname: '参数配置' }
+      },
       // 用户设置
       {
         path: '/user-setting',

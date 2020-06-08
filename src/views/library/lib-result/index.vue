@@ -7,8 +7,8 @@
 
         <div :class="[$style.content]">
           <config-table :checkable="false" row-key="id" :storage-key="storageKey" :api="api" :columns="columns" bordered ref="configTable">
-            <v-table-column prop="createdUser" label="创建人" :order="1"></v-table-column>
-            <v-table-column prop="filePath" label="文件路径" :order="2">
+            <v-table-column prop="index" type="index" label="序号" :order="1" width="64px" fixed="left"></v-table-column>
+            <v-table-column prop="filePath" label="文件路径" :order="2" v-if="fileEnabled">
               <template slot-scope="{row}">
                 <a @click="onForwardFile(row)" :title="row.file.filePath" v-if="row.file">{{row.file.filePath | ellipsis(30, true)}}</a>
                 <template v-if="row.file">
@@ -17,6 +17,7 @@
                 </template>
               </template>
             </v-table-column>
+            <v-table-column prop="createdUser" label="创建人" :order="999"></v-table-column>
             <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="180px">
                 <template slot-scope="{row}">
                     <!-- <span class="icon-btn" @click="onEdit(row)" title="编辑"><v-icon type="edit"></v-icon></span> -->
@@ -54,6 +55,7 @@ import InviteUser from './invite-user/index.vue'
 import DynamicForm from './dynamic-form/index.vue'
 import { getFile } from '@/api/file'
 import { download } from '@/helpers/download'
+import { http } from '@/api'
 @Component({
   components: { EditLib, EditFields, InviteUser, DynamicForm }
 })
@@ -70,9 +72,15 @@ export default class LibResult extends Vue {
 
     dataSource: any[] = []
 
+    properties: any = []
+
     @Inject() getCurrent!: () => any
 
     @Inject() setCurrent!: (row: any) => void
+
+    get fileEnabled () {
+      return this.properties.some((v: any) => v.name === 'form.file.enabled' && v.value === 'Y')
+    }
 
     get height () {
       let total = ((this.current && this.current.fieldDefs) || []).length + 1
@@ -221,7 +229,14 @@ export default class LibResult extends Vue {
       $e.refresh()
     }
 
+    loadProperties () {
+      http().get('/properties').then(data => {
+        this.properties = data || []
+      })
+    }
+
     mounted () {
+      this.loadProperties()
     }
 
     @Watch('catalogId', { immediate: true }) catalogIdChange () {

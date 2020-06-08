@@ -12,7 +12,7 @@
       </v-table-column>
       <v-table-column prop="execCount" label="执行次数"></v-table-column>
       <v-table-column prop="startTime" label="上一次开始时间"></v-table-column>
-      <v-table-column prop="endTime" label="上一次开始时间"></v-table-column>
+      <v-table-column prop="endTime" label="上一次完成时间"></v-table-column>
        <!-- <v-table-column prop="parentId" label="导入目录"></v-table-column> -->
        <v-table-column prop="parentId" label="导入目录">
          <template slot-scope="{}">/</template>

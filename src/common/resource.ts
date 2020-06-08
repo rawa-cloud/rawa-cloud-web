@@ -109,6 +109,9 @@ const root = [
           },
           {
             pid: 'export-plan'
+          },
+          {
+            pid: 'property'
           }
         ]
       }

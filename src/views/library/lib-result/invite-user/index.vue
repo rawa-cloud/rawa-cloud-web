@@ -14,8 +14,8 @@
             </div>
             <span>选择用户： </span>
             <v-input-group>
-              <v-select clearable v-model="value" searchable :search-fn="searchFn" style="width: 240px;" placeholder="查找用户" v-if="searchVisible"></v-select>
-              <v-button color="primary" @click="onAdd" :disabled="!value">添加</v-button>
+              <v-select multiple clearable collapse-tags v-model="value" searchable :search-fn="searchFn" style="width: 240px;" placeholder="查找用户" v-if="searchVisible"></v-select>
+              <v-button color="primary" @click="onAdd" :disabled="value.length < 1">添加</v-button>
             </v-input-group>
           </div>
 
@@ -75,7 +75,7 @@ export default class InviteUser extends Vue {
 
   data: any[] = []
 
-  value: string = ''
+  value: string[] = []
 
   users: any[] = []
 
@@ -125,7 +125,7 @@ export default class InviteUser extends Vue {
     data.map((v: any) => {
       this.add(v.username, v.opt, v.system)
     })
-    this.value = ''
+    this.value = []
     this.deptIds = []
     this.visible = true
     return new Promise((resolve, reject) => {
@@ -183,9 +183,11 @@ export default class InviteUser extends Vue {
 
   onAdd () {
     let vm = this
-    if (!this.value) return
-    this.add(this.value, 'r', false)
-    this.value = ''
+    if (this.value.length < 1) return
+    this.value.forEach(v => {
+      this.add(v, 'r', false)
+    })
+    this.value = []
   }
 
   searchFn (input: string, cb: (items: any[])=>void) {
