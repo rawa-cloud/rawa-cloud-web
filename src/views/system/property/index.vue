@@ -23,7 +23,7 @@
   </v-radio-group>
 </v-form-item>
 <v-form-item label="水印内容" v-if="form.preview_mark_enabled === 'Y'">
-  <v-input v-model="form.preview_mark_content" clearable maxlength="32" style="width: 100%;"></v-input>
+  <v-input v-model.lazy="form.preview_mark_content" clearable maxlength="32" style="width: 100%;"></v-input>
 </v-form-item>
 
 </v-form>
