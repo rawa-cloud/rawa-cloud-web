@@ -84,7 +84,7 @@ export default class User extends Vue {
       status: null,
 
       get deptId () {
-        return this.deptIds.slice(-1) || null
+        return this.deptIds.slice(-1)[0] || null
       }
     }
 
@@ -141,7 +141,9 @@ export default class User extends Vue {
     }
 
     onQuery () {
-      this.query(this.form)
+      const req = Object.assign({}, this.form)
+      delete req.deptIds
+      this.query(req)
     }
 
     query (params: any) {
