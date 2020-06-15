@@ -6,7 +6,7 @@
         </div>
 
         <div :class="[$style.content]">
-          <config-table :checkable="false" row-key="id" :storage-key="storageKey" :api="api" :columns="columns" bordered ref="configTable">
+          <config-table :checkable="false" row-key="id" size="sm" :storage-key="storageKey" :api="api" :columns="columns" bordered ref="configTable">
             <v-table-column prop="index" type="index" label="序号" :order="1" width="64px" fixed="left"></v-table-column>
             <v-table-column prop="filePath" label="文件路径" :order="2" v-if="fileEnabled">
               <template slot-scope="{row}">
@@ -18,14 +18,14 @@
               </template>
             </v-table-column>
             <v-table-column prop="createdUser" label="创建人" :order="999"></v-table-column>
-            <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="220px">
+            <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="180px">
                 <template slot-scope="{row}">
                     <!-- <span class="icon-btn" @click="onEdit(row)" title="编辑"><v-icon type="edit"></v-icon></span> -->
-                    <a class="ml-2" @click="onCopy(row)" title="复制" v-if="canCopy(row)">复制</a>
-                    <a class="ml-2" @click="onEditFields(row)" title="编辑" v-if="row.editable">编辑</a>
-                    <a class="ml-2" @click="onInvite(row)" title="邀请成员" v-if="row.visibility === 'assign' && row.admin">邀请成员</a>
+                    <a class="ml-2 ft-sm" @click="onCopy(row)" title="复制" v-if="canCopy(row)">复制</a>
+                    <a class="ml-2 ft-sm" @click="onEditFields(row)" title="编辑" v-if="row.editable">编辑</a>
+                    <a class="ml-2 ft-sm" @click="onInvite(row)" title="邀请成员" v-if="row.visibility === 'assign' && row.admin">邀请成员</a>
                     <!-- <span class="icon-btn ml-2" @click="onAddFile(row)" title="关联文件"><v-icon type="file-add"></v-icon></span> -->
-                    <a class="ml-2" @click="onDelete(row.id)" title="删除" v-if="row.admin">删除</a>
+                    <a class="ml-2 ft-sm" @click="onDelete(row.id)" title="删除" v-if="row.admin">删除</a>
                     <!-- <span class="ml-3 icon-btn" @click="onRecover(row.id)"><svg-icon icon="recover"></svg-icon></span> -->
                 </template>
             </v-table-column>
