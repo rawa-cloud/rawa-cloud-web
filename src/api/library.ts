@@ -129,8 +129,16 @@ export function queryLibraries (params: LibraryQueryReq) {
   return http().post<Page<LibraryQueryRes>>(`/libraries/query`, params)
 }
 
+export function exportLibraries (params: any) {
+  return http().post<Blob>(`/libraries/export`, params, { responseType: 'blob' })
+}
+
 export function addLibrary (req: LibraryAddReq) {
   return http().post<number>(`/libraries`, req)
+}
+
+export function copyLibrary (id: number) {
+  return http().post<number>(`/libraries/copy/${id}`)
 }
 
 export function updateLibrary (id: number, req: LibraryUpdateReq) {

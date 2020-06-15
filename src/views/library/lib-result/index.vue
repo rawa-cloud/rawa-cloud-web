@@ -18,9 +18,10 @@
               </template>
             </v-table-column>
             <v-table-column prop="createdUser" label="创建人" :order="999"></v-table-column>
-            <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="180px">
+            <v-table-column prop="opt" label="操作" fixed="right" :order="1000" width="220px">
                 <template slot-scope="{row}">
                     <!-- <span class="icon-btn" @click="onEdit(row)" title="编辑"><v-icon type="edit"></v-icon></span> -->
+                    <a class="ml-2" @click="onCopy(row)" title="复制" v-if="canCopy(row)">复制</a>
                     <a class="ml-2" @click="onEditFields(row)" title="编辑" v-if="row.editable">编辑</a>
                     <a class="ml-2" @click="onInvite(row)" title="邀请成员" v-if="row.visibility === 'assign' && row.admin">邀请成员</a>
                     <!-- <span class="icon-btn ml-2" @click="onAddFile(row)" title="关联文件"><v-icon type="file-add"></v-icon></span> -->
@@ -30,6 +31,7 @@
             </v-table-column>
             <template slot="extra">
               <v-button type="text" size="sm" class="primary-link-btn" icon="plus" @click="onAdd" v-if="current && current.addable">新增</v-button>
+              <v-button type="text" size="sm" class="primary-link-btn ml-3" @click="onExport" :loading="exporting" v-if="current">导出</v-button>
             </template>
           </config-table>
         </div>
@@ -48,7 +50,7 @@
 <script lang="ts">
 
 import { Vue, Component, Inject, Watch } from 'vue-property-decorator'
-import { queryLibraries, deleteLibrary, addLibraryFile, downloadFileForLibrary } from '@/api/library'
+import { queryLibraries, deleteLibrary, addLibraryFile, downloadFileForLibrary, exportLibraries, copyLibrary } from '@/api/library'
 import EditLib from './edit-lib/index.vue'
 import EditFields from './edit-fields/index.vue'
 import InviteUser from './invite-user/index.vue'
@@ -73,6 +75,10 @@ export default class LibResult extends Vue {
     dataSource: any[] = []
 
     properties: any = []
+
+    params: any = {}
+
+    exporting = false
 
     @Inject() getCurrent!: () => any
 
@@ -126,12 +132,35 @@ export default class LibResult extends Vue {
       return ((this.current && this.current.fieldDefs) || []).filter((v: any) => v.visible)
     }
 
+    canCopy (row: any) {
+      if (!this.current || !this.current.addable) return false
+      return row.createdUser === this.$auth.username
+    }
+
+    onCopy (row: any) {
+      copyLibrary(row.id).then(() => {
+        this.$message.success('复制成功')
+        this.refresh()
+      })
+    }
+
     onQuery (params: any = {}) {
       const req: any = {
         catalogId: this.catalogId,
         params
       }
+      this.params = req
       this.query(req)
+    }
+
+    onExport () {
+      this.$message.info('正在导出， 请稍后...')
+      this.exporting = true
+      exportLibraries(this.params).then(data => {
+        download(data, '导出清单.xlsx')
+      }).finally(() => {
+        this.exporting = false
+      })
     }
 
     onReset () {
