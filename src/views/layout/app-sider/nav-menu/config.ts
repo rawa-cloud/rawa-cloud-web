@@ -108,5 +108,22 @@ export const menus: Array<MenuOption> = [
         link: '/system/property'
       }
     ]
+  },
+  {
+    name: '水印设置',
+    icon: 'barcode',
+    pid: `${HOME}.watermark`,
+    children: [
+      {
+        name: '水印列表',
+        pid: `${HOME}.watermark.list`,
+        link: '/watermark/list'
+      },
+      {
+        name: '关联用户',
+        pid: `${HOME}.watermark.user`,
+        link: '/watermark/user'
+      }
+    ]
   }
 ]

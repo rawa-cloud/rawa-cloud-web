@@ -113,6 +113,20 @@ const routes: Array<RouteConfig> = [
         component: () => import('@/views/system/property/index.vue'),
         meta: { pid: `${HOME}.system.property`, cname: '参数配置' }
       },
+      // 水印设置
+      {
+        path: 'watermark/list',
+        name: 'watermark/list',
+        component: () => import('@/views/watermark/list/index.vue'),
+        meta: { pid: `${HOME}.watermark.list`, cname: '水印列表' }
+      },
+      {
+        path: 'watermark/user',
+        name: 'watermark/user',
+        component: () => import('@/views/watermark/user/index.vue'),
+        meta: { pid: `${HOME}.watermark.user`, cname: '关联用户' }
+      },
+
       // 用户设置
       {
         path: '/user-setting',

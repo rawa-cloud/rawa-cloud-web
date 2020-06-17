@@ -114,6 +114,17 @@ const root = [
             pid: 'property'
           }
         ]
+      },
+      {
+        pid: 'watermark',
+        children: [
+          {
+            pid: 'list'
+          },
+          {
+            pid: 'user'
+          }
+        ]
       }
     ]
   }

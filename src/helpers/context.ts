@@ -7,7 +7,8 @@ export const adminUrls = [
   '/dept',
   '/log',
   '/library-config',
-  '/system'
+  '/system',
+  '/watermark'
 ]
 
 export function isAdminUrl (route: Route) {
