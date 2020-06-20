@@ -6,9 +6,9 @@
             <v-input clearable v-model="form.username" maxlength="16" :disabled="isEdit"></v-input>
           </v-form-item>
 
-          <v-form-item label="密码" prop="password" required v-if="!isEdit">
+          <v-form-item label="密码" prop="password" :required="!isEdit">
             <div class="d-flex align-items-center">
-              <v-input clearable v-model="form.password" maxlength="16" :disabled="isEdit"></v-input>
+              <v-input clearable v-model="form.password" maxlength="16"></v-input>
               <v-button type="outline" color="info" class="ml-2" @click="onGenPassword">随机生成</v-button>
             </div>
           </v-form-item>
@@ -91,27 +91,30 @@ export default class EditUser extends Vue {
     }
   }
 
-  rules = {
-    username: [
-      { validator: 'required', message: '用户名必填', trigger: 'blur' }
-    ],
-    password: [
-      { validator: 'required', message: '密码必填', trigger: 'blur' },
-      { validator: 'length', min: 6, message: '密码长度不小于6位', trigger: 'blur' }
-    ],
-    cname: [
-      { validator: 'required', message: '中文名必填', trigger: 'blur' }
-    ],
-    deptId: [
-      { validator: 'required', message: '请选择组织部门', trigger: 'change' }
-    ]
-  }
-
   resolve: Function | null = null
 
   reject: Function | null = null
 
   visible: boolean = false
+
+  get rules () {
+    const ret: any = {
+      username: [
+        { validator: 'required', message: '用户名必填', trigger: 'blur' }
+      ],
+      password: [
+        { validator: 'length', min: 6, message: '密码长度不小于6位', trigger: 'blur' }
+      ],
+      cname: [
+        { validator: 'required', message: '中文名必填', trigger: 'blur' }
+      ],
+      deptId: [
+        { validator: 'required', message: '请选择组织部门', trigger: 'change' }
+      ]
+    }
+    if (!this.isEdit) ret.password.push({ validator: 'required', message: '密码必填', trigger: 'blur' })
+    return ret
+  }
 
   get isEdit (): boolean {
     return !!this.user
