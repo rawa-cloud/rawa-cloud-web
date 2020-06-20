@@ -9,7 +9,7 @@
   </v-radio-group>
 </v-form-item>
 
-<section-header class="mt-3">预览配置</section-header>
+<!-- <section-header class="mt-3">预览配置</section-header>
 <v-form-item label="水印">
   <v-radio-group v-model="form.preview_mark_enabled">
     <v-radio label="Y">启用</v-radio>
@@ -24,7 +24,7 @@
 </v-form-item>
 <v-form-item label="水印内容" v-if="form.preview_mark_enabled === 'Y'">
   <v-input v-model.lazy="form.preview_mark_content" clearable maxlength="32" style="width: 100%;"></v-input>
-</v-form-item>
+</v-form-item> -->
 
 </v-form>
 </div>
@@ -39,10 +39,11 @@ import { http } from '@/api'
 @Component
 export default class Property extends Vue {
   form = {
-    form_file_enabled: 'N',
-    preview_mark_enabled: 'N',
-    preview_mark_user_enabled: 'N',
-    preview_mark_content: ''
+    form_file_enabled: 'N'
+    // ,
+    // preview_mark_enabled: 'N',
+    // preview_mark_user_enabled: 'N',
+    // preview_mark_content: ''
   }
 
   origin: any = {}
