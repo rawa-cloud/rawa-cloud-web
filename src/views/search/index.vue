@@ -28,6 +28,9 @@
                   <div slot-scope="{row}" :class="[$style.label]">
                     <file-icon v-bind="iconProps(row)" :class="[$style.icon]"></file-icon>
                     <span class="ml-2 text-link">{{row.name}}</span>
+
+                    <v-button size="sm" class="ml-2" @click="onPreview(row)" v-if="canPreview(row)">预览</v-button>
+                    <v-button size="sm" class="ml-2" @click="onDownload(row)" v-if="canDownload(row)">下载</v-button>
                   </div>
               </v-table-column>
               <v-table-column prop="size" label="大小">
@@ -43,6 +46,8 @@
               </v-table-column>
             </v-table>
         </div>
+
+        <file-preview ref="filePreview"></file-preview>
     </div>
 </template>
 
@@ -50,8 +55,10 @@
 
 import { Vue, Component, Watch } from 'vue-property-decorator'
 import { queryUsers } from '@/api/user'
-import { searchFiles, getFile } from '@/api/file'
+import { searchFiles, getFile, downloadFile } from '@/api/file'
+import { download } from '@/helpers/download'
 import { normalizeDate } from '@/helpers/date'
+import { UMASK, hasAllAuthority, hasAnyAuthority } from '@/common/umask'
 
 @Component
 export default class Search extends Vue {
@@ -83,6 +90,14 @@ export default class Search extends Vue {
       return { dir, personal, root, contentType }
     }
 
+    canPreview (row: any) {
+      return hasAnyAuthority(row.umask, UMASK.PREVIW.value)
+    }
+
+    canDownload (row: any) {
+      return hasAnyAuthority(row.umask, UMASK.DOWNLOAD.value)
+    }
+
     onQuery () {
       this.query()
     }
@@ -109,6 +124,18 @@ export default class Search extends Vue {
           return
         }
         this.$router.push(`/file?id=${parentId}`)
+      })
+    }
+
+    onPreview (row: any) {
+      const $e = this.$refs.filePreview as any
+      $e.preview(row, [row])
+    }
+
+    onDownload (row: any) {
+      let file = row.file
+      downloadFile(row.id).then(data => {
+        download(data, row.dir ? `${row.name}.zip` : row.name)
       })
     }
 
