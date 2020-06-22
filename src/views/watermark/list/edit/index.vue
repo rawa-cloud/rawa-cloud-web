@@ -7,17 +7,15 @@
           <v-input clearable v-model.trim="form.name" maxlength="16" :disabled="isEdit"></v-input>
         </v-form-item>
         <v-form-item label="logo" prop="uuid" required>
-          <v-upload :file-list.sync="fileList" accept="image/*" list-type="picture-card" :custom-request="customRequest" :success-fn="successFn" :limit="1">
+          <v-upload :file-list.sync="fileList" accept="image/*" list-type="picture-card"
+          :custom-request="customRequest" :success-fn="successFn" :limit="1" @preview="onPreview">
             <div class="text-center" v-if="fileList.length < 1">
               <div><i class="anticon anticon-plus"></i></div>
               <div>上传</div>
             </div>
           </v-upload>
-      <!-- <v-modal :visible.sync="visible">
-        <img :src="file && (file.url || file.thumbUrl)" alt="&times;" style="width: 100%;">
-      </v-modal> -->
         </v-form-item>
-        <v-form-item label="水印内容" prop="content" required>
+        <v-form-item label="水印内容" prop="content">
           <v-textarea placeholder="请输入内容" :rows="3" v-model.trim="form.content" maxlength="128" style="width: 100%;"></v-textarea>
         </v-form-item>
         <v-form-item label="状态" prop="status" required>
@@ -62,6 +60,10 @@
       <v-button type="primary" class="ml-3" @click="onConfirm">确定</v-button>
     </div>
   </v-modal>
+
+  <v-modal :visible.sync="imgVisible">
+    <img :src="file && (file.url || file.thumbUrl)" alt="&times;" style="width: 100%;">
+  </v-modal>
 </div>
 </template>
 
@@ -93,9 +95,9 @@ export default class EditDir extends Vue {
     name: [
       { validator: 'required', message: '名称必填' }
     ],
-    content: [
-      { validator: 'required', message: '水印内容必填' }
-    ],
+    // content: [
+    //   { validator: 'required', message: '水印内容必填' }
+    // ],
     status: [
       { validator: 'required', message: '状态必填' }
     ]
@@ -110,6 +112,10 @@ export default class EditDir extends Vue {
   reject: Function | null = null
 
   visible: boolean = false
+
+  imgVisible = false
+
+  file: any = null
 
   get isEdit (): boolean {
     return !!this.row
@@ -179,6 +185,11 @@ export default class EditDir extends Vue {
         })
       }
     })
+  }
+
+  onPreview (file: any) {
+    this.imgVisible = true
+    this.file = file
   }
 
   request (): Promise<number | void> {
