@@ -23,7 +23,19 @@
         </div>
 
         <div>
-            <v-table pageable :data-source="dataSource" size="sm" height="calc(100vh - 64px - 8px - 62px - 70px)">
+            <div class="ft-sm d-flex justify-content-between">
+              <span>
+                <v-button type="text" size="sm" class="link-btn" :disabled="checkedRows.length < 1" @click="onBatchDownload">
+                  <v-icon type="download"></v-icon> <span>下载</span>
+                </v-button>
+              </span>
+              <span class="caption">
+                <span> 已选择 {{checkedRows.length}} 项</span>
+                <a class="ml-2" @click="onClearSelection">清空选择</a>
+              </span>
+            </div>
+            <v-table pageable :data-source="dataSource" size="sm" height="calc(100vh - 64px - 8px - 62px - 70px)" @selection-change="onSelectionChange" ref="table">
+              <v-table-column type="selection" fixed="left" width="64px"></v-table-column>
               <v-table-column prop="name" label="文件名" width="480px">
                   <div slot-scope="{row}" :class="[$style.label]">
                     <file-icon v-bind="iconProps(row)" :class="[$style.icon]"></file-icon>
@@ -78,6 +90,8 @@ export default class Search extends Vue {
 
     dataSource: any[] = []
 
+    checkedRows: any[] = []
+
     get name () {
       return this.$route.query.name || ''
     }
@@ -112,6 +126,7 @@ export default class Search extends Vue {
       let req = Object.assign({}, this.form, { creationTime: undefined })
       searchFiles(req).then(data => {
         this.dataSource = data || []
+        this.onClearSelection()
       }).finally(() => {
         this.loading = false
       })
@@ -136,6 +151,37 @@ export default class Search extends Vue {
       let file = row.file
       downloadFile(row.id).then(data => {
         download(data, row.dir ? `${row.name}.zip` : row.name)
+      })
+    }
+
+    onSelectionChange (rows: any[]) {
+      this.checkedRows = rows || []
+    }
+
+    onClearSelection () {
+      this.checkedRows = []
+      const $e = this.$refs.table as any
+      if (!$e) return
+      $e.selectionKeySet.clear()
+    }
+
+    onBatchDownload () {
+      const ret = this.checkedRows.filter((v: any) => {
+        return this.canDownload(v)
+      })
+      if (ret.length < 1) {
+        this.$message.info('无可下载文件')
+        return
+      }
+      this.$modal.confirm({
+        title: '下载确认',
+        content: `共 ${ret.length} 个可下载文件, 确认下载?`
+      }).then(() => {
+        ret.forEach((v: any) => {
+          this.onDownload(v)
+        })
+      }).catch(() => {
+        // ignore
       })
     }
 

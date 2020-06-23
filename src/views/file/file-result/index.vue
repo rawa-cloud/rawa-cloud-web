@@ -114,7 +114,7 @@ export default class FileResult extends Vue {
 
     actions = [
       { title: '预览', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
-      { title: '下载', batch: false, umask: UMASK.DOWNLOAD.value, action: this.onDownload },
+      { title: '下载', batch: true, umask: UMASK.DOWNLOAD.value, action: this.onDownload },
       { title: '更新', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, action: this.onRenew },
       { title: '编辑', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, onlyOffice: true, action: this.onOnlineEdit },
       // { title: '版本', batch: false, onlyFile: true, umask: UMASK.ACCESS.value, action: this.onFileRecord },
@@ -232,18 +232,25 @@ export default class FileResult extends Vue {
     }
 
     @Provide() onDownload (file?: any) {
-      if (!this.validate(file)) return
-      if (!file && this.checkedRows.length > 1) {
-        this.$message.info('暂不支持批量下载')
-        return
-      }
-      let row = file || this.checkedRows[0]
+      // if (!this.validate(file)) return
+      // if (!file && this.checkedRows.length > 1) {
+      //   this.$message.info('暂不支持批量下载')
+      //   return
+      // }
+      // let row = file || this.checkedRows[0]
       // if (row.dir) {
       //   this.$message.info('暂不支持下载文件夹')
       //   return
       // }
-      downloadFile(row.id).then(data => {
-        download(data, row.dir ? `${row.name}.zip` : row.name)
+      let files = file ? [file] : this.checkedRows
+      if (files.length < 1) {
+        this.$message.info('请选择下载文件')
+        return
+      }
+      files.forEach((v: any) => {
+        downloadFile(v.id).then(data => {
+          download(data, v.dir ? `${v.name}.zip` : v.name)
+        })
       })
     }
 
