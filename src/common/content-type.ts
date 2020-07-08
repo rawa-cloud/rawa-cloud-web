@@ -36,8 +36,9 @@ const map: any = {
 export const iconMap = getIconMap()
 
 export function getType (suffix: string) {
+  if (!suffix) return ''
   return Object.keys(map).find((v: string) => {
-    return !!(map[v] && map[v][suffix])
+    return !!(map[v] && map[v][suffix.toLowerCase()])
   }) || ''
 }
 
