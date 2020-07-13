@@ -1,7 +1,9 @@
 <template>
   <div :class="[$style.container]">
-    <viewer :images="images" @inited="inited" :options="options" @hidden.native="onHidden">
-      <img v-for="src in images" :src="src" :key="src" style="display: none;">
+    <viewer :images="auctualImages" @inited="inited" :options="options" @hidden.native="onHidden">
+      <template slot-scope="{images}">
+      <img v-for="(src, i) in images" :src="src" :key="i" style="display: none;">
+      </template>
     </viewer>
     <!-- <div :class="[$style.close]" @click="onClose"><v-icon type="close-circle-o"></v-icon></div> -->
   </div>
@@ -18,8 +20,13 @@ const baseUrl = process.env.VUE_APP_API_BASE_URL
 @Component
 export default class ImagePreview extends mixins(BasePreview) {
   options = {
-    backdrop: 'static'
+    backdrop: 'static',
+    viewed: this.viewed
   }
+
+  auctualImages: any[] = []
+
+  index = 0
 
   get ids (): number[] {
     let id = this.row && this.row.id
@@ -44,7 +51,17 @@ export default class ImagePreview extends mixins(BasePreview) {
   }
 
   inited (viewer: any) {
-    viewer.show(0)
+    viewer.show()
+  }
+
+  viewed (e: any) {
+    const num = 10
+    this.index = e.detail.index
+    if (this.auctualImages.length >= this.images.length) return
+    if (this.auctualImages.length < this.index + num) {
+      const max = this.auctualImages.length
+      this.auctualImages.push(...this.images.slice(max, max + num))
+    }
   }
 
   onClose () {
@@ -60,6 +77,9 @@ export default class ImagePreview extends mixins(BasePreview) {
   //     window.URL.revokeObjectURL(v)
   //   })
   // }
+  @Watch('images', { immediate: true }) imageChange () {
+    this.auctualImages.push(this.images[0])
+  }
 }
 </script>
 
