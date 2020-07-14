@@ -152,7 +152,7 @@ export default class EditDir extends Vue {
       name: (this.row && this.row.name) || '',
       uuid: (this.row && this.row.uuid) || '',
       content: (this.row && this.row.content) || '',
-      status: (this.row && this.row.uuid !== false) || true,
+      status: !!this.row && !!this.row.status,
       widthRadio: (this.row && this.row.widthRadio) || 0.8,
       logoWidthRadio: (this.row && this.row.logoWidthRadio) || 0.3,
       opacity: (this.row && this.row.opacity) || 0.4,
