@@ -105,8 +105,8 @@ export default class Edit extends Vue {
     this.form = {
       username: (this.row && this.row.username) || '',
       watermarkId: (this.row && this.row.watermarkId) || null,
-      download: (this.row && this.row.download !== false) || true,
-      preview: (this.row && this.row.preview !== false) || true
+      download: !!this.row && !!this.row.download,
+      preview: !!this.row && !!this.row.preview
     }
     this.visible = true
     return new Promise((resolve, reject) => {
