@@ -45,7 +45,7 @@ export default class ImagePreview extends mixins(BasePreview) {
         url = `${baseUrl}/libraries/${this.row.libraryId}/preview`
       } else if (this.linkId) {
         url = `${baseUrl}/shares/${this.linkId}/files/${v}/preview?password=${this.password}`
-      } else url = `${baseUrl}/files/${v}/preview`
+      } else url = `${baseUrl}/files/preview-image/${v}?timetamp=${Date.now()}`
       return url
     })
   }
