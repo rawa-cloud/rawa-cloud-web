@@ -3,12 +3,12 @@
   <div v-if="visible">
       <div>
         <div class="mb-3" v-if="authority">
-          <div class="d-flex text-secondary">
-            <span style="flex: 1 1 auto; width: 50%;" class="text-truncate" :title="file && file.name"><span>文件(夹) : </span> <span class="text-primary">{{file && file.name}}</span></span>
-            <span style="flex: 1 1 auto; width: 50%;" class="text-truncate">
-              <span v-if="dept" class="ml-2" :title="dept && dept.name"><span>部门 : </span> <span class="text-info">{{dept && dept.name}}</span></span>
-              <span v-if="user" class="ml-2" :title="user && user.username"><span>用户 : </span> <span class="text-info">{{user && user.username}}</span></span>
-            </span>
+          <div class="text-secondary">
+            <div class="text-truncate" :title="file && file.name"><span>文件(夹) : </span> <span class="text-primary">{{file && file.name}}</span></div>
+            <div class="text-truncate mt-2">
+              <span v-if="dept" :title="dept && dept.name"><span>部门 : </span> <span class="text-info">{{dept && dept.name}}</span></span>
+              <span v-if="user" :title="user && user.username"><span>用户 : </span> <span class="text-info">{{user && user.username}}</span></span>
+            </div>
           </div>
           <div class="text-secondary mt-2" v-if="authority.implicit">
             <span class="text-error">继承于 </span>

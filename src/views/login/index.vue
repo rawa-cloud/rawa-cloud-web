@@ -1,27 +1,34 @@
 <template>
     <div :class="[$style.container]">
-        <div :class="[$style.box]" class="rounded p-4" @keyup.enter="onLogin">
-            <div :class="[$style.logo]">
-                <img src="@/assets/logo.png" alt="&times;" class="w-4 circle">
+        <div :class="[$style.header]">
+             <div :class="[$style.logo]">
+                <img src="@/assets/logo.png" alt="&times;" class="circle">
             </div>
-            <div :class="[$style.title]">锐柚文档管理</div>
-
-            <form @submit.prevent>
-                <div class="mb-3">
-                    <v-input name="username" v-model.trim="form.username" placeholder="请输入账号" size="lg" block prefix="user" maxlength="32"></v-input>
-                </div>
-                <div class="mb-3">
-                    <v-input name="password" v-model.trim="form.password" placeholder="请输入密码" size="lg" block prefix="lock" type="password" maxlength="32"></v-input>
-                </div>
-
-                <!-- <div class="mb-3 text-right">
-                    <a> <v-icon type="key" class="mr-2"></v-icon> 忘记密码</a>
-                </div> -->
-
-                <v-button type="primary" size="lg" block @click="onLogin" :loading="loading">登 录</v-button>
-            </form>
+            <div :class="[$style.title]">
+              <div>锐柚网盘</div>
+              <div>rawa cloud</div>
+            </div>
         </div>
-        <menu-icon :class="[$style.footer]"></menu-icon>
+        <div :class="[$style.body]">
+          <div :class="[$style.box]" class="p-4" @keyup.enter="onLogin">
+            <div :class="[$style.label]">账号登录</div>
+
+              <form @submit.prevent>
+                  <div class="mb-3">
+                      <v-input name="username" v-model.trim="form.username" placeholder="请输入账号" size="lg" block prefix="user" maxlength="32"></v-input>
+                  </div>
+                  <div class="mb-4">
+                      <v-input name="password" v-model.trim="form.password" placeholder="请输入密码" size="lg" block prefix="lock" type="password" maxlength="32"></v-input>
+                  </div>
+
+                  <!-- <div class="mb-3 text-right">
+                      <a> <v-icon type="key" class="mr-2"></v-icon> 忘记密码</a>
+                  </div> -->
+
+                  <v-button type="primary" size="lg" block @click="onLogin" :loading="loading">登 录</v-button>
+              </form>
+          </div>
+        </div>
     </div>
 </template>
 
@@ -49,41 +56,56 @@ export default class Login extends Vue {
 
 <style lang="scss" module>
 .container {
+  height: 100vh;
+  width: 100vw;
+}
+
+.header {
+  height: 60px;
+  display: flex;
+}
+
+.body {
     position: relative;
-    height: 100vh;
+    height: calc(100vh - 60px);
     width: 100vw;
     display: flex;
     align-items: center;
-    padding-bottom: 200px;
-    justify-content: center;
-    background-image: linear-gradient(180deg,hsla(0,0%,100%,0) 60%,#fff),linear-gradient(70deg,#dbedff 32%,#ebfff0);
+    justify-content: flex-end;
+    background-image: url("@/assets/login.jpg");
 }
 
 .box {
     position: relative;
-    width: 320px;
-    height: 280px;
+    width: 360px;
+    height: 300px;
+    margin-right: 6%;
     background: rgba(255, 255, 255, 1);
+    border-radius: 2px;
+    margin-bottom: 8%;
 }
 
 .logo {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%) translateY(-200%);
+  padding: 8px 0 8px 20px;
+  &>img {
+    width: 48px;
+    height: 48px;
+  }
 }
 
 .title {
-    text-align: center;
-    font-size: 24px;
-    color: rgba(0, 0, 0, .6);
-    margin: 0 0 12px 0;
-    font-family: Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
+  padding: 4px 0 4px 16px;
+  text-align: center;
+  font-size: 24px;
+  color: rgba(0, 0, 0, .6);
+  font-family: "Comic Sans MS", cursive, Avenir,Helvetica Neue,Arial,Helvetica,sans-serif;
+  line-height: 1.2;
 }
 
-.footer {
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
+.label {
+  margin-bottom: 16px;
+  font-size: 24px;
+  color: rgba(0, 0, 0, .6);
+  line-height: 1.2;
 }
 </style>
