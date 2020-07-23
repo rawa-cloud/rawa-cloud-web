@@ -5,7 +5,7 @@
                 <img src="@/assets/logo.png" alt="&times;" class="circle">
             </div>
             <div :class="[$style.title]">
-              <div>锐柚网盘</div>
+              <div>锐柚文档管理</div>
               <div>rawa cloud</div>
             </div>
         </div>
