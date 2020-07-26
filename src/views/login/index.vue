@@ -1,6 +1,6 @@
 <template>
     <div :class="[$style.container]">
-        <div :class="[$style.header]">
+        <!-- <div :class="[$style.header]">
              <div :class="[$style.logo]">
                 <img src="@/assets/logo.png" alt="&times;" class="circle">
             </div>
@@ -8,10 +8,10 @@
               <div>锐柚文档管理</div>
               <div>rawa cloud</div>
             </div>
-        </div>
+        </div> -->
         <div :class="[$style.body]">
           <div :class="[$style.box]" class="p-4" @keyup.enter="onLogin">
-            <div :class="[$style.label]">账号登录</div>
+            <div :class="[$style.label]">锐柚文档管理</div>
 
               <form @submit.prevent>
                   <div class="mb-3">
@@ -60,19 +60,20 @@ export default class Login extends Vue {
   width: 100vw;
 }
 
-.header {
-  height: 60px;
-  display: flex;
-}
+// .header {
+//   height: 60px;
+//   display: flex;
+// }
 
 .body {
-    position: relative;
-    height: calc(100vh - 60px);
-    width: 100vw;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    background-image: url("@/assets/login.jpg");
+  position: relative;
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  background-image: url("@/assets/login.jpg");
+  background-size: 100% auto;
 }
 
 .box {
@@ -103,6 +104,7 @@ export default class Login extends Vue {
 }
 
 .label {
+  text-align: center;
   margin-bottom: 16px;
   font-size: 24px;
   color: rgba(0, 0, 0, .6);

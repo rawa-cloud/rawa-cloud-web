@@ -172,6 +172,10 @@ export function downloadFile (id: number) {
   return http().get<Blob>(`/files/download/${id}`, { responseType: 'blob' })
 }
 
+export function downloadImageFile (id: number, height?: number, width?: number) {
+  return http().get<Blob>(`/files/download-image/${id}`, { responseType: 'blob', params: { height, width } })
+}
+
 export function previewFile (id: number) {
   return http().get<Blob>(`/files/${id}/preview`, { responseType: 'blob' })
 }

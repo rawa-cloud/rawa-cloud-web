@@ -42,6 +42,10 @@ export function getType (suffix: string) {
   }) || ''
 }
 
+export function isImage (suffix: string) {
+  return getType(suffix) === 'image'
+}
+
 function getIconMap () {
   let ret: any = {}
   Object.values(map).forEach(v => {

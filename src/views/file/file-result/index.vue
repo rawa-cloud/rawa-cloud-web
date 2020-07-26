@@ -56,13 +56,14 @@
         <file-collect ref="fileCollect"></file-collect>
         <file-detail ref="fileDetail"></file-detail>
         <file-edit ref="fileEdit"></file-edit>
+        <img-size-chooser ref="imgSizeChooser"></img-size-chooser>
     </div>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component, Prop, Watch, Provide, Inject } from 'vue-property-decorator'
-import { queryFiles, downloadFile, deleteFiles, moveFiles, copyFiles, getFile } from '@/api/file'
+import { queryFiles, downloadFile, downloadImageFile, deleteFiles, moveFiles, copyFiles, getFile } from '@/api/file'
 import { download } from '@/helpers/download'
 import FileList from './file-list/index.vue'
 import FileThumbnail from './file-thumbnail/index.vue'
@@ -75,8 +76,10 @@ import FileRecord from './file-record/index.vue'
 import FileCollect from './file-collect/index.vue'
 import FileDetail from './file-detail/index.vue'
 import FileEdit from './file-edit/index.vue'
+import ImgSizeChooser from './img-size-chooser/index.vue'
 import { UMASK, hasAllAuthority, hasAnyAuthority } from '@/common/umask'
-import { getType } from '@/common/content-type'
+import { getType, isImage } from '@/common/content-type'
+import { http } from '@/api'
 
 @Component({
   components: { FileList,
@@ -89,7 +92,8 @@ import { getType } from '@/common/content-type'
     FileRecord,
     FileCollect,
     FileDetail,
-    FileEdit
+    FileEdit,
+    ImgSizeChooser
   }
 })
 export default class FileResult extends Vue {
@@ -111,6 +115,8 @@ export default class FileResult extends Vue {
       prop: 'dir',
       asc: true
     }
+
+    properties: any = []
 
     actions = [
       { title: '预览', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
@@ -154,6 +160,10 @@ export default class FileResult extends Vue {
     get canMkDir () {
       const umask = (this.parent && this.parent.umask) || 0
       return hasAllAuthority(umask, UMASK.MK_DIR.value)
+    }
+
+    get imageDownloadSizeEnabled () {
+      return this.properties.some((v: any) => v.name === 'image.download.size.enabled' && v.value === 'Y')
     }
 
     @Provide() filterActions (row?: any) {
@@ -247,11 +257,30 @@ export default class FileResult extends Vue {
         this.$message.info('请选择下载文件')
         return
       }
-      files.forEach((v: any) => {
-        downloadFile(v.id).then(data => {
-          download(data, v.dir ? `${v.name}.zip` : v.name)
+      let useImageDownload = false
+      if (this.imageDownloadSizeEnabled) {
+        const allImage = files.every((v: any) => {
+          return !v.dir && isImage(v.contentType)
         })
-      })
+        if (allImage) useImageDownload = true
+      }
+      if (useImageDownload) {
+        const $e = this.$refs.imgSizeChooser as ImgSizeChooser
+        $e.choose().then(data => {
+          const { height, width } = data
+          files.forEach((v: any) => {
+            downloadImageFile(v.id, height, width).then(data => {
+              download(data, v.dir ? `${v.name}.zip` : v.name)
+            })
+          })
+        })
+      } else {
+        files.forEach((v: any) => {
+          downloadFile(v.id).then(data => {
+            download(data, v.dir ? `${v.name}.zip` : v.name)
+          })
+        })
+      }
     }
 
     @Provide() onDelete (file?: any) {
@@ -426,6 +455,12 @@ export default class FileResult extends Vue {
       })
     }
 
+    loadProperties () {
+      http().get('/properties').then(data => {
+        this.properties = data || []
+      })
+    }
+
     validate (file?: any) {
       if (!file && this.checkedRows.length < 1) {
         this.$message.info('请选择文件')
@@ -443,6 +478,10 @@ export default class FileResult extends Vue {
       } else {
         this.parent = null
       }
+    }
+
+    created () {
+      this.loadProperties()
     }
 }
 </script>

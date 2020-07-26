@@ -9,6 +9,14 @@
   </v-radio-group>
 </v-form-item>
 
+<section-header>图片配置</section-header>
+<v-form-item label="下载时选择尺寸">
+  <v-radio-group v-model="form.image_download_size_enabled">
+    <v-radio label="Y">启用</v-radio>
+    <v-radio label="N">禁用</v-radio>
+  </v-radio-group>
+</v-form-item>
+
 <!-- <section-header class="mt-3">预览配置</section-header>
 <v-form-item label="水印">
   <v-radio-group v-model="form.preview_mark_enabled">
@@ -39,7 +47,8 @@ import { http } from '@/api'
 @Component
 export default class Property extends Vue {
   form = {
-    form_file_enabled: 'N'
+    form_file_enabled: 'N',
+    image_download_size_enabled: 'N'
     // ,
     // preview_mark_enabled: 'N',
     // preview_mark_user_enabled: 'N',
