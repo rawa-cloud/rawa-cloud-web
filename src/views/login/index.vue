@@ -28,6 +28,7 @@
                   <v-button type="primary" size="lg" block @click="onLogin" :loading="loading">登 录</v-button>
               </form>
           </div>
+          <div :class="[$style.tip]"><a :href="url" target="_blank">手机端访问: {{url}}</a></div>
         </div>
     </div>
 </template>
@@ -37,10 +38,14 @@
 import { Vue, Component } from 'vue-property-decorator'
 import MenuIcon from './menu-icon/index.vue'
 
+const url = 'http://' + window.location.hostname + ':8004'
+
 @Component({
   components: { MenuIcon }
 })
 export default class Login extends Vue {
+    url = url
+
     form = {
       username: '',
       password: ''
@@ -80,7 +85,7 @@ export default class Login extends Vue {
     position: relative;
     width: 360px;
     height: 300px;
-    margin-right: 6%;
+    margin-right: 10%;
     background: rgba(255, 255, 255, 1);
     border-radius: 2px;
     margin-bottom: 8%;
@@ -109,5 +114,17 @@ export default class Login extends Vue {
   font-size: 24px;
   color: rgba(0, 0, 0, .6);
   line-height: 1.2;
+}
+
+.tip {
+  position: absolute;
+  bottom: 2%;
+  width: 100%;
+  color: #fff;
+  text-align: center;
+  & > a {
+    color: #fff;
+  }
+  left: 0;
 }
 </style>
