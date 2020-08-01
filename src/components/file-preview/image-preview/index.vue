@@ -80,6 +80,20 @@ export default class ImagePreview extends mixins(BasePreview) {
   @Watch('images', { immediate: true }) imageChange () {
     this.auctualImages.push(this.images[0])
   }
+
+  mounted () {
+    const e = document.querySelector('.viewer-container')
+    if (e) {
+      const handler = (e: any) => {
+        e.stopPropagation()
+        e.preventDefault()
+      }
+      e.addEventListener('contextmenu', handler)
+      this.$once('hook:beforeDestroy', function () {
+        e.removeEventListener('contextmenu', handler)
+      })
+    }
+  }
 }
 </script>
 
