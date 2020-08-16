@@ -1,14 +1,14 @@
 <template>
     <div>
         <div v-if="dept">
-          <div>
+          <!-- <div>
             <section-header>基本信息</section-header>
             <div>
                   <span>
                       <span> <span class="text-secondary mr-3">部门名称:</span> <span>{{dept && dept.name}}</span></span>
                   </span>
               </div>
-          </div>
+          </div> -->
 
           <div class="mt-4">
             <section-header>用户列表</section-header>

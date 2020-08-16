@@ -14,6 +14,7 @@
           </div>
 
           <div v-if="isUpdate">
+            <span class="mb-2">文件更新备注:</span>
             <v-textarea v-model.trim="form.remark" maxlength="100"></v-textarea>
           </div>
         </div>

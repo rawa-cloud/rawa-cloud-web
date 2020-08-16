@@ -7,7 +7,7 @@
     <v-table-column prop="remark" label="备注"></v-table-column>
     <v-table-column prop="opt" label="操作" fixed="right" width="160px">
         <template slot-scope="{row}">
-            <span class="ml-3 icon-btn" @click="onDownload(row)" title="下载"><v-icon type="cloud-download-o"></v-icon></span>
+            <a class="ml-3" @click="onDownload(row)" title="下载">下载</a>
         </template>
     </v-table-column>
 </v-table>

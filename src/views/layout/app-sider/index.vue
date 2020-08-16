@@ -35,7 +35,7 @@ export default class AppSider extends Vue {
 <style lang="scss" module>
 .container {
     background-color: var(--bg-color);
-    box-shadow: 2px 0 6px var(--bg-color-2);
+    box-shadow: 2px 0 6px rgba(0,0,0,0.2);
     position: relative;
     height: 100%;
     overflow: auto;

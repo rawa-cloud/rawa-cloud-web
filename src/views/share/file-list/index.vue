@@ -13,7 +13,8 @@
             <v-table-column prop="lastChangeTime" label="修改日期"></v-table-column>
             <v-table-column column-key="opt" label="操作" fixed="right" width="120px">
                 <template slot-scope="{row}">
-                    <span class="mr-2 icon-btn" @click="onDownload(row)"><v-icon type="cloud-download-o"></v-icon></span>
+                    <a class="mr-2" @click="onPreview(row)">预览</a>
+                    <a class="mr-2" @click="onDownload(row)">下载</a>
                 </template>
             </v-table-column>
         </v-table>

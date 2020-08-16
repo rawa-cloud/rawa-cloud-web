@@ -141,7 +141,7 @@ export default class FileTree extends Vue {
 .container {
   background-color: #fff;
   padding: 0 12px 16px 12px;
-  box-shadow: 2px 0 4px var(--bg-color-1);
+  box-shadow: 2px 0 4px rgba(0,0,0,0.1);
 }
 
 .tree {

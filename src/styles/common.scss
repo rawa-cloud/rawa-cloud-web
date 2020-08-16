@@ -49,3 +49,9 @@
     color: var(--primary-darken-1);
   }
 }
+
+.v-tree {
+  .v-tree-node__text.is-current {
+    background-color: var(--primary-lighten-2);
+  }
+}
