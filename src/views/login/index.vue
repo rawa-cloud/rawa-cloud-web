@@ -1,17 +1,8 @@
 <template>
     <div :class="[$style.container]">
-        <!-- <div :class="[$style.header]">
-             <div :class="[$style.logo]">
-                <img src="@/assets/logo.png" alt="&times;" class="circle">
-            </div>
-            <div :class="[$style.title]">
-              <div>锐柚文档管理</div>
-              <div>rawa cloud</div>
-            </div>
-        </div> -->
         <div :class="[$style.body]">
           <div :class="[$style.box]" class="p-4" @keyup.enter="onLogin">
-            <div :class="[$style.label]">锐柚文档管理</div>
+            <div :class="[$style.label]">龙华智能消防图纸管理系统</div>
 
               <form @submit.prevent>
                   <div class="mb-3">
@@ -28,7 +19,7 @@
                   <v-button type="primary" size="lg" block @click="onLogin" :loading="loading">登 录</v-button>
               </form>
           </div>
-          <div :class="[$style.tip]"><a :href="url" target="_blank">手机端访问: {{url}}</a></div>
+          <!-- <div :class="[$style.tip]"><a :href="url" target="_blank">手机端访问: {{url}}</a></div> -->
         </div>
     </div>
 </template>

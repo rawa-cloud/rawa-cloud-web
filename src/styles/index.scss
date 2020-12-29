@@ -1,2 +1,17 @@
 @import "./reboot.scss";
 @import "./common.scss";
+
+$icon-url               : "/fonts/font_icons" !default;
+
+@font-face {
+  font-family: 'anticon';
+  font-display: fallback;
+  src: url("#{$icon-url}"); /* IE9*/
+  src:
+          /* chrome、firefox */
+          url('#{$icon-url}.woff') format('woff'),
+            /* chrome、firefox、opera、Safari, Android, iOS 42+*/
+          url('#{$icon-url}.ttf') format('truetype'),
+            /* iOS 41- */
+          url('#{$icon-url}.svg#iconfont') format('svg');
+}

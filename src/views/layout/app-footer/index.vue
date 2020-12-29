@@ -1,6 +1,6 @@
 <template>
 <div class="text-center text-secondary">
-  Copyright©️  2019 瑞柚云盘出品
+  <!-- Copyright©️  2019 龙华云盘出品 -->
 </div>
 </template>
 
