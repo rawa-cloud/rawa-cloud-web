@@ -44,7 +44,7 @@ export default class FileNavigator extends Vue {
       }
       getParents(this.id).then(data => {
         this.dataSource = (data || []).filter((v: any, i: number) => {
-          if (i === 0) v.name = v.name === '/' ? '图纸维护' : '个人目录'
+          if (i === 0) v.name = v.name === '/' ? '公司文档' : '个人目录'
           return true
         })
       })

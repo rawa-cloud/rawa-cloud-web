@@ -4,7 +4,7 @@
             @selection-change="onSelectionChange" height="calc(100vh - 64px - 40px - 36px - 8px)" @row-menu="onRowMenu" ref="table"
             @row-click="onRowClick" @row-dbclick="onRowDbclick">
             <v-table-column type="selection" fixed="left" width="80px"></v-table-column>
-            <v-table-column prop="name" label="文件名" width="320px" sortable>
+            <v-table-column prop="name" label="文件名" width="480px" sortable>
                 <div slot-scope="{row}" :class="[$style.label]">
                    <file-icon v-bind="iconProps(row)" :class="[$style.icon]"></file-icon>
                    <span class="ml-2 text-link" @click="onPreview(row)">{{row.name}}</span>
@@ -18,13 +18,9 @@
               </template>
             </v-table-column>
             <v-table-column prop="lastChangeTime" label="修改日期" sortable></v-table-column>
-            <!-- <v-table-column prop="umask" label="权限">
+            <v-table-column prop="umask" label="权限">
               <template slot-scope="{row}">{{row.umask | umask}}</template>
-            </v-table-column> -->
-             <v-table-column prop="leaderName" label="负责人"></v-table-column>
-             <v-table-column prop="locationName " label="所属辖区"></v-table-column>
-             <v-table-column prop="unitName" label="所属单位"></v-table-column>
-             <v-table-column prop="keyUnitName" label="重点单位"></v-table-column>
+            </v-table-column>
             <!-- <v-table-column column-key="opt" label="操作" fixed="right" width="120px">
                 <template slot-scope="{row}">
                     <v-dropdown trigger="click" class="d-inline">

@@ -146,7 +146,7 @@ export default class NavMenu extends Vue {
   }
 
   created () {
-    this.loadLibraryMenus()
+    // this.loadLibraryMenus()
   }
 
   // cssVariable: MenuCssVariable = {

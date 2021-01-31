@@ -122,16 +122,16 @@ export default class FileResult extends Vue {
       { title: '预览', batch: false, umask: UMASK.PREVIW.value, action: this.onPreview },
       { title: '下载', batch: true, umask: UMASK.DOWNLOAD.value, action: this.onDownload },
       { title: '更新', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, action: this.onRenew },
-      // { title: '编辑', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, onlyOffice: true, action: this.onOnlineEdit },
+      { title: '编辑', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, onlyOffice: true, action: this.onOnlineEdit },
       // { title: '版本', batch: false, onlyFile: true, umask: UMASK.ACCESS.value, action: this.onFileRecord },
-      // { title: '分享', batch: true, umask: UMASK.LINK.value, action: this.onShare },
+      { title: '分享', batch: true, umask: UMASK.LINK.value, action: this.onShare },
       { title: '重命名', batch: false, umask: UMASK.RENAME.value, action: this.onRename },
       { title: '删除', batch: true, umask: UMASK.RECYCLE.value, action: this.onDelete },
       { title: '复制到', batch: true, umask: UMASK.DOWNLOAD.value, action: this.onCopyTo },
       { title: '移动到', batch: true, umask: UMASK.RECYCLE.value | UMASK.DOWNLOAD.value, action: this.onMoveTo },
-      // { title: '收藏', batch: false, umask: UMASK.ACCESS.value, action: this.onCollect },
-      { title: '详情', batch: false, umask: UMASK.ACCESS.value, action: this.onDetail }
-      // { title: '权限', batch: false, admin: true, action: this.onGoAuthority }
+      { title: '收藏', batch: false, umask: UMASK.ACCESS.value, action: this.onCollect },
+      { title: '详情', batch: false, umask: UMASK.ACCESS.value, action: this.onDetail },
+      { title: '权限', batch: false, admin: true, action: this.onGoAuthority }
     ]
 
     @Inject() reload!: (id?: number) => void
@@ -174,15 +174,14 @@ export default class FileResult extends Vue {
         if (v.onlyFile && rows.some((w: any) => w.dir)) return false
         if (v.onlyOffice) return rows.every((w: any) => getType(w.contentType) === 'office')
         return true
+      }).filter((v: any) => {
+        if (v.admin) {
+          return rows.every((w: any) => w.admin && !w.userId)
+        }
+        return rows.every((w: any) => {
+          return hasAllAuthority(w.umask, v.umask)
+        })
       })
-      // .filter((v: any) => {
-      //   if (v.admin) {
-      //     return rows.every((w: any) => w.admin && !w.userId)
-      //   }
-      //   return rows.every((w: any) => {
-      //     return hasAllAuthority(w.umask, v.umask)
-      //   })
-      // })
     }
 
     onSelectView (view: 'list' | 'thumbnail') {

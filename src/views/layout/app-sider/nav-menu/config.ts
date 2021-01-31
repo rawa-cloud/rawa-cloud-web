@@ -16,18 +16,24 @@ export const menus: Array<MenuOption> = [
   //   pid: `${HOME}.dashboard`,
   //   link: '/dashboard'
   // },
+  // {
+  //   name: '全部文件',
+  //   icon: 'appstore',
+  //   pid: `${HOME}.file`,
+  //   link: '/file'
+  // },
   {
-    name: '全部文件',
+    name: '图纸维护',
     icon: 'appstore',
     pid: `${HOME}.file`,
     link: '/file'
   },
-  {
-    name: '我的分享',
-    icon: 'share-alt',
-    pid: `${HOME}.link`,
-    link: '/link'
-  },
+  // {
+  //   name: '我的分享',
+  //   icon: 'share-alt',
+  //   pid: `${HOME}.link`,
+  //   link: '/link'
+  // },
   {
     name: '部门管理',
     icon: 'layout',
@@ -40,12 +46,12 @@ export const menus: Array<MenuOption> = [
     pid: `${HOME}.user`,
     link: '/user'
   },
-  {
-    name: '权限管理',
-    icon: 'safety',
-    pid: `${HOME}.authority`,
-    link: '/authority'
-  },
+  // {
+  //   name: '权限管理',
+  //   icon: 'safety',
+  //   pid: `${HOME}.authority`,
+  //   link: '/authority'
+  // },
   {
     name: '操作日志',
     icon: 'solution',
@@ -58,24 +64,24 @@ export const menus: Array<MenuOption> = [
     pid: `${HOME}.search`,
     link: '/search'
   },
-  {
-    name: '我的收藏',
-    icon: 'heart',
-    pid: `${HOME}.favorite`,
-    link: '/favorite'
-  },
+  // {
+  //   name: '我的收藏',
+  //   icon: 'heart',
+  //   pid: `${HOME}.favorite`,
+  //   link: '/favorite'
+  // },
   {
     name: '回收站',
     icon: 'delete',
     pid: `${HOME}.recycle`,
     link: '/recycle'
   },
-  {
-    name: '自定义表单',
-    icon: 'tool',
-    pid: `${HOME}.library-config`,
-    link: '/library-config'
-  },
+  // {
+  //   name: '自定义表单',
+  //   icon: 'tool',
+  //   pid: `${HOME}.library-config`,
+  //   link: '/library-config'
+  // },
   // {
   //   name: '自定义库',
   //   icon: 'book',

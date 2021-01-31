@@ -42,8 +42,7 @@ export default class Dept extends Vue {
 }
 
 .tree {
-  width: 0;
-  visibility: hidden;
+  width: 240px;
   height: 100%;
   overflow: auto;
 }
