@@ -34,7 +34,7 @@ export default class AppSider extends Vue {
 
 <style lang="scss" module>
 .container {
-    background-color: var(--bg-color);
+    background-color: #273039;
     box-shadow: 2px 0 6px rgba(0,0,0,0.2);
     position: relative;
     height: 100%;
@@ -46,13 +46,24 @@ export default class AppSider extends Vue {
   height: calc(100vh - 4rem - 80px);
   overflow: auto;
   border-right-color: transparent;
+  background-color: #273039;
 
   :global {
     .v-menu-item {
-      color: var(--text-color-secondary) !important;
+      background-color: #273039 !important;
+      border-right-color: transparent;
+      color: #fff !important;
+
+      &.selected {
+        background-color: #22272f !important;
+        &::after {
+          border-right-color: #22272f !important;
+        }
+      }
     }
     .v-sub-menu__title {
-      color: var(--text-color-secondary) !important;
+      background-color: #273039 !important;
+      color: #fff !important;
     }
   }
 }

@@ -3,8 +3,7 @@
     <v-dropdown placement="bottom-end" :class="[$style.dropdown]">
         <div :class="[$style.reference]">
             <div style="height: auto;" class="px-2">
-                <v-avatar type="image"><img src="@/assets/avatar.png" /></v-avatar>
-                <span class="ml-2">{{username}}</span>
+                <i style="color: #fff;"><v-icon type="logout"></v-icon></i>
             </div>
         </div>
         <v-dropdown-menu slot="dropdown">
@@ -48,7 +47,6 @@ export default class GlobalAction extends Vue {
     padding-right: 8px;
     transition: background-color .35s ease;
     &:hover {
-        background: var(--primary-lighten-5);
         cursor: pointer;
     }
 }

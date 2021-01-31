@@ -45,7 +45,7 @@ export default class Layout extends Vue {
 }
 
 .header {
-    height: 4rem;
+    height: 3rem;
     padding: 0;
     background-color: var(--bg-color);
     box-shadow: 0 2px 5px rgba(0,0,0,0.2);
@@ -53,9 +53,8 @@ export default class Layout extends Vue {
 
 .main {
   background-color: #fff;
-  height: calc(100vh - 64px);
+  height: calc(100vh - 3rem);
   background: transparent;
-  padding-top: 8px;
 }
 
 .sider {
@@ -65,5 +64,6 @@ export default class Layout extends Vue {
 .content {
   overflow: auto;
   height: 100%;
+  padding-top: 12px;
 }
 </style>

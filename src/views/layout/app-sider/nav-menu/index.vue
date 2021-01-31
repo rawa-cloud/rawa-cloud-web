@@ -20,8 +20,11 @@ export default class NavMenu extends Vue {
   }
 
   get menus () {
-    const ret = [...fixedMenus, ...this.libraryMenus]
-    return ret.filter(v => this.isAdmin ? has(adminUrls, v) : !has(adminUrls, v))
+    const ret = [...fixedMenus]
+    return ret.filter(v => {
+      if (v.isAdmin && !this.$auth.hasRole('SUPER')) return false
+      return true
+    })
 
     function has (list: string[], menu: MenuOption): boolean {
       if (!menu.link) {
