@@ -3,7 +3,7 @@
     <div class="d-flex align-items-center" style="height: 100%;">
       <div :class="[$style.logo]" @click="onIndex">
         <img src="@/assets/logo.png" alt="&times;" :class="[$style.img]"/>
-        <span class="ml-2"> 龙华智能消防图纸管理系统</span>
+        <span class="ml-2"> 龙华智能消防-图纸管理系统</span>
       </div>
 
       <catalog-menu :class="[$style.menu]" style="margin-left: 48px;"></catalog-menu>
