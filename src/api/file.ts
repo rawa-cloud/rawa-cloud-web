@@ -141,7 +141,7 @@ export function addFile (req: FileAddReq) {
 }
 
 export function patchFile (id: number, req: FilePatchReq) {
-  return http().patch<void>(`/files/${id}`, req)
+  return http().put<void>(`/files/${id}`, req)
 }
 
 export function getFile (id: number) {

@@ -2,7 +2,7 @@
     <div>
       <v-modal :visible.sync="actualVisible" width="30vw" :title="title" :maskClosable="false" :keyboard="false">
         <v-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="left">
-          <v-form-item label="名称" prop="name" required>
+          <v-form-item label="名称" prop="name" required v-if="!file">
             <v-input clearable v-model.trim="form.name" maxlength="16"></v-input>
           </v-form-item>
           <v-form-item label="容量(M)" prop="limitSize">
@@ -125,7 +125,7 @@ export default class EditDir extends Vue {
     Object.assign(req, this.form)
     if (req.limitSize) req.limitSize = req.limitSize * 1024 * 1024
     if (this.isEdit) {
-      req.parentId = this.file.parentId
+      // req.id = this.file.id
     } else {
       let parentId: any = this.parentId
       req.parentId = parentId

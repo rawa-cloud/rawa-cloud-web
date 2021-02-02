@@ -134,6 +134,7 @@ export default class FileResult extends Vue {
       // { title: '编辑', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, onlyOffice: true, action: this.onOnlineEdit },
       // { title: '版本', batch: false, onlyFile: true, umask: UMASK.ACCESS.value, action: this.onFileRecord },
       // { title: '分享', batch: true, umask: UMASK.LINK.value, action: this.onShare },
+      { title: '编辑', batch: false, onlyDir: true, umask: UMASK.RENAME.value, action: this.onUpdateDir },
       { title: '编辑信息', batch: false, onlyFile: true, umask: UMASK.RENAME.value, action: this.onUpdateInfo },
       { title: '重命名', batch: false, umask: UMASK.RENAME.value, action: this.onRename },
       { title: '删除', batch: true, umask: UMASK.RECYCLE.value, action: this.onDelete },
@@ -182,6 +183,7 @@ export default class FileResult extends Vue {
       return this.actions.filter((v: any) => {
         if (!v.batch && rows.length > 1) return false
         if (v.onlyFile && rows.some((w: any) => w.dir)) return false
+        if (v.onlyDir && rows.some((w: any) => !w.dir)) return false
         if (v.onlyOffice) return rows.every((w: any) => getType(w.contentType) === 'office')
         return true
       })
@@ -252,6 +254,21 @@ export default class FileResult extends Vue {
       const $e = this.$refs.editDir as EditDir
       $e.add(this.parentId).then(() => {
         this.$message.success('新建文件夹成功')
+        this.reload()
+        this.refresh()
+      })
+    }
+
+    onUpdateDir (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('只能选择一条记录')
+        return
+      }
+      let row = file || this.checkedRows[0]
+      const $e = this.$refs.editDir as EditDir
+      $e.edit(row).then(() => {
+        this.$message.success('编辑文件夹成功')
         this.reload()
         this.refresh()
       })
