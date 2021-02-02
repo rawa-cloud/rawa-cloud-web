@@ -2,7 +2,7 @@
 <div>
   <v-modal :visible.sync="actualVisible" width="640px" title="筛选字段">
     <v-transfer v-model="value" :title="['展示字段', '隐藏字段']"
-      :data-source="dataSource" filterable style="height: calc(100vh - 360px);"></v-transfer>
+      :data-source="dataSource" searchable style="height: calc(100vh - 360px);"></v-transfer>
     <div slot="footer" class="text-right">
       <v-button @click="onCancel">取消</v-button>
       <v-button type="primary" class="ml-3" @click="onConfirm">确定</v-button>

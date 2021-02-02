@@ -3,22 +3,22 @@
       <v-modal :visible.sync="actualVisible" width="30vw" title="上传文件信息" :maskClosable="false" :keyboard="false">
         <v-form ref="form" :model="form" :rules="rules" label-width="80px" label-position="left">
           <v-form-item label="负责人" prop="leader" required>
-            <v-select v-model="form.leader" filterable clearable>
+            <v-select v-model="form.leader" searchable clearable>
               <dict-option name="user"></dict-option>
             </v-select>
           </v-form-item>
           <v-form-item label="所属辖区" prop="location" required>
-            <v-select v-model="form.location" filterable clearable>
+            <v-select v-model="form.location" searchable clearable>
               <dict-option name="location"></dict-option>
             </v-select>
           </v-form-item>
           <v-form-item label="所属单位" prop="unit" required>
-            <v-select v-model="form.unit" filterable clearable>
+            <v-select v-model="form.unit" searchable clearable>
               <dict-option name="unit"></dict-option>
             </v-select>
           </v-form-item>
           <v-form-item label="重点单位" prop="keyUnit">
-            <v-select v-model="form.keyUnit" filterable clearable>
+            <v-select v-model="form.keyUnit" searchable clearable>
               <dict-option name="keyUnit"></dict-option>
             </v-select>
           </v-form-item>

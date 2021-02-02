@@ -9,22 +9,22 @@
                     <v-input v-model.trim="form.tags" clearable class="w-10"></v-input>
                 </v-form-item>
                 <v-form-item prop="leader" label="负责人">
-                    <v-select v-model="form.leader" clearable filterable class="w-10">
+                    <v-select v-model="form.leader" clearable searchable class="w-10">
                       <dict-option name="user"></dict-option>
                     </v-select>
                 </v-form-item>
                 <v-form-item prop="location" label="所属辖区">
-                  <v-select v-model="form.location" clearable filterable class="w-10">
+                  <v-select v-model="form.location" clearable searchable class="w-10">
                       <dict-option name="location"></dict-option>
                     </v-select>
                 </v-form-item>
                 <v-form-item prop="unit" label="所属单元">
-                  <v-select v-model="form.unit" clearable filterable class="w-10">
+                  <v-select v-model="form.unit" clearable searchable class="w-10">
                     <dict-option name="unit"></dict-option>
                   </v-select>
                 </v-form-item>
                 <v-form-item prop="keyUnit" label="重点单元">
-                  <v-select v-model="form.keyUnit" clearable filterable class="w-10">
+                  <v-select v-model="form.keyUnit" clearable searchable class="w-10">
                     <dict-option name="keyUnit"></dict-option>
                   </v-select>
                 </v-form-item>
