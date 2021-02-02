@@ -188,7 +188,7 @@ export default class Search extends Vue {
 
     onPreview (row: any) {
       const $e = this.$refs.filePreview as any
-      $e.preview(row, [row])
+      $e.preview(row, (this.$refs.configTable as any).remoteData.dataSource)
     }
 
     onDownload (row: any) {
