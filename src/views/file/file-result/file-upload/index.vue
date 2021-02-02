@@ -48,6 +48,8 @@ export default class FileUpload extends Vue {
 
   name: string = ''
 
+  params: any = {}
+
   form = {
     remark: ''
   }
@@ -91,10 +93,11 @@ export default class FileUpload extends Vue {
     return Promise.resolve()
   }
 
-  upload (parentId: number, multiple: boolean = true, directory: boolean = false) {
+  upload (parentId: number, multiple: boolean = true, directory: boolean = false, params: any = {}) {
     this.isUpdate = false
     this.multiple = multiple
     this.directory = directory
+    this.params = params || {}
     this.id = parentId
     this.name = ''
     this.title = this.directory ? '上传文件夹' : '上传文件'
@@ -187,7 +190,8 @@ export default class FileUpload extends Vue {
         parentId: this.id,
         dir: false,
         name: v.name,
-        uuid: v.url
+        uuid: v.url,
+        ...this.params
       }
     })
     return req
@@ -204,7 +208,8 @@ export default class FileUpload extends Vue {
         let ret: any = {
           dir: obj[META].dir,
           name: obj[META].name,
-          uuid: obj[META].uuid
+          uuid: obj[META].uuid,
+          ...vm.params
         }
         let children = Object.keys(obj)
           .filter((key: any) => key !== META)

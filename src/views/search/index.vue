@@ -5,6 +5,29 @@
                 <v-form-item prop="name" label="名称">
                     <v-input v-model.trim="form.name" clearable class="w-10"></v-input>
                 </v-form-item>
+                <v-form-item prop="tags" label="标签">
+                    <v-input v-model.trim="form.tags" clearable class="w-10"></v-input>
+                </v-form-item>
+                <v-form-item prop="leader" label="负责人">
+                    <v-select v-model="form.leader" clearable filterable class="w-10">
+                      <dict-option name="user"></dict-option>
+                    </v-select>
+                </v-form-item>
+                <v-form-item prop="location" label="所属辖区">
+                  <v-select v-model="form.location" clearable filterable class="w-10">
+                      <dict-option name="location"></dict-option>
+                    </v-select>
+                </v-form-item>
+                <v-form-item prop="unit" label="所属单元">
+                  <v-select v-model="form.unit" clearable filterable class="w-10">
+                    <dict-option name="unit"></dict-option>
+                  </v-select>
+                </v-form-item>
+                <v-form-item prop="keyUnit" label="重点单元">
+                  <v-select v-model="form.keyUnit" clearable filterable class="w-10">
+                    <dict-option name="keyUnit"></dict-option>
+                  </v-select>
+                </v-form-item>
                 <v-form-item prop="creationBy" label="创建人">
                   <v-input v-model.trim="form.creationBy" clearable class="w-10"></v-input>
                 </v-form-item>
@@ -34,9 +57,9 @@
                 <a class="ml-2" @click="onClearSelection">清空选择</a>
               </span>
             </div>
-            <v-table pageable :data-source="dataSource" size="sm" height="calc(100vh - 64px - 8px - 62px - 70px)" @selection-change="onSelectionChange" ref="table">
+            <config-table row-key="id" size="sm" :class="[$style.table]" :api="api" simple height="calc(100vh - 64px - 8px - 62px - 160px)" ref="configTable">
               <v-table-column type="selection" fixed="left" width="64px"></v-table-column>
-              <v-table-column prop="name" label="文件名" width="480px">
+              <v-table-column prop="name" label="文件名" width="420px">
                   <div slot-scope="{row}" :class="[$style.label]">
                     <file-icon v-bind="iconProps(row)" :class="[$style.icon]"></file-icon>
                     <span class="ml-2 text-link">{{row.name}}</span>
@@ -44,6 +67,23 @@
                     <v-button size="sm" class="ml-2" @click="onPreview(row)" v-if="canPreview(row)">预览</v-button>
                     <v-button size="sm" class="ml-2" @click="onDownload(row)" v-if="canDownload(row)">下载</v-button>
                   </div>
+              </v-table-column>
+              <v-table-column prop="tags" label="标签">
+                <template slot-scope="{row}">
+                  <v-tag v-for="(t, i) in row._tags" :key="i"> {{t}} </v-tag>
+                </template>
+              </v-table-column>
+             <v-table-column prop="leader" label="负责人">
+                <template slot-scope="{row}">{{text('user', row.leader)}}</template>
+              </v-table-column>
+              <v-table-column prop="location" label="所属辖区">
+                <template slot-scope="{row}">{{text('location', row.location)}}</template>
+              </v-table-column>
+              <v-table-column prop="unit" label="所属单位">
+                <template slot-scope="{row}">{{text('unit', row.unit)}}</template>
+              </v-table-column>
+              <v-table-column prop="keyUnit" label="重点单位">
+                <template slot-scope="{row}">{{text('keyUnit', row.keyUnit)}}</template>
               </v-table-column>
               <v-table-column prop="size" label="大小">
                 <template slot-scope="{row}">
@@ -56,7 +96,7 @@
               <v-table-column prop="filePath" label="原文件路径" overflow="ellipsis" width="240px">
                 <template slot-scope="{row}"><a @click="onForward(row.id, row.parentId)" :title="row.filePath">{{row.filePath}}</a></template>
               </v-table-column>
-            </v-table>
+            </config-table>
         </div>
 
         <file-preview ref="filePreview"></file-preview>
@@ -71,9 +111,12 @@ import { searchFiles, getFile, downloadFile } from '@/api/file'
 import { download } from '@/helpers/download'
 import { normalizeDate } from '@/helpers/date'
 import { UMASK, hasAllAuthority, hasAnyAuthority } from '@/common/umask'
+import { getDictLabel } from '@/common/dict'
 
 @Component
 export default class Search extends Vue {
+    api = searchFiles
+
     form = {
       name: '',
       creationBy: '',
@@ -83,7 +126,12 @@ export default class Search extends Vue {
       },
       get creationTimeEnd () {
         return normalizeDate(this.creationTime[1])
-      }
+      },
+      leader: '',
+      location: '',
+      unit: '',
+      keyUnit: '',
+      tags: ''
     }
 
     loading: boolean = false
@@ -105,15 +153,17 @@ export default class Search extends Vue {
     }
 
     canPreview (row: any) {
-      return hasAnyAuthority(row.umask, UMASK.PREVIW.value)
+      // return hasAnyAuthority(row.umask, UMASK.PREVIW.value)
+      return true
     }
 
     canDownload (row: any) {
-      return hasAnyAuthority(row.umask, UMASK.DOWNLOAD.value)
+      // return hasAnyAuthority(row.umask, UMASK.DOWNLOAD.value)
+      return true
     }
 
     onQuery () {
-      this.query()
+      this.query(this.form)
     }
 
     onReset () {
@@ -121,15 +171,9 @@ export default class Search extends Vue {
       $form.resetFields()
     }
 
-    query () {
-      this.loading = true
-      let req = Object.assign({}, this.form, { creationTime: undefined })
-      searchFiles(req).then(data => {
-        this.dataSource = data || []
-        this.onClearSelection()
-      }).finally(() => {
-        this.loading = false
-      })
+    query (params: any) {
+      const $e = (this as any).$refs.configTable
+      if ($e) $e.query(params)
     }
 
     onForward (id: number, parentId: number) {
@@ -185,16 +229,20 @@ export default class Search extends Vue {
       })
     }
 
-    mounted () {
-      this.query()
+    text (name: string, code: string) {
+      return getDictLabel(name, code)
     }
 
-    @Watch('name', { immediate: true }) nameChange (name: string) {
-      if (name) {
-        this.form.name = name
-        this.query()
-      }
+    mounted () {
+      this.onQuery()
     }
+
+  // @Watch('name', { immediate: true }) nameChange (name: string) {
+  //   if (name) {
+  //     this.form.name = name
+  //     this.query()
+  //   }
+  // }
 }
 </script>
 <style lang="scss" module>

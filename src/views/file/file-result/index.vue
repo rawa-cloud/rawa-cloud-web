@@ -57,13 +57,16 @@
         <file-detail ref="fileDetail"></file-detail>
         <file-edit ref="fileEdit"></file-edit>
         <img-size-chooser ref="imgSizeChooser"></img-size-chooser>
+        <choose-file-info ref="chooseFileInfo"></choose-file-info>
+        <add-tag ref="addTag"></add-tag>
+        <edit-file-info ref="editFileInfo"></edit-file-info>
     </div>
 </template>
 
 <script lang="ts">
 
 import { Vue, Component, Prop, Watch, Provide, Inject } from 'vue-property-decorator'
-import { queryFiles, downloadFile, downloadImageFile, deleteFiles, moveFiles, copyFiles, getFile } from '@/api/file'
+import { queryFiles, downloadFile, downloadImageFile, deleteFiles, moveFiles, copyFiles, getFile, updateTags } from '@/api/file'
 import { download } from '@/helpers/download'
 import FileList from './file-list/index.vue'
 import FileThumbnail from './file-thumbnail/index.vue'
@@ -76,7 +79,10 @@ import FileRecord from './file-record/index.vue'
 import FileCollect from './file-collect/index.vue'
 import FileDetail from './file-detail/index.vue'
 import FileEdit from './file-edit/index.vue'
+import ChooseFileInfo from './choose-file-info/index.vue'
 import ImgSizeChooser from './img-size-chooser/index.vue'
+import AddTag from './add-tag/index.vue'
+import EditFileInfo from './edit-file-info/index.vue'
 import { UMASK, hasAllAuthority, hasAnyAuthority } from '@/common/umask'
 import { getType, isImage } from '@/common/content-type'
 import { http } from '@/api'
@@ -93,7 +99,10 @@ import { http } from '@/api'
     FileCollect,
     FileDetail,
     FileEdit,
-    ImgSizeChooser
+    ImgSizeChooser,
+    ChooseFileInfo,
+    AddTag,
+    EditFileInfo
   }
 })
 export default class FileResult extends Vue {
@@ -125,6 +134,7 @@ export default class FileResult extends Vue {
       // { title: '编辑', batch: false, onlyFile: true, umask: UMASK.UPDATE_FILE.value, onlyOffice: true, action: this.onOnlineEdit },
       // { title: '版本', batch: false, onlyFile: true, umask: UMASK.ACCESS.value, action: this.onFileRecord },
       // { title: '分享', batch: true, umask: UMASK.LINK.value, action: this.onShare },
+      { title: '编辑信息', batch: false, onlyFile: true, umask: UMASK.RENAME.value, action: this.onUpdateInfo },
       { title: '重命名', batch: false, umask: UMASK.RENAME.value, action: this.onRename },
       { title: '删除', batch: true, umask: UMASK.RECYCLE.value, action: this.onDelete },
       { title: '复制到', batch: true, umask: UMASK.DOWNLOAD.value, action: this.onCopyTo },
@@ -212,12 +222,29 @@ export default class FileResult extends Vue {
       }
     }
 
+    @Provide() onUpdateInfo (file?: any) {
+      if (!this.validate(file)) return
+      if (!file && this.checkedRows.length > 1) {
+        this.$message.info('只能选择一条记录')
+        return
+      }
+      let row = file || this.checkedRows[0]
+      const $e = this.$refs.editFileInfo as EditFileInfo
+      $e.edit(row).then((data: any) => {
+        this.$message.success('更新成功')
+        Object.assign(row, data || {})
+      })
+    }
+
     onUpload (multiple: boolean, directory: boolean) {
       const $e = this.$refs.fileUpload as FileUpload
-      $e.upload(this.parentId, multiple, directory).then(() => {
-        this.$message.success('上传成功')
-        this.refresh()
-        if (directory) this.reload()
+      const $c = this.$refs.chooseFileInfo as ChooseFileInfo
+      $c.choose().then((data: any) => {
+        $e.upload(this.parentId, multiple, directory, data).then(() => {
+          this.$message.success('上传成功')
+          this.refresh()
+          if (directory) this.reload()
+        })
       })
     }
 
@@ -413,6 +440,26 @@ export default class FileResult extends Vue {
       $e.view(f).then(() => {})
     }
 
+    @Provide() onAddTag (row?: any) {
+      const $e = this.$refs.addTag as AddTag
+      $e.add().then((data: any) => {
+        const origin = row._tags || []
+        const req = [...origin, data]
+        updateTags(row.id, req).then(() => {
+          row._tags = req
+        })
+      })
+    }
+
+    @Provide() onRemoveTag (row: any, idx: number) {
+      const $e = this.$refs.addTag as AddTag
+      const origin = row._tags || []
+      const req = origin.filter((v: any, i: number) => idx !== i)
+      updateTags(row.id, req).then(() => {
+        row._tags = req
+      })
+    }
+
     onSort (prop: string) {
       if (this.sort.prop === prop) {
         this.sort.asc = !this.sort.asc
@@ -446,7 +493,8 @@ export default class FileResult extends Vue {
       let req = { parentId }
       this.loading = true
       queryFiles(req).then(data => {
-        this.dataSource = (data || []).filter(v => {
+        this.dataSource = (data || []).filter((v: any) => {
+          v._tags = tags(v.tags)
           if (!this.filter) return true
           const list = (this.filter as any).split(',').map((v: any) => +v)
           return list.includes(v.id)
@@ -454,6 +502,17 @@ export default class FileResult extends Vue {
       }).finally(() => {
         this.loading = false
       })
+
+      function tags (t: string) {
+        if (!t) return []
+        try {
+          const ret = JSON.parse(t)
+          if (!Array.isArray(ret)) return []
+          return ret
+        } catch (error) {
+          return []
+        }
+      }
     }
 
     loadProperties () {

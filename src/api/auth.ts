@@ -1,5 +1,6 @@
 import { http } from '.'
 import { getAuthorities } from '@/common/resource'
+import store from '@/store'
 
 export interface LoginReq {
     username: string
@@ -24,11 +25,30 @@ export function logout () {
 }
 
 export function loadPrinciple () {
-  return http().get<any>(`/auth/principle`).then((v: any) => {
+  const all = [http().get<any>(`/auth/principle`), loadDict(), loadUsers()]
+  return Promise.all(all).then(([v, dicts = [], users = []]) => {
+    store.commit('dict/setItems', [...users, ...dicts])
     const roles = (v.roles || []).map((v: any) => ({ code: v }))
     const authorities = getAuthorities(roles.map((w: any) => w.code))
     return Object.assign(v, { roles }, { authorities })
   })
+
+  function loadDict () {
+    return http().get<any>(`/dicts`)
+  }
+
+  function loadUsers () {
+    return http().get<any>('/users').then(data => {
+      return (data || []).map((v: any) => {
+        return {
+          name: 'user',
+          code: v.username,
+          label: v.cname,
+          status: v.status
+        }
+      })
+    })
+  }
 }
 
 export function changePassword (req: ChangePasswordReq) {

@@ -35,7 +35,7 @@ export const menus: Array<MenuOption> = [
         link: '/file'
       },
       {
-        name: '文件搜索',
+        name: '图纸检索',
         icon: 'search',
         pid: `${HOME}.search`,
         link: '/search'

@@ -1,4 +1,4 @@
-import { http } from '.'
+import { http, Page, Pageable } from '.'
 
 export interface FileQueryReq {
   parentId: number
@@ -120,7 +120,7 @@ export interface FileBatchAddReq {
   children?: FileBatchAddReq
 }
 
-export interface FileSearchReq {
+export interface FileSearchReq extends Pageable{
   name?: string
 
   creationBy?: string
@@ -201,9 +201,33 @@ export function batchAddFile (req: FileBatchAddReq[]) {
 }
 
 export function searchFiles (req: FileSearchReq) {
-  return http().get<FileRes[]>(`/files/search`, { params: req })
+  return http().get<Page<FileRes[]>>(`/files/search`, { params: req }).then((data: any) => {
+    const content = (data && data.content) || []
+    content.forEach((v: any) => {
+      v._tags = tags(v.tags)
+    })
+    return data
+  })
+  function tags (t: string) {
+    if (!t) return []
+    try {
+      const ret = JSON.parse(t)
+      if (!Array.isArray(ret)) return []
+      return ret
+    } catch (error) {
+      return []
+    }
+  }
 }
 
 export function getAdminRootFiles () {
   return http().get<FileRes[]>(`/files/admin-roots`)
+}
+
+export function updateTags (id: number, tags: string[]) {
+  return http().post<void>(`/files/${id}/tags`, { tags: JSON.stringify(tags) })
+}
+
+export function updateFileInfo (id: number, req: any) {
+  return http().post<void>(`/files/${id}/fileInfo`, req)
 }

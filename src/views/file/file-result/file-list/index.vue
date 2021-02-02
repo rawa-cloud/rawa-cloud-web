@@ -11,6 +11,24 @@
                   <!-- <span class="ml-2 text-error" v-if="row.admin && !row.userId"><svg-icon icon="dot"></svg-icon></span> -->
                 </div>
             </v-table-column>
+            <v-table-column prop="tags" label="标签">
+              <template slot-scope="{row}">
+                <v-tag closable v-for="(t, i) in row._tags" :key="i" @close="onRemoveTag(row, i)"> {{t}} </v-tag>
+                <v-button size="mini" type="text" icon="plus" style="padding: 0;" @click="onAddTag(row)"></v-button>
+              </template>
+            </v-table-column>
+            <v-table-column prop="leader" label="负责人">
+              <template slot-scope="{row}">{{text('user', row.leader)}}</template>
+            </v-table-column>
+            <v-table-column prop="location" label="所属辖区">
+              <template slot-scope="{row}">{{text('location', row.location)}}</template>
+            </v-table-column>
+            <v-table-column prop="unit" label="所属单位">
+              <template slot-scope="{row}">{{text('unit', row.unit)}}</template>
+            </v-table-column>
+            <v-table-column prop="keyUnit" label="重点单位">
+              <template slot-scope="{row}">{{text('keyUnit', row.keyUnit)}}</template>
+            </v-table-column>
             <v-table-column prop="size" label="大小" sortable>
               <template slot-scope="{row}">
                 <template v-if="row.dir"></template>
@@ -21,10 +39,6 @@
             <!-- <v-table-column prop="umask" label="权限">
               <template slot-scope="{row}">{{row.umask | umask}}</template>
             </v-table-column> -->
-             <v-table-column prop="leaderName" label="负责人"></v-table-column>
-             <v-table-column prop="locationName " label="所属辖区"></v-table-column>
-             <v-table-column prop="unitName" label="所属单位"></v-table-column>
-             <v-table-column prop="keyUnitName" label="重点单位"></v-table-column>
             <!-- <v-table-column column-key="opt" label="操作" fixed="right" width="120px">
                 <template slot-scope="{row}">
                     <v-dropdown trigger="click" class="d-inline">
@@ -61,6 +75,7 @@
 
 <script lang="ts">
 
+import { getDictLabel } from '@/common/dict'
 import { Vue, Component, Prop, Emit, Watch, Inject } from 'vue-property-decorator'
 
 @Component
@@ -80,6 +95,10 @@ export default class FileList extends Vue {
     @Inject() onRename!: (row: any) => void
 
     @Inject() filterActions!: (row?: any) => any[]
+
+    @Inject() onAddTag!: (row?: any) => void
+
+    @Inject() onRemoveTag!: (row: any, idx: number) => void
 
     timestamp: number = Date.now()
 
@@ -148,6 +167,10 @@ export default class FileList extends Vue {
       this.checkedRows.forEach((v: any) => {
         $e.selectionKeySet.add(v)
       })
+    }
+
+    text (name: string, code: string) {
+      return getDictLabel(name, code)
     }
 
     mounted () {

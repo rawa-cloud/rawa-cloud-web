@@ -7,9 +7,9 @@
             <v-tab-pane name="1" label="版本列表">
               <file-record :id="file && file.id"></file-record>
             </v-tab-pane>
-            <v-tab-pane name="2" label="权限管理">
+            <!-- <v-tab-pane name="2" label="权限管理">
               <file-authority :id="file && file.id"></file-authority>
-            </v-tab-pane>
+            </v-tab-pane> -->
             <v-tab-pane name="3" label="操作历史">
               <file-log :id="file && file.id"></file-log>
             </v-tab-pane>

@@ -1,3 +1,5 @@
+import store from '@/store'
+
 export default {
   libraryFieldType: {
     'text': '单文本',
@@ -44,4 +46,18 @@ export default {
     'ADMIN': '文件夹管理员',
     'SUPER': '超级管理员'
   }
+}
+
+export function getDict (name: string, isAll = false): any[] {
+  return (store.getters['dict/options'][name] || []).filter((v: any) => isAll ? true : v.status)
+}
+
+export function getDictItem (name: string, code: string, isAll = false): any {
+  const dict = getDict(name, isAll)
+  return dict.find((v: any) => v.code === code)
+}
+
+export function getDictLabel (name: string, code: string): any {
+  const item = getDictItem(name, code, true)
+  return (item && item.label) || code
 }

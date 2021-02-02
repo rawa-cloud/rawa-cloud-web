@@ -12,7 +12,7 @@
 
 <script lang="ts">
 
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator'
+import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator'
 import { TreeNodeLoadFn, VTree } from 'vua'
 import { queryFiles, getUserRootFile, getRootFile } from '@/api/file'
 
@@ -21,6 +21,8 @@ export default class FileTree extends Vue {
   @Prop(Number) id!: number
 
   @Emit('update:id') updateId (id: number) {}
+
+  root: any = null
 
   props = {
     key: 'id',
@@ -63,6 +65,7 @@ export default class FileTree extends Vue {
     const all = [getRootFile(), getUserRootFile()]
     Promise.all(all).then(([root, userRoot]) => {
       let ret = []
+      this.root = root || null
       if (root) {
         root.name = '公司文档'
         ret.push(root)
@@ -133,6 +136,12 @@ export default class FileTree extends Vue {
 
   mounted () {
     this.loadData()
+  }
+
+  @Watch('id') idChange () {
+    if (!this.id && this.root) {
+      this.$router.push(`/file?id=${this.root.id}`)
+    }
   }
 }
 </script>
