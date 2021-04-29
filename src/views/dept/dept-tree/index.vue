@@ -9,9 +9,9 @@
             <div slot="content"  slot-scope="{node}" @click="onSelect(node)" :class="[$style.content]" class="d-flex justify-content-between">
                 <span class="mr-4">{{node.data.label}}</span>
                 <div @click.stop="" class="_flag_actions">
-                    <a class="" @click="onAdd(node.data)" title="新增部门">新增</a>
+                    <!-- <a class="" @click="onAdd(node.data)" title="新增部门">新增</a>
                     <a class="ml-2" @click="onEdit(node)" title="编辑部门" v-if="node.data.parentId">编辑</a>
-                    <a class="ml-2" @click="onDelete(node.data)" title="删除部门" v-if="node.data.parentId">编辑</a>
+                    <a class="ml-2" @click="onDelete(node.data)" title="删除部门" v-if="node.data.parentId">编辑</a> -->
                 </div>
             </div>
         </v-tree>

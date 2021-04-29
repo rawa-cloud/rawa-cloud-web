@@ -30,7 +30,7 @@
                 <v-form-item >
                    <v-button type="primary" @click="onQuery">查询</v-button>
                    <v-button class="ml-3" @click="onReset">重置</v-button>
-                   <v-button class="ml-3" type="primary" color="info" @click="onAdd">新增用户</v-button>
+                   <!-- <v-button class="ml-3" type="primary" color="info" @click="onAdd">新增用户</v-button> -->
                 </v-form-item>
             </v-form>
         </div>
@@ -47,13 +47,13 @@
             <v-table-column prop="status" label="状态">
               <template slot-scope="{row}">{{row.status | transcode('status')}}</template>
             </v-table-column>
-            <v-table-column prop="opt" label="操作" fixed="right" width="160px">
+            <!-- <v-table-column prop="opt" label="操作" fixed="right" width="160px">
                 <template slot-scope="{row}">
                     <span class="icon-btn" @click="onEdit(row)" title="编辑" :disabled="isDefault(row)"><v-icon type="edit"></v-icon></span>
                     <span class="ml-3 icon-btn" @click="onDelete(row.id)" title="删除" :disabled="isDefault(row)"><v-icon type="delete"></v-icon></span>
                     <span class="ml-3 icon-btn" :disabled="!hasAdminRole(row)" @click="onViewUserFile(row)" title="管理员目录"><v-icon type="folder-add"></v-icon></span>
                 </template>
-            </v-table-column>
+            </v-table-column> -->
           </config-table>
         </div>
         <edit-user ref="editUser"></edit-user>

@@ -24,7 +24,7 @@
                   </v-select>
                 </v-form-item>
                 <v-form-item prop="keyUnit" label="重点单元">
-                  <v-select v-model="form.keyUnit" clearable searchable class="w-10">
+                  <v-select v-model="form.keyUnit" clearable searchable :disabled="keyUnit" class="w-10">
                     <dict-option name="keyUnit"></dict-option>
                   </v-select>
                 </v-form-item>
@@ -144,6 +144,10 @@ export default class Search extends Vue {
       return this.$route.query.name || ''
     }
 
+    get keyUnit () {
+      return this.$route.query.zddw as any
+    }
+
     iconProps (row: any) {
       let dir = row.dir
       let personal = row.personal
@@ -234,6 +238,7 @@ export default class Search extends Vue {
     }
 
     mounted () {
+      this.form.keyUnit = this.keyUnit || ''
       this.onQuery()
     }
 

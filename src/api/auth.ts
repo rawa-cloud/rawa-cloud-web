@@ -28,9 +28,9 @@ export function loadPrinciple () {
   // eslint-disable-next-line no-useless-escape
   const user = (location.href.match(/[\?&]user=([^&]+)/) || [])[1]
   const handler = () => {
-    const all = [http().get<any>(`/auth/principle`), loadDict(), loadUsers()]
-    return Promise.all(all).then(([v, dicts = [], users = []]) => {
-      store.commit('dict/setItems', [...users, ...dicts])
+    const all = [http().get<any>(`/auth/principle`), loadDepts(), loadKeyUnit(), loadAreas(), loadUsers()]
+    return Promise.all(all).then(([v, depts = [], units = [], areas = [], users = []]) => {
+      store.commit('dict/setItems', [...users, ...depts, ...units, ...areas])
       const roles = (v.roles || []).map((v: any) => ({ code: v }))
       const authorities = getAuthorities(roles.map((w: any) => w.code))
       return Object.assign(v, { roles }, { authorities })
@@ -60,6 +60,45 @@ export function loadPrinciple () {
           code: v.username,
           label: v.cname,
           status: v.status
+        }
+      })
+    })
+  }
+
+  function loadDepts () {
+    return http().get<any>('/depts').then(data => {
+      return (data || []).map((v: any) => {
+        return {
+          name: 'unit',
+          code: v.code,
+          label: v.name,
+          status: true
+        }
+      })
+    })
+  }
+
+  function loadKeyUnit () {
+    return http().get<any>('/units').then(data => {
+      return (data || []).map((v: any) => {
+        return {
+          name: 'keyUnit',
+          code: v.code,
+          label: v.name,
+          status: true
+        }
+      })
+    })
+  }
+
+  function loadAreas () {
+    return http().get<any>('/units').then(data => {
+      return (data || []).map((v: any) => {
+        return {
+          name: 'location',
+          code: v.code,
+          label: v.name,
+          status: true
         }
       })
     })
