@@ -72,7 +72,8 @@ export function loadPrinciple () {
           name: 'unit',
           code: v.code,
           label: v.name,
-          status: true
+          status: true,
+          data: v
         }
       })
     })
@@ -85,20 +86,22 @@ export function loadPrinciple () {
           name: 'keyUnit',
           code: v.code,
           label: v.name,
-          status: true
+          status: true,
+          data: v
         }
       })
     })
   }
 
   function loadAreas () {
-    return http().get<any>('/units').then(data => {
+    return http().get<any>('/areas').then(data => {
       return (data || []).map((v: any) => {
         return {
           name: 'location',
           code: v.code,
           label: v.name,
-          status: true
+          status: true,
+          data: v
         }
       })
     })

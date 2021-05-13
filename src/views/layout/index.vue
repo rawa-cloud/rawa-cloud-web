@@ -4,7 +4,7 @@
         <app-header></app-header>
     </v-header>
     <v-layout :class="[$style.main]">
-      <v-sider :dark="sider.dark ? {} : undefined" :class="[$style.sider]">
+      <v-sider :dark="sider.dark ? {} : undefined" :class="[$style.sider]" v-if="!zddw">
           <app-sider></app-sider>
       </v-sider>
       <v-content :class="[$style.content]">
@@ -35,6 +35,10 @@ export default class Layout extends Vue {
 
   get sider () {
     return appConfig.sider
+  }
+
+  get zddw () {
+    return this.$route.query.zddw
   }
 }
 </script>
