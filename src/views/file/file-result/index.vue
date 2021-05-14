@@ -241,7 +241,7 @@ export default class FileResult extends Vue {
     onUpload (multiple: boolean, directory: boolean) {
       const $e = this.$refs.fileUpload as FileUpload
       const $c = this.$refs.chooseFileInfo as ChooseFileInfo
-      $c.choose().then((data: any) => {
+      $c.choose(this.parent).then((data: any) => {
         $e.upload(this.parentId, multiple, directory, data).then(() => {
           this.$message.success('上传成功')
           this.refresh()

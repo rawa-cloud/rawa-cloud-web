@@ -59,7 +59,8 @@ export function loadPrinciple () {
           name: 'user',
           code: v.username,
           label: v.cname,
-          status: v.status
+          status: v.status,
+          data: v
         }
       })
     })
