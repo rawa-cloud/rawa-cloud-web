@@ -38,7 +38,7 @@ export default class Layout extends Vue {
   }
 
   get zddw () {
-    return this.$route.query.zddw
+    return this.$route.query.zddw || this.$route.path === '/display'
   }
 }
 </script>
