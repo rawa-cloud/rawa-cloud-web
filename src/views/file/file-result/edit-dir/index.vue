@@ -129,10 +129,11 @@ export default class EditDir extends Vue {
   }
 
   getKeyUnitsByUnitCode (code: any) {
-    if (!code) return []
-    const dept = (this.items['unit'] || []).find((v: any) => v.code === code)
-    if (!dept) return []
-    return (this.items['keyUnit'] || []).filter((v: any) => (v && v.deptThirdId) === dept.thirdId)
+    // if (!code) return []
+    // const dept = (this.items['unit'] || []).find((v: any) => v.code === code)
+    // if (!dept) return []
+    // return (this.items['keyUnit'] || []).filter((v: any) => (v && v.deptThirdId) === dept.thirdId)
+    return (this.items['keyUnit'] || [])
   }
 
   get leader () {

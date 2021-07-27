@@ -60,6 +60,9 @@ export default class ChooseFileInfo extends Vue {
     ],
     'unit': [
       { validator: 'required', message: '所属单位必填' }
+    ],
+    'keyUnit': [
+      { validator: 'required', message: '重点单位单位必填' }
     ]
   }
 
@@ -88,10 +91,11 @@ export default class ChooseFileInfo extends Vue {
   }
 
   getKeyUnitsByUnitCode (code: any) {
-    if (!code) return []
-    const dept = (this.items['unit'] || []).find((v: any) => v.code === code)
-    if (!dept) return []
-    return (this.items['keyUnit'] || []).filter((v: any) => (v && v.data.deptThirdId) === dept.data.thirdId)
+    // if (!code) return []
+    // const dept = (this.items['unit'] || []).find((v: any) => v.code === code)
+    // if (!dept) return []
+    // return (this.items['keyUnit'] || []).filter((v: any) => (v && v.data.deptThirdId) === dept.data.thirdId)
+    return (this.items['keyUnit'] || [])
   }
 
   get leader () {

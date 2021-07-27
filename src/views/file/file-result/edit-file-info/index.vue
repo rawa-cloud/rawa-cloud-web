@@ -57,6 +57,9 @@ export default class ChooseFileInfo extends Vue {
     ],
     'unit': [
       { validator: 'required', message: '所属单位必填' }
+    ],
+    'keyUnit': [
+      { validator: 'required', message: '重点单位必填' }
     ]
   }
 
