@@ -1,7 +1,7 @@
 <template>
     <div>
         <ul :class="[$style.list]">
-            <li :class="[$style.item, activeCls(row)]" v-for="(row, i) in dataSource" :key="i" @click="onPreview(row)">
+            <li :class="[$style.item, activeCls(row)]" v-for="(row, i) in renderedDataSource" :key="i" @click="onPreview(row)">
               <!-- <div class="text-center">
                   <img :src="imageUrl(row)" :class="[$style.thumbnail]" v-if="imageUrl(row)">
                   <file-icon v-bind="iconProps(row)" class="ft-64" v-else></file-icon>
@@ -49,6 +49,10 @@ export default class FileThumbnail extends Vue {
 
     get menus () {
       return this.filterActions()
+    }
+
+    get renderedDataSource () {
+      return this.dataSource.filter(v => !v.dir)
     }
 
     iconProps (row: any) {
