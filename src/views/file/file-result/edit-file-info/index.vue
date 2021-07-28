@@ -17,7 +17,7 @@
               <dict-option name="unit"></dict-option>
             </v-select>
           </v-form-item>
-          <v-form-item label="重点单位" prop="keyUnit">
+          <v-form-item label="重点单位" prop="keyUnit" required>
             <v-select v-model="form.keyUnit" searchable clearable>
               <dict-option name="keyUnit"></dict-option>
             </v-select>

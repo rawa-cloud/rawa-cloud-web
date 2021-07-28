@@ -17,7 +17,7 @@
               <v-option :label="row.label" :value="row.code" v-for="(row, i) in units" :key="i"></v-option>
             </v-select>
           </v-form-item>
-          <v-form-item label="重点单位" prop="keyUnit">
+          <v-form-item label="重点单位" prop="keyUnit" required>
             <v-select v-model="form.keyUnit" searchable clearable>
               <v-option :label="row.label" :value="row.code" v-for="(row, i) in keyUnits" :key="i"></v-option>
             </v-select>
